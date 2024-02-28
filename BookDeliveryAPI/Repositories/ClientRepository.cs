@@ -8,7 +8,7 @@ namespace BookDeliverySystemAPI.Repositories
         public List<BookDeliveryCore.Client> GetClient()
         {
 
-            SqlConnection oCnn = new SqlConnection("Data Source=MENTALITY;Initial Catalog=BookingDeliverySystem;Integrated Security=True;Encrypt=False;");
+            SqlConnection oCnn = new SqlConnection("Data Source=DESKTOP-GG5B8TO\\SQLEXPRESS;Initial Catalog=BookingDeliverySystem;Integrated Security=True;");
             oCnn.Open();
             try
             {
@@ -31,7 +31,7 @@ namespace BookDeliverySystemAPI.Repositories
         public void InsertClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber)
         {
 
-            SqlConnection oCnn = new SqlConnection("Data Source=MENTALITY;Initial Catalog=BookingDeliverySystem;Integrated Security=True;Encrypt=False;");
+            SqlConnection oCnn = new SqlConnection("Data Source=DESKTOP-GG5B8TO\\SQLEXPRESS;Initial Catalog=BookingDeliverySystem;Integrated Security=True;");
             oCnn.Open();
             try
             {
