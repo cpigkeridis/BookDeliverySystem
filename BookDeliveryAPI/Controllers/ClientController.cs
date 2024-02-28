@@ -30,17 +30,16 @@ namespace BookDeliverySystemAPI.Controllers
 
         [HttpPost]
         [Route("api/[controller]/[action]")]
-        public IActionResult InsertClient(string username, string firstname, string lastname, string address, string postalcode, string role, string phonenumber)
+        public IActionResult InsertClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber)
         {
-            //FIX RETURN LATER
             try
             {
-                _oClient.InsertClient(username, firstname, lastname, address, postalcode, role, phonenumber);
-                return Ok();
+                _oClient.InsertClient(username, firstname, lastname, address, postalcode, phonenumber);
+                return CreatedAtAction(nameof(GetClientInfo), new { }, new { message = "Client inserted successfully." });
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(new { message = "Error inserting client.", error = ex.Message });
             }
         }
     }
