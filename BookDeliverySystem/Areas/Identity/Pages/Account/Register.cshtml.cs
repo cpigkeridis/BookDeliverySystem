@@ -159,7 +159,7 @@ namespace BookDeliverySystem.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    InsertNewClient(user.Email, user.FirstName, user.LastName, user.Address, user.PostalCode, "CLIE", user.PhoneNumber);
+                    InsertNewClient(user.Email, user.FirstName, user.LastName, user.Address, user.PostalCode, user.PhoneNumber);
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
@@ -207,11 +207,11 @@ namespace BookDeliverySystem.Areas.Identity.Pages.Account
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
-        private void InsertNewClient(string username, string firstname, string lastname, string address, string postalcode, string role, string phonenumber)
+        private void InsertNewClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber)
         {
             try
             {
-                _oClient.InsertClient(username, firstname, lastname, address, postalcode, role, phonenumber);
+                _oClient.InsertClient(username, firstname, lastname, address, postalcode, phonenumber);
             }
             catch (Exception ex)
             {
