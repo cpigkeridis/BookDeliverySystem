@@ -9,9 +9,7 @@ namespace BookDeliveryCore
     public class Users
     {
         public long? SR_NO { get; set; }
-        public long? CLIENT_ID { get; set; }
-        public long? COURIER_ID { get; set; }
-        public long? ADMINISTRATOR_ID { get; set; }
-        public string? ROLE { get; set; }
+        public string? USERNAME { get; set; }
+        public string? ROLE { get; set;}
     }
 }
