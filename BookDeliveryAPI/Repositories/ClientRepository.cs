@@ -14,8 +14,6 @@ namespace BookDeliverySystemAPI.Repositories
         public List<BookDeliveryCore.Client> GetClient()
         {
 
-            //"Data Source=DESKTOP-GG5B8TO\\SQLEXPRESS;Initial Catalog=BookingDeliverySystem;Integrated Security=True;"
-
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
             try
@@ -33,7 +31,6 @@ namespace BookDeliverySystemAPI.Repositories
                 oCnn.Close();
                 oCnn.Dispose();
             }
-            //a
         }
 
         public void InsertClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber)
