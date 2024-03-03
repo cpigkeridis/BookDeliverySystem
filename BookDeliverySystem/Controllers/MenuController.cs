@@ -8,5 +8,17 @@ namespace BookDeliverySystem.Controllers
         {
             return View();
         }
+        public IActionResult AboutUs()
+        {
+            return View();
+        }
+        public IActionResult AdminModule()
+        {
+            return View();
+        }
+        public IActionResult MyOrders()
+        {
+            return View();
+        }
     }
 }
