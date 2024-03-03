@@ -1,14 +1,22 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Security.Cryptography.X509Certificates;
 using Dapper;
 namespace BookDeliverySystemAPI.Repositories
 {
     public class ClientRepository : Interfaces.IClientRepository
     {
+        ConfigManagerAppSettings.IConfigManager _Configuration;
+        public ClientRepository(ConfigManagerAppSettings.IConfigManager oConfig)
+        {
+            _Configuration = oConfig;
+        }
         public List<BookDeliveryCore.Client> GetClient()
         {
 
-            SqlConnection oCnn = new SqlConnection("Data Source=DESKTOP-GG5B8TO\\SQLEXPRESS;Initial Catalog=BookingDeliverySystem;Integrated Security=True;");
+            //"Data Source=DESKTOP-GG5B8TO\\SQLEXPRESS;Initial Catalog=BookingDeliverySystem;Integrated Security=True;"
+
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
             try
             {
@@ -31,7 +39,7 @@ namespace BookDeliverySystemAPI.Repositories
         public void InsertClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber)
         {
 
-            SqlConnection oCnn = new SqlConnection("Data Source=DESKTOP-GG5B8TO\\SQLEXPRESS;Initial Catalog=BookingDeliverySystem;Integrated Security=True;");
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
             try
             {

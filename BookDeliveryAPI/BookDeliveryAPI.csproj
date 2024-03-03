@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BookDeliveryCore\BookDeliveryCore.csproj" />
+    <ProjectReference Include="..\ConfigManagerAppSettings\ConfigManagerAppSettings.csproj" />
   </ItemGroup>
 
 </Project>
