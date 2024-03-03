@@ -50,8 +50,8 @@ namespace BookDeliverySystemAPI.Repositories
                     FIRSTNAME = firstname,
                     LASTNAME = lastname,
                     ADDRESS = address,
-                    POSTAL_CODE = postalcode,
-                    PHONE_NUMBER = phonenumber
+                    POSTALCODE = postalcode,
+                    PHONENUMBER = phonenumber
 
                 };
                 oCnn.ExecuteScalar("[dbo].[SP_INSERT_CLIENT]", values, commandType: System.Data.CommandType.StoredProcedure);

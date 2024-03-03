@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<BookDeliverySystemAPI.Interfaces.IClientRepository, BookDeliverySystemAPI.Repositories.ClientRepository>();
+builder.Services.AddSingleton<ConfigManagerAppSettings.IConfigManager, ConfigManagerAppSettings.AppsConfiguration>();
 
 
 var app = builder.Build();
