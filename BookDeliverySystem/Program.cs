@@ -13,6 +13,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<BookDeliverySystemAPI.Interfaces.IClientRepository, BookDeliverySystemAPI.Repositories.ClientRepository>();
+builder.Services.AddSingleton<BookDeliverySystemAPI.Interfaces.IAdministratorRepository, BookDeliverySystemAPI.Repositories.AdministratorRepository>();
 builder.Services.AddSingleton<ConfigManagerAppSettings.IConfigManager, ConfigManagerAppSettings.AppsConfiguration>();
 var app = builder.Build();
 

@@ -20,4 +20,8 @@
     <ProjectReference Include="..\ConfigManagerAppSettings\ConfigManagerAppSettings.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BookDeliverySystemAPI\" />
+  </ItemGroup>
+
 </Project>
