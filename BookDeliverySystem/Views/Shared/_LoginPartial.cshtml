@@ -3,10 +3,32 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+        var user = await UserManager.GetUserAsync(User);
+        if(user.Role == "ADMI")
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Menu" asp-action="AdminModule">Admin Module</a>
+            </li>
+        }
+        @*TODO MAKE ADMIN MODULE ACCESSIBLE ONLY TO ADMIN ROLE USERS*@
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Menu" asp-action="MyOrders">My Orders</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Menu" asp-action="ContactUs">Contact Us</a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Menu" asp-action="AboutUs">About Us</a>
+                </li>
+
     <li class="nav-item">
             <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa-solid fa-user"></i></a>
     </li>
@@ -18,6 +40,12 @@
 }
 else
 {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Menu" asp-action="ContactUs">Contact Us</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Menu" asp-action="AboutUs">About Us</a>
+        </li>
     <li class="nav-item">
         <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
     </li>

@@ -28,6 +28,15 @@ namespace BookDeliverySystem.Controllers
             return user.Role;
         }
 
+        public async Task<string> setUserRole(string role)
+        {
+            string? userId = HttpContext.User.Identity.Name;
+            ApplicationUser user = await _signInManager.UserManager.FindByNameAsync(userId);
+            user.Role = role;
+            return user.Role;
+
+        }
+
         public async Task<IActionResult> Index()
         {
             string? role =await getUserRole();
