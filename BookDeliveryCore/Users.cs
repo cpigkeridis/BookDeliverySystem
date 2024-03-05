@@ -11,5 +11,6 @@ namespace BookDeliveryCore
         public long? SR_NO { get; set; }
         public string? USERNAME { get; set; }
         public string? ROLE { get; set;}
+        public bool ENABLE { get; set; }
     }
 }

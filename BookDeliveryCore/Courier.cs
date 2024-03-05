@@ -17,7 +17,8 @@ namespace BookDeliveryCore
         public string? ADDRESS { get; set; }
         public string? POSTAL_CODE { get; set; }
         public string? ROLE { get; set; } 
-        public string? PHONENUMBER { get; set; }
+        public string? PHONE_NUMBER { get; set; }
         public string? CURRENT_LOCATION { get; set; }
+        public bool ENABLE { get; set; }
     }
 }
