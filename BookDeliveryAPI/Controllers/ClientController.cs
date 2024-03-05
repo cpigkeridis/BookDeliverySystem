@@ -13,21 +13,6 @@ namespace BookDeliverySystemAPI.Controllers
             _oClient = oClient;
         }
 
-        [HttpGet]
-        [Route("api/[controller]/[action]")]
-        public IActionResult GetClientInfo()
-        {
-            try
-            {
-                List<BookDeliveryCore.Client> obj = _oClient.GetClient();
-                return obj == null ? NoContent() : Ok(obj);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
         [HttpPost]
         [Route("api/[controller]/[action]")]
         public IActionResult InsertClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber)
@@ -35,7 +20,7 @@ namespace BookDeliverySystemAPI.Controllers
             try
             {
                 _oClient.InsertClient(username, firstname, lastname, address, postalcode, phonenumber);
-                return CreatedAtAction(nameof(GetClientInfo), new { }, new { message = "Client inserted successfully." });
+                return Ok(new { message = "Client inserted successfully." });
             }
             catch (Exception ex)
             {

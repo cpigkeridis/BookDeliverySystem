@@ -11,27 +11,7 @@ namespace BookDeliverySystemAPI.Repositories
         {
             _Configuration = oConfig;
         }
-        public List<BookDeliveryCore.Client> GetClient()
-        {
-
-            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
-            oCnn.Open();
-            try
-            {
-                var values = new
-                {
-
-                };
-                List<BookDeliveryCore.Client> obj = oCnn.Query<BookDeliveryCore.Client>("[dbo].[SP_GETCLIENT]", values, commandType: System.Data.CommandType.StoredProcedure).ToList();
-                return obj;
-
-            }
-            finally
-            {
-                oCnn.Close();
-                oCnn.Dispose();
-            }
-        }
+        
 
         public void InsertClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber)
         {
