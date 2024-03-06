@@ -1,4 +1,6 @@
-﻿namespace BookDeliverySystemAPI.Interfaces
+﻿using BookDeliveryCore;
+
+namespace BookDeliverySystemAPI.Interfaces
 {
     public interface IAdministratorRepository
     {
@@ -6,9 +8,12 @@
         public void ChangeClientRole(string username, string role);
         public void ChangeAdministratorRole(string username, string NewRole);
         public void ChangeCourierRole(string username, string NewRole);
-        public List<BookDeliveryCore.Client> GetClient();
-        public List<BookDeliveryCore.Courier> GetCourier();
-        public List<BookDeliveryCore.Administrator> GetAdministrator();
+        public List<BookDeliveryCore.Client> GetClients();
+        public List<BookDeliveryCore.Courier> GetCouriers();
+        public List<BookDeliveryCore.Administrator> GetAdministrators();
         public void UpdateUserEnableStatus(string username, bool enable);
+        public Client GetClientByUsername(string username);
+        public Courier GetCourierByUsername(string username);
+        public Administrator GetAdministratorByUsername(string username);
     }
 }

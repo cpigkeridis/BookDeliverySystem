@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
+using BookDeliveryCore;
 using Dapper;
 namespace BookDeliverySystemAPI.Repositories
 {
@@ -110,7 +111,7 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
-        public List<BookDeliveryCore.Client> GetClient()
+        public List<BookDeliveryCore.Client> GetClients()
         {
 
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
@@ -121,7 +122,7 @@ namespace BookDeliverySystemAPI.Repositories
                 {
 
                 };
-                List<BookDeliveryCore.Client> obj = oCnn.Query<BookDeliveryCore.Client>("[dbo].[SP_GETCLIENT]", values, commandType: System.Data.CommandType.StoredProcedure).ToList();
+                List<BookDeliveryCore.Client> obj = oCnn.Query<BookDeliveryCore.Client>("[dbo].[SP_GETCLIENTS]", values, commandType: System.Data.CommandType.StoredProcedure).ToList();
                 return obj;
 
             }
@@ -132,14 +133,14 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
-        public List<BookDeliveryCore.Courier> GetCourier()
+        public List<BookDeliveryCore.Courier> GetCouriers()
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
             try
             {
                 var values = new { };
-                List<BookDeliveryCore.Courier> obj = oCnn.Query<BookDeliveryCore.Courier>("[dbo].[SP_GETCOURIER]", values, commandType: System.Data.CommandType.StoredProcedure).ToList();
+                List<BookDeliveryCore.Courier> obj = oCnn.Query<BookDeliveryCore.Courier>("[dbo].[SP_GETCOURIERS]", values, commandType: System.Data.CommandType.StoredProcedure).ToList();
                 return obj;
             }catch (Exception ex) 
             {
@@ -152,14 +153,14 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
-        public List<BookDeliveryCore.Administrator> GetAdministrator()
+        public List<BookDeliveryCore.Administrator> GetAdministrators()
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
             try
             {
                 var values = new { };
-                List<BookDeliveryCore.Administrator> obj = oCnn.Query<BookDeliveryCore.Administrator>("[dbo].[SP_GETADMINISTRATOR]", values, commandType: System.Data.CommandType.StoredProcedure).ToList();
+                List<BookDeliveryCore.Administrator> obj = oCnn.Query<BookDeliveryCore.Administrator>("[dbo].[SP_GETADMINISTRATORS]", values, commandType: System.Data.CommandType.StoredProcedure).ToList();
                 return obj;
             }
             catch (Exception ex)
@@ -196,5 +197,80 @@ namespace BookDeliverySystemAPI.Repositories
                 oCnn.Dispose();
             }
          }
+
+        public Client GetClientByUsername(string username)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var parameters = new
+                {
+                    Username = username
+                };
+
+                BookDeliveryCore.Client obj = oCnn.QuerySingleOrDefault<BookDeliveryCore.Client>("[dbo].[SP_GETCLIENTBYUSERNAME]",parameters,commandType: System.Data.CommandType.StoredProcedure);
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+        }
+
+        public Administrator GetAdministratorByUsername(string username)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var parameters = new
+                {
+                    Username = username
+                };
+
+                Administrator obj = oCnn.QuerySingleOrDefault<Administrator>("[dbo].[SP_GETADMINISTRATORBYUSERNAME]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+        }
+
+        public Courier GetCourierByUsername(string username)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var parameters = new
+                {
+                    Username = username
+                };
+
+                Courier obj = oCnn.QuerySingleOrDefault<Courier>("[dbo].[SP_GETCOURIERBYUSERNAME]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+        }
     }
 }
