@@ -81,7 +81,7 @@ namespace BookDeliveryAPI.Controllers
         {
             try
             {
-                List<BookDeliveryCore.Client> obj = _oAdministrator.GetClient();
+                List<BookDeliveryCore.Client> obj = _oAdministrator.GetClients();
                 return obj == null ? NoContent() : Ok(obj);
             }
             catch (Exception ex)
@@ -96,7 +96,7 @@ namespace BookDeliveryAPI.Controllers
         {
             try
             {
-                List<BookDeliveryCore.Courier> obj = _oAdministrator.GetCourier();
+                List<BookDeliveryCore.Courier> obj = _oAdministrator.GetCouriers();
                 return obj == null ? NoContent() : Ok(obj);
             }
             catch (Exception ex)
@@ -111,7 +111,7 @@ namespace BookDeliveryAPI.Controllers
         {
             try
             {
-                List<BookDeliveryCore.Administrator> obj = _oAdministrator.GetAdministrator();
+                List<BookDeliveryCore.Administrator> obj = _oAdministrator.GetAdministrators();
                 return obj == null ? NoContent() : Ok(obj);
             }
             catch (Exception ex)
@@ -132,6 +132,75 @@ namespace BookDeliveryAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { message = "Error updating user enable status.", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/[action]")]
+        public IActionResult GetClientByUsername(string username)
+        {
+            try
+            {
+                var client = _oAdministrator.GetClientByUsername(username);
+
+                if (client != null)
+                {
+                    return Ok(new { message = "Client retrieved successfully.", client }); // Client found, return a successful response
+                }
+                else
+                {
+                    return NotFound(new { message = "Client not found." }); // Client not found, return a not found response
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error retrieving client.", error = ex.Message }); // Handle any exceptions and return an error response
+            }
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/[action]")]
+        public IActionResult GetAdministratorByUsername(string username)
+        {
+            try
+            {
+                Administrator admin = _oAdministrator.GetAdministratorByUsername(username);
+
+                if (admin != null)
+                {
+                    return Ok(admin);
+                }
+                else
+                {
+                    return NotFound(new { message = "Administrator not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error getting administrator.", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/GetCourierByUsername")]
+        public IActionResult GetCourierByUsername(string username)
+        {
+            try
+            {
+                Courier courier = _oAdministrator.GetCourierByUsername(username);
+
+                if (courier != null)
+                {
+                    return Ok(courier);
+                }
+                else
+                {
+                    return NotFound(new { message = "Courier not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error getting courier.", error = ex.Message });
             }
         }
     }
