@@ -4,7 +4,6 @@
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-
 <main class="content-wrapper">
     <div class="content">
         <div class="form-label">
@@ -14,12 +13,13 @@
             <div class="col-xs-12">
                 <div class="form-group">
                     <div class="col-md-4">
-                    <label>User Type</label>
-                    <select id="userType" tabindex="-1" class="form-control form-select" aria-hidden="true" style="width:100%" onchange="GetUsers($('#userType').selectedValue())">
+                        <label>User Type</label>
+                        <select id="userType" tabindex="-1" class="form-control form-select" aria-hidden="true" style="width:100%">
                             <option value="ADMI">ADMIN</option>
                             <option value="COUR">COURIER</option>
                             <option value="CLIE">CLIENT</option>
-                    </select>
+                            <option value="AGEN">AGENCY</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -29,24 +29,56 @@
                 <div id="UserResult"></div>
             </div>
         </div>
-
     </div>
 </main>
 
 <script>
     $(document).ready(function () {
+        // Initial load on page load
+        GetUsers("ADMI");
+
+        // Dropdown change event handling
+        $("#userType").change(function () {
+            var selectedValue = $(this).val();
+            GetUsers(selectedValue);
+        });
+    });
+
+    function GetUsers(selectedValue) {
+        var url = "";
+
+        switch (selectedValue) {
+            case "ADMI":
+                url = "@Url.Action("SearchAdmins", "Admin")";
+                break;
+            case "COUR":
+                url = "@Url.Action("SearchCouriers", "Admin")";
+                break;
+            case "CLIE":
+                url = "@Url.Action("SearchClients", "Admin")";
+                break;
+            case "AGEN": 
+                url = "@Url.Action("SearchAgencies", "Admin")";
+                break;
+            default:
+                // Handle default case or show an error
+                break;
+        }
+
         $.ajax({
             type: "POST",
-            url: "@Url.Action("SearchClients","Admin")",
+            url: url,
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({}),
             async: true,
             success: function (response) {
+                console.log(response); // Add this line for logging
                 $('#UserResult').html(response);
+                // Initialize DataTable here if needed
             },
             error: function (xhr, status, error) {
                 alert(error);
             }
         });
-    });
+    }
 </script>

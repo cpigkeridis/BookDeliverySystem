@@ -272,5 +272,27 @@ namespace BookDeliverySystemAPI.Repositories
                 oCnn.Dispose();
             }
         }
+        public List<Agency> GetAgencies()
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var values = new { };
+                List<Agency> agencies = oCnn.Query<Agency>("[dbo].[SP_GETAGENCIES]", values, commandType: System.Data.CommandType.StoredProcedure).ToList();
+                return agencies;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+        }
+
+
     }
 }

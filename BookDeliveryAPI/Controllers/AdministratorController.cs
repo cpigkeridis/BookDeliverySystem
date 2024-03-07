@@ -203,5 +203,20 @@ namespace BookDeliveryAPI.Controllers
                 return BadRequest(new { message = "Error getting courier.", error = ex.Message });
             }
         }
+
+        [HttpGet]
+        [Route("api/[controller]/GetAgencies")]
+        public IActionResult GetAgencies()
+        {
+            try
+            {
+                List<BookDeliveryCore.Agency> obj = _oAdministrator.GetAgencies();
+                return Ok(obj);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
     }
 }

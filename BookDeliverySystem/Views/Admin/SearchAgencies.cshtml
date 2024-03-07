@@ -2,4 +2,71 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    Layout = null;
+    @model List<BookDeliveryCore.Agency>
+
 }
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+</head>
+
+<div class="row" style="max-width: 100%; padding:15px;">
+    <div class="col-md-12 col-sm-12">
+        <div>
+            <table id="UserTable" class="table table-condensed table-hover" style="100%">
+                <thead>
+                    <tr>
+                        <th scope="col">Agency ID</th>
+                        <th scope="col">Reward ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Country</th>
+                        <th scope="col">Postal Code</th>
+                        <th scope="col">Courier ID</th>
+                        <th scope="col">Courier Available</th>
+                        <th scope="col">Review</th>
+                        <th scope="col">Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var agency in Model)
+                    {
+                        <tr>
+                            <td>@agency.AGENCY_ID</td>
+                            <td>@agency.REWARD_ID</td>
+                            <td>@agency.NAME</td>
+                            <td>@agency.CITY</td>
+                            <td>@agency.COUNTRY</td>
+                            <td>@agency.POSTAL_CODE</td>
+                            <td>@agency.COURIER_ID</td>
+                            <td>@agency.COURIER_AVAILABLE</td>
+                            <td>@agency.REVIEW</td>
+                            <td><a><i class="fa fa-magic" aria-hidden="true"></i></a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#UserTable').DataTable({
+            paging: true,
+            pagingType: 'simple_numbers',
+            searching: false,
+            pageLength: 15,
+            dom: 'frtip',
+            language: {
+                thousands: ",",
+                decimal: "."
+            },
+            responsive: true,
+            columnDefs: [
+                { className: 'dt-body-left', targets: '_all' }
+            ]
+        });
+    });
+</script>

@@ -107,7 +107,136 @@ namespace BookDeliverySystem.Controllers
                 }
             }
              catch (Exception ex){
-                return BadRequest(new { message = "Error inserting client.", error = ex.Message });
+                return BadRequest(new { message = "Error searaching clients.", error = ex.Message });
+            }
+        }
+
+        public async Task<IActionResult> SearchCouriers()
+        {
+            try
+            {
+                if (_signInManager.IsSignedIn(User))
+                {
+                    // TODO: if (!User.Identity.IsAuthenticated) custom function to authenticate based on enabled column
+                    if (await getUserRole() != "ADMI")
+                    {
+                        return RedirectToAction("AccessDenied", "Error");
+                    }
+
+                    // Make a GET request to the API endpoint for couriers
+                    HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7203/api/Administrator/GetCouriers");
+
+                    // Check if the request was successful
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Read the response content as string
+                        var responseData = await response.Content.ReadAsStringAsync();
+                        List<Courier> couriers = JsonConvert.DeserializeObject<List<Courier>>(responseData);
+                        _httpClient.Dispose();
+
+                        // Do something with the response data
+                        return View(couriers);
+                    }
+                    else
+                    {
+                        // Handle the error
+                        return StatusCode((int)response.StatusCode);
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("AccessDenied", "Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error searching couriers.", error = ex.Message });
+            }
+        }
+
+        public async Task<IActionResult> SearchAdmins()
+        {
+            try
+            {
+                if (_signInManager.IsSignedIn(User))
+                {
+                    // TODO: if (!User.Identity.IsAuthenticated) custom function to authenticate based on enabled column
+                    if (await getUserRole() != "ADMI")
+                    {
+                        return RedirectToAction("AccessDenied", "Error");
+                    }
+
+                    // Make a GET request to the API endpoint for administrators
+                    HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7203/api/Administrator/GetAdministrators");
+
+                    // Check if the request was successful
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Read the response content as string
+                        var responseData = await response.Content.ReadAsStringAsync();
+                        List<Administrator> admin = JsonConvert.DeserializeObject<List<Administrator>>(responseData);
+                        _httpClient.Dispose();
+
+                        // Do something with the response data, for example, return it to a view
+                        return View(admin);
+                    }
+                    else
+                    {
+                        // Handle the error
+                        return StatusCode((int)response.StatusCode);
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("AccessDenied", "Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error searching administrators.", error = ex.Message });
+            }
+        }
+
+        public async Task<IActionResult> SearchAgencies()
+        {
+            try
+            {
+                if (_signInManager.IsSignedIn(User))
+                {
+                    // TODO: if (!User.Identity.IsAuthenticated) custom function to authenticate based on enabled column
+                    if (await getUserRole() != "ADMI")
+                    {
+                        return RedirectToAction("AccessDenied", "Error");
+                    }
+
+                    // Make a GET request to the API endpoint for agencies
+                    HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7203/api/Administrator/GetAgencies");
+
+                    // Check if the request was successful
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Read the response content as string
+                        var responseData = await response.Content.ReadAsStringAsync();
+                        List<Agency> agencies = JsonConvert.DeserializeObject<List<Agency>>(responseData);
+                        _httpClient.Dispose();
+
+                        // Do something with the response data, for example, return it to a view
+                        return View(agencies);
+                    }
+                    else
+                    {
+                        // Handle the error
+                        return StatusCode((int)response.StatusCode);
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("AccessDenied", "Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error searching agencies.", error = ex.Message });
             }
         }
     }
