@@ -203,7 +203,7 @@
         // Close modal after saving changes
         $('#editUserModal').modal('hide');
         //TODO FIX LATER
-        location.reload();
+        window.location.href = '@Url.Action("AdminModule", "Menu", new { select = "ADMI" })';
 
     }
 

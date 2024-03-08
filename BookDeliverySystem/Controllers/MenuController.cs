@@ -55,22 +55,35 @@ namespace BookDeliverySystem.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> AdminModule()
+        public async Task<IActionResult> AdminModule(string select = "")
         {
-            if (_signInManager.IsSignedIn(User))
+            try
             {
-                //TODO if (!User.Identity.IsAuthenticated) custom function to authenticate based on enabled column
-                if (await getUserRole() != "ADMI")
+                if (_signInManager.IsSignedIn(User))
+                {
+                    //TODO if (!User.Identity.IsAuthenticated) custom function to authenticate based on enabled column
+                    if (await getUserRole() != "ADMI")
+                    {
+                        return RedirectToAction("AccessDenied", "Error");
+                    }
+                    //await setUserRole("ADMI");
+                    if (select.Trim() == "" || select == null)
+                    {
+                        select = "ADMI"; // Example value
+                    }
+
+                    ViewBag.InitialUserType = select;
+                    return View();
+
+                }
+                else
                 {
                     return RedirectToAction("AccessDenied", "Error");
                 }
-                //await setUserRole("ADMI");
-                return View();
-
             }
-            else
+            catch (Exception ex)
             {
-                return RedirectToAction("AccessDenied", "Error");
+                return BadRequest(new { message = "Error searaching clients.", error = ex.Message });
             }
 
         }

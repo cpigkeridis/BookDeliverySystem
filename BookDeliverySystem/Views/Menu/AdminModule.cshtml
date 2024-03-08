@@ -21,6 +21,7 @@
                             <option value="COUR">COURIER</option>
                             <option value="AGEN">AGENCY</option>
                         </select>
+
                     </div>
                 </div>
             </div>
@@ -33,10 +34,15 @@
     </div>
 </main>
 
+<input hidden id="startval" value="@ViewBag.InitialUserType" />
+
 <script>
     $(document).ready(function () {
+
+        var initialUserType = $("#startval").val();
+        $("#userType").val(initialUserType);
         // Initial load on page load
-        GetUsers("CLIE");
+        GetUsers(initialUserType);
 
         // Dropdown change event handling
         $("#userType").change(function () {
