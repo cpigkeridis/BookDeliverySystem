@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDeliveryAPI", "..\BookD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDeliveryCore", "..\BookDeliveryCore\BookDeliveryCore.csproj", "{6797BFCC-1958-4533-BBD3-037490A94CAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigManagerAppSettings", "..\ConfigManagerAppSettings\ConfigManagerAppSettings.csproj", "{177C492D-71C6-4E00-99CD-07215A5AE8CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigManagerAppSettings", "..\ConfigManagerAppSettings\ConfigManagerAppSettings.csproj", "{177C492D-71C6-4E00-99CD-07215A5AE8CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

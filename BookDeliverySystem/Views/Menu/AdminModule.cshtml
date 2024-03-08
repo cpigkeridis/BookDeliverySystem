@@ -1,8 +1,9 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+
 
 <main class="content-wrapper">
     <div class="content">
@@ -14,12 +15,13 @@
                 <div class="form-group">
                     <div class="col-md-4">
                         <label>User Type</label>
-                        <select id="userType" tabindex="-1" class="form-control form-select" aria-hidden="true" style="width:100%">
+                        <select id="userType" tabindex="2" class="form-control form-select" aria-hidden="true" style="width:100%">
+                            <option value="CLIE">CLIENT</option>
                             <option value="ADMI">ADMIN</option>
                             <option value="COUR">COURIER</option>
-                            <option value="CLIE">CLIENT</option>
                             <option value="AGEN">AGENCY</option>
                         </select>
+
                     </div>
                 </div>
             </div>
@@ -32,10 +34,15 @@
     </div>
 </main>
 
+<input hidden id="startval" value="@ViewBag.InitialUserType" />
+
 <script>
     $(document).ready(function () {
+
+        var initialUserType = $("#startval").val();
+        $("#userType").val(initialUserType);
         // Initial load on page load
-        GetUsers("ADMI");
+        GetUsers(initialUserType);
 
         // Dropdown change event handling
         $("#userType").change(function () {

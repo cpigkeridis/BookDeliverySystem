@@ -122,7 +122,7 @@ namespace BookDeliveryAPI.Controllers
 
         [HttpPost]
         [Route("api/[controller]/[action]")]
-        public IActionResult UpdateUserEnableStatus(string username, bool enable)
+        public IActionResult UpdateUserEnableStatus(string username, string enable)
         {
             try
             {

@@ -174,7 +174,7 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
-         public void UpdateUserEnableStatus(string username, bool enable)
+         public void UpdateUserEnableStatus(string username, string enable)
          {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
