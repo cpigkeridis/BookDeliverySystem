@@ -16,5 +16,6 @@ namespace BookDeliverySystemAPI.Interfaces
         public Courier GetCourierByUsername(string username);
         public Administrator GetAdministratorByUsername(string username);
         public List<Agency> GetAgencies();
+        public Users GetUser(string username, string role);
     }
 }

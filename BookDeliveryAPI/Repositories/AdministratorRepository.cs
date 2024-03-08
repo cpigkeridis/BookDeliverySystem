@@ -292,7 +292,32 @@ namespace BookDeliverySystemAPI.Repositories
                 oCnn.Dispose();
             }
         }
-
-
+        public Users GetUser(string username, string role)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            {
+               
+                try
+                {
+                    var parameters = new
+                    { 
+                        username,
+                        role 
+                    };
+                    Users obj = oCnn.QuerySingleOrDefault<Users>("[dbo].[SP_GETUSER]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                    return obj;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    oCnn.Close();
+                    oCnn.Dispose();
+                }
+            }
+        }
     }
 }

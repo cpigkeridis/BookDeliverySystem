@@ -218,5 +218,77 @@ namespace BookDeliveryAPI.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [HttpGet]
+        [Route("api/[controller]/GetUser")]
+        public IActionResult GetUser(string username, string role)
+        {
+            try
+            {
+                Users user = _oAdministrator.GetUser(username, role);
+
+                if (user != null)
+                {
+                    object mappedUser = null;
+
+                    if (user.ROLE == "ADMI")
+                    {
+                        mappedUser = new
+                        {
+                            user.USERNAME,
+                            user.ROLE,
+                            user.ENABLE,
+                            user.FIRSTNAME,
+                            user.LASTNAME,
+                            user.ADDRESS,
+                            user.POSTAL_CODE,
+                            user.PHONE_NUMBER
+                        };
+                    }
+                    else if (user.ROLE == "COUR")
+                    {
+                        mappedUser = new
+                        {
+                            user.USERNAME,
+                            user.ROLE,
+                            user.ENABLE,
+                            user.AGENCY_ID,
+                            user.VEHICLE_NO,
+                            user.STATUS,
+                            user.FIRSTNAME,
+                            user.LASTNAME,
+                            user.ADDRESS,
+                            user.POSTAL_CODE,
+                            user.PHONE_NUMBER,
+                            user.CURRENT_LOCATION
+                        };
+                    }
+                    else if (user.ROLE == "CLIE")
+                    {
+                        mappedUser = new
+                        {
+                            user.USERNAME,
+                            user.ROLE,
+                            user.ENABLE,
+                            user.FIRSTNAME,
+                            user.LASTNAME,
+                            user.ADDRESS,
+                            user.POSTAL_CODE,
+                            user.PHONE_NUMBER
+                        };
+                    }
+
+                    return Ok(mappedUser);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message); 
+            }
+        }
     }
 }
