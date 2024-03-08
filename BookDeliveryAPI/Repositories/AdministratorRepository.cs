@@ -319,5 +319,96 @@ namespace BookDeliverySystemAPI.Repositories
                 }
             }
         }
+
+        public void EditClient(string username, string firstname, string lastname, string address, string postal_code, string phonumber, bool enable)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var parameters = new
+                {
+                    USERNAME = username,
+                    FIRSTNAME = firstname,
+                    LASTNAME = lastname,
+                    ADDRESS = address,
+                    POSTAL_CODE = postal_code,
+                    PHONE_NUMBER = phonumber,
+                    ENABLE = enable
+                };
+                oCnn.Execute("[dbo].[SP_EDIT_CLIENT]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+        }
+        
+        public void EditAdministrator(string username,string firstname, string lastname, string address, string postal_code, string phonumber, bool enable)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var parameters = new
+                {
+                    USERNAME = username,
+                    FIRSTNAME = firstname,
+                    LASTNAME = lastname,
+                    ADDRESS = address,
+                    POSTAL_CODE = postal_code,
+                    PHONE_NUMBER = phonumber,
+                    ENABLE = enable
+                };
+                oCnn.Execute("[dbo].[SP_EDIT_ADMINISTRATOR]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+        }
+        public void EditCourier(string username, string agencyId, string vehicleId, string status, string firstname, string lastname, string address, string postalCode, string phoneNumber, string currentLocation, bool enable)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var parameters = new
+                {
+                    USERNAME = username,
+                    AGENCY_ID = agencyId,
+                    VEHICLE_ID = vehicleId,
+                    STATUS = status,
+                    FIRSTNAME = firstname,
+                    LASTNAME = lastname,
+                    ADDRESS = address,
+                    POSTAL_CODE = postalCode,
+                    PHONE_NUMBER = phoneNumber,
+                    CURRENT_LOCATION = currentLocation,
+                    ENABLE = enable
+                };
+                oCnn.Execute("[dbo].[SP_EDIT_COURIER]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+        }
+
     }
 }

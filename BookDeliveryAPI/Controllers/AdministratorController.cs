@@ -290,5 +290,50 @@ namespace BookDeliveryAPI.Controllers
                 return StatusCode(500, ex.Message); 
             }
         }
+
+        [HttpPost]
+        [Route("api/[controller]/EditClient")]
+        public IActionResult EditClient(string username, string firstname, string lastname, string address, string postal_code, string phonumber, bool enable)
+        {
+            try
+            {
+                _oAdministrator.EditClient(username, firstname, lastname, address, postal_code, phonumber, enable);
+                return Ok(new { message = "client edit succesfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error editing client.", error = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/EditAdministrator")]
+        public IActionResult EditAdministrator(string username, string firstname, string lastname, string address, string postal_code, string phonumber, bool enable)
+        {
+            try
+            {
+                _oAdministrator.EditAdministrator(username, firstname, lastname, address, postal_code, phonumber, enable);
+                return Ok(new { message = "admin edit succesfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error editing admin.", error = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/EditCourier")]
+        public IActionResult EditCourier(string username, string agency_id, string vehicle_id, string status, string firstname, string lastname, string address, string postalcode, string phonenumber, string currentlocation, bool enable)
+        {
+            try
+            {
+                _oAdministrator.EditCourier(username,  agency_id,  vehicle_id,  status,  firstname,  lastname,  address,  postalcode,  phonenumber,  currentlocation, enable);
+                return Ok(new { message = "courier edit succesfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error editing courier.", error = ex.Message });
+            }
+        }
     }
 }
