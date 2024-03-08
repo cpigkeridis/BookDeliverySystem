@@ -11,7 +11,7 @@ namespace BookDeliverySystemAPI.Interfaces
         public List<BookDeliveryCore.Client> GetClients();
         public List<BookDeliveryCore.Courier> GetCouriers();
         public List<BookDeliveryCore.Administrator> GetAdministrators();
-        public void UpdateUserEnableStatus(string username, bool enable);
+        public void UpdateUserEnableStatus(string username, string enable);
         public Client GetClientByUsername(string username);
         public Courier GetCourierByUsername(string username);
         public Administrator GetAdministratorByUsername(string username);
