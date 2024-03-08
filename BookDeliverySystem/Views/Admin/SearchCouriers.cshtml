@@ -21,7 +21,8 @@
                         <th scope="col">Agency ID</th>
                         <th scope="col">Vehicle No</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Name</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
                         <th scope="col">Address</th>
                         <th scope="col">Postal Code</th>
                         <th scope="col">Role</th>
@@ -39,14 +40,15 @@
                             <td>@courier.AGENCY_ID</td>
                             <td>@courier.VEHICLE_NO</td>
                             <td>@courier.STATUS</td>
-                            <td>@courier.FIRSTNAME  @courier.LASTNAME</td>
+                            <td>@courier.FIRSTNAME</td>
+                            <td>@courier.LASTNAME</td>
                             <td>@courier.ADDRESS</td>
                             <td>@courier.POSTAL_CODE</td>
                             <td>@courier.ROLE</td>
                             <td>@courier.PHONE_NUMBER</td>
                             <td>@courier.CURRENT_LOCATION</td>
                             <td>@courier.ENABLE</td>
-                            <td><button><i class="fa fa-magic" aria-hidden="true"></i></button></td>
+                            <td><button onclick="EditUser(this)"><i class="fa fa-magic" aria-hidden="true"></i></button></td>
                         </tr>
                     }
                 </tbody>
@@ -54,6 +56,79 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" disabled>
+                    </div>
+                     <div class="mb-3">
+                        <label for="agency" class="form-label">Agency</label>
+                        <input type="text" class="form-control" id="agency" >
+                    </div>
+                     <div class="mb-3">
+                        <label for="vehicle" class="form-label">Vehicle No</label>
+                        <input type="text" class="form-control" id="vehicle" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <input type="text" class="form-control" id="status" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="firstname" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstname">
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastname" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastname">
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address">
+                    </div>
+                    <div class="mb-3">
+                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <input type="text" class="form-control" id="postalCode">
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role</label>
+                        <select id="role" class="form-control form-select" aria-hidden="true" style="width:100%">
+                            <option value="ADMI">ADMIN</option>
+                            <option value="COUR">COURIER</option>
+                            <option value="CLIE">CLIENT</option>
+                        </select>
+                        @*<input type="text" class="form-control" id="role">*@
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="phoneNumber">
+                    </div>
+                    <div class="mb-3">
+                        <label for="currentlocation" class="form-label">Current Location</label>
+                        <input type="text" class="form-control" id="currentlocation">
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="enabled">
+                        <label class="form-check-label" for="enabled">Enabled</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveChanges()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input id="role2" hidden disabled />
 
 <script>
     $(document).ready(function () {
@@ -72,5 +147,97 @@
                 { className: 'dt-body-left', targets: '_all' }
             ]
         });
+
     });
+    function EditUser(button) {
+        var row = button.parentNode.parentNode; // Get the row
+        var cells = row.getElementsByTagName("td");
+        var userData = {
+            username: cells[0].innerText,
+            agencyid: cells[1].innerText,
+            vehicleno: cells[2].innerText,
+            status: cells[3].innerText,
+            firstname: cells[4].innerText,
+            lastname: cells[5].innerText,
+            address: cells[6].innerText,
+            postalcode: cells[7].innerText,
+            role: cells[8].innerText,
+            phonenumber: cells[9].innerText,
+            currentlocation: cells[10].innerText,
+            enabled: cells[11].innerText
+        };
+
+        // Now you can do whatever you want with userData
+        console.log(userData);
+        $('#role2').val(userData.role);
+        editUserModal(userData)
+    }
+
+    function editUserModal(userData) {
+        $('#username').val(userData.username);
+        $('#agency').val(userData.agencyid);
+        $('#vehicle').val(userData.vehicleno);
+        $('#status').val(userData.status);
+        $('#firstname').val(userData.firstname);
+        $('#lastname').val(userData.lastname);
+        $('#address').val(userData.address);
+        $('#postalCode').val(userData.postalcode);
+        $('#role').val(userData.role);
+        $('#phoneNumber').val(userData.phonenumber);
+        $('#currentlocation').val(userData.currentlocation);
+        $('#enabled').prop('checked', userData.enabled === 'True');
+
+        $('#editUserModal').modal('show');
+    }
+
+    function saveChanges() {
+        var username = $('#username').val();
+        var agency = $('#agency').val();
+        var vehicle = $('#vehicle').val();
+        var status = $('#status').val();
+        var firstname = $('#firstname').val();
+        var lastname = $('#lastname').val();
+        var address = $('#address').val();
+        var postalCode = $('#postalCode').val();
+        var role = $('#role').val();
+        var phoneNumber = $('#phoneNumber').val();
+        var currentlocation = $('#currentlocation').val();
+        var enabled = $('#enabled').prop('checked').toString();
+
+        //// Perform actions to save changes here
+        //console.log("Username: " + username);
+        //console.log("First Name: " + firstname);
+        //console.log("Last Name: " + lastname);
+        //console.log("Address: " + address);
+        //console.log("Postal Code: " + postalCode);
+        //console.log("Role: " + role);
+        //console.log("Phone Number: " + phoneNumber);
+        //console.log("Enabled: " + enabled);
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("UpdateCourier", "Admin")",
+            contentType: "application/json; charset=utf-8",
+
+            // Pass only the 'username' parameter
+            data: JSON.stringify({ 'Username': username,'Agency':agency,'Vehicle':vehicle,'Status':status, 'Firstname': firstname, 'Lastname': lastname, 'Address': address, 'PostalCode': postalCode, 'Role': role, 'PhoneNumber': phoneNumber, 'Currentlocation':currentlocation,'Enabled': enabled, 'OldRole': $('#role2').val() }),
+            async: false,
+            success: function (response) {
+                console.log(response); // Add this line for logging
+                //$('#UserResult').html(response);
+                // Initialize DataTable here if needed
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+
+        // Close modal after saving changes
+        $('#editUserModal').modal('hide');
+        //TODO FIX LATER
+        location.reload();
+
+    }
+
+
 </script>

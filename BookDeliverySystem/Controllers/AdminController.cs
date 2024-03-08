@@ -4,6 +4,7 @@ using BookDeliverySystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Net;
 using System.Text;
@@ -242,6 +243,30 @@ namespace BookDeliverySystem.Controllers
                 return BadRequest(new { message = "Error searching agencies.", error = ex.Message });
             }
         }
+        public string getRoleUrl(string oldrole,string newrole,string username)
+        {
+            string apiUrl = "";
+            if (oldrole == "CLIE")
+            {
+                apiUrl = $"https://localhost:7203/api/Administrator/ChangeClientRole?username={username}&role={newrole}";
+            }
+            else if (oldrole == "ADMI")
+            {
+                apiUrl = $"https://localhost:7203/api/Administrator/ChangeAdministratorRole?username={username}&role={newrole}";
+
+            }
+            else if (oldrole == "COUR")
+            {
+                apiUrl = $"https://localhost:7203/api/Administrator/ChangeCourierRole?username={username}&role={newrole}";
+
+            }
+            else
+            {
+                return apiUrl;
+            }
+            return apiUrl;
+
+        }
         
         public async Task<IActionResult> UpdateClient([FromBody] SearchUsersReqModel value)
         {
@@ -267,7 +292,7 @@ namespace BookDeliverySystem.Controllers
                         oldrole=value.OldRole
 
                     };
-                    string json = JsonConvert.SerializeObject(values);
+                    //string json = JsonConvert.SerializeObject(values);
                     string apiUrl = $"https://localhost:7203/api/Administrator/UpdateUserEnableStatus?username={value.Username}&enable={value.Enabled}";
  
 
@@ -281,26 +306,194 @@ namespace BookDeliverySystem.Controllers
                     if (response1.IsSuccessStatusCode)
                     {
                         string responseBody = await response1.Content.ReadAsStringAsync();
-                        string apiUrl2 = "";
-                        if (values.oldrole == "CLIE")
+                        apiUrl = getRoleUrl(values.oldrole,values.role,values.username);
+                        if (apiUrl.Trim() == "")
                         {
-                             apiUrl2 = $"https://localhost:7203/api/Administrator/ChangeClientRole?username={value.Username}&role={value.Role}";
+                            throw new Exception ("Failed to retrieve url for updating role");
                         }
-                        else if (values.oldrole == "ADMI")
+                        
+                        HttpResponseMessage response2 = await _httpClient.PostAsync(apiUrl, null);
+                        if (response2.IsSuccessStatusCode)
                         {
-                             apiUrl2 = $"https://localhost:7203/api/Administrator/ChangeAdministratorRole?username={value.Username}&role={value.Role}";
-
-                        }
-                        else if (values.oldrole == "COUR")
-                        {
-                             apiUrl2 = $"https://localhost:7203/api/Administrator/ChangeCourierRole?username={value.Username}&role={value.Role}";
-
+                            responseBody = responseBody + " " + await response2.Content.ReadAsStringAsync();
+                            _httpClient.Dispose();
+                            return Ok(new { message = "Request successful.", responseBody });
                         }
                         else
                         {
-                            throw new Exception("NO ROLE");
+                            _httpClient.Dispose();
+
+                            // If the request was not successful, handle the error
+                            // For example, read the error response content
+                            string errorResponse = await response1.Content.ReadAsStringAsync();
+
+                            // Return an appropriate error message
+                            return BadRequest(new { message = "Updated Enabled but failed to update role.", errorResponse });
                         }
-                        HttpResponseMessage response2 = await _httpClient.PostAsync(apiUrl2, null);
+
+                    }
+                    else
+                    {
+                        _httpClient.Dispose();
+
+                        // If the request was not successful, handle the error
+                        // For example, read the error response content
+                        string errorResponse = await response1.Content.ReadAsStringAsync();
+
+                        // Return an appropriate error message
+                        return BadRequest(new { message = "Request failed.", errorResponse });
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("AccessDenied", "Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error searching agencies.", error = ex.Message });
+            }
+
+        }
+
+        public async Task<IActionResult> UpdateAdmin([FromBody] SearchUsersReqModel value)
+        {
+            try
+            {
+                if (_signInManager.IsSignedIn(User))
+                {
+                    // TODO: if (!User.Identity.IsAuthenticated) custom function to authenticate based on enabled column
+                    if (await getUserRole() != "ADMI")
+                    {
+                        return RedirectToAction("AccessDenied", "Error");
+                    }
+                    var values = new
+                    {
+                        username = value.Username,
+                        firstname = value.Firstname,
+                        lastname = value.Lastname,
+                        address = value.Address,
+                        postalcode = value.PostalCode,
+                        role = value.Role,
+                        phonenumber = value.PhoneNumber,
+                        enabled = value.Enabled,
+                        oldrole = value.OldRole
+
+                    };
+                    //string json = JsonConvert.SerializeObject(values);
+                    string apiUrl = $"https://localhost:7203/api/Administrator/UpdateUserEnableStatus?username={value.Username}&enable={value.Enabled}";
+
+
+
+
+
+                    // Make a POST request to the API endpoint for agencies
+                    HttpResponseMessage response1 = await _httpClient.PostAsync(apiUrl, null);
+
+                    // Check if the request was successful
+                    if (response1.IsSuccessStatusCode)
+                    {
+                        string responseBody = await response1.Content.ReadAsStringAsync();
+                        apiUrl = getRoleUrl(values.oldrole, values.role, values.username);
+                        if (apiUrl.Trim() == "")
+                        {
+                            throw new Exception("Failed to retrieve url for updating role");
+                        }
+
+                        HttpResponseMessage response2 = await _httpClient.PostAsync(apiUrl, null);
+                        if (response2.IsSuccessStatusCode)
+                        {
+                            responseBody = responseBody + " " + await response2.Content.ReadAsStringAsync();
+                            _httpClient.Dispose();
+                            return Ok(new { message = "Request successful.", responseBody });
+                        }
+                        else
+                        {
+                            _httpClient.Dispose();
+
+                            // If the request was not successful, handle the error
+                            // For example, read the error response content
+                            string errorResponse = await response1.Content.ReadAsStringAsync();
+
+                            // Return an appropriate error message
+                            return BadRequest(new { message = "Updated Enabled but failed to update role.", errorResponse });
+                        }
+
+                    }
+                    else
+                    {
+                        _httpClient.Dispose();
+
+                        // If the request was not successful, handle the error
+                        // For example, read the error response content
+                        string errorResponse = await response1.Content.ReadAsStringAsync();
+
+                        // Return an appropriate error message
+                        return BadRequest(new { message = "Request failed.", errorResponse });
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("AccessDenied", "Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error searching agencies.", error = ex.Message });
+            }
+
+        }
+
+
+        public async Task<IActionResult> UpdateCourier([FromBody] SearchCouriersReqModel value)
+        {
+            try
+            {
+                if (_signInManager.IsSignedIn(User))
+                {
+                    // TODO: if (!User.Identity.IsAuthenticated) custom function to authenticate based on enabled column
+                    if (await getUserRole() != "ADMI")
+                    {
+                        return RedirectToAction("AccessDenied", "Error");
+                    }
+                    var values = new
+                    {
+                        username = value.Username,
+                        agency = value.Agency,
+                        vehicle= value.Vehicle,
+                        status= value.Status,
+                        firstname = value.Firstname,
+                        lastname = value.Lastname,
+                        address = value.Address,
+                        postalcode = value.PostalCode,
+                        role = value.Role,
+                        phonenumber = value.PhoneNumber,
+                        currentlocation= value.Currentlocation,
+                        enabled = value.Enabled,
+                        oldrole = value.OldRole
+
+                    };
+                    //string json = JsonConvert.SerializeObject(values);
+                    string apiUrl = $"https://localhost:7203/api/Administrator/UpdateUserEnableStatus?username={value.Username}&enable={value.Enabled}";
+
+
+
+
+
+                    // Make a POST request to the API endpoint for agencies
+                    HttpResponseMessage response1 = await _httpClient.PostAsync(apiUrl, null);
+
+                    // Check if the request was successful
+                    if (response1.IsSuccessStatusCode)
+                    {
+                        string responseBody = await response1.Content.ReadAsStringAsync();
+                        apiUrl = getRoleUrl(values.oldrole, values.role, values.username);
+                        if (apiUrl.Trim() == "")
+                        {
+                            throw new Exception("Failed to retrieve url for updating role");
+                        }
+
+                        HttpResponseMessage response2 = await _httpClient.PostAsync(apiUrl, null);
                         if (response2.IsSuccessStatusCode)
                         {
                             responseBody = responseBody + " " + await response2.Content.ReadAsStringAsync();

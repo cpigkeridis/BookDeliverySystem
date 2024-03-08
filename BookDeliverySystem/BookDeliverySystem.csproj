@@ -23,4 +23,9 @@
     <ProjectReference Include="..\ConfigManagerAppSettings\ConfigManagerAppSettings.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="css\" />
+    <Folder Include="Scripts\" />
+  </ItemGroup>
+
 </Project>
