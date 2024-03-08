@@ -190,8 +190,6 @@
             async: false,
             success: function (response) {
                 console.log(response); // Add this line for logging
-                //$('#UserResult').html(response);
-                // Initialize DataTable here if needed
             },
             error: function (xhr, status, error) {
                 alert(error);
@@ -201,7 +199,7 @@
         // Close modal after saving changes
         $('#editUserModal').modal('hide');
         //TODO FIX LATER
-        location.reload();
+        window.location.href = '@Url.Action("AdminModule", "Menu", new { select = "CLIE" })';
 
     }
               
