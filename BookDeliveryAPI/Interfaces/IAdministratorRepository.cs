@@ -17,8 +17,8 @@ namespace BookDeliverySystemAPI.Interfaces
         public Administrator GetAdministratorByUsername(string username);
         public List<Agency> GetAgencies();
         public Users GetUser(string username, string role);
-        public void EditClient(string username, string firstname, string lastname, string address, string postal_code, string phonumber, bool enable);
-        public void EditAdministrator(string username, string firstname, string lastname, string address, string postal_code, string phonumber, bool enable);
-        public void EditCourier(string username, string agency_id, string vehicle_id, string status, string firstname, string lastname, string address, string postalcode, string phonenumber, string currentlocation, bool enable);
+        public void EditClient(string username, string firstname, string lastname, string address, string postal_code, string phonumber, bool enable, string NewRole);
+        public void EditAdministrator(string username, string firstname, string lastname, string address, string postal_code, string phonumber, bool enable, string NewRole);
+        public void EditCourier(string username, string agency_id, string vehicle_id, string status, string firstname, string lastname, string address, string postalcode, string phonenumber, string currentlocation, bool enable, string NewRole);
     }
 }
