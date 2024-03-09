@@ -413,5 +413,28 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
+        public Orders GetOrderByUserName(string ClientUsername)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var parameters = new
+                {
+                    CLIENTUSERNAME = ClientUsername,
+                };
+                Orders obj = oCnn.QuerySingleOrDefault<Orders>("[dbo].[SP_GET_ORDER_BY_USERNAME]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+        }
     }
 }

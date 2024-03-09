@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="css\**" />
+    <Compile Remove="Scripts\**" />
+    <Content Remove="css\**" />
+    <Content Remove="Scripts\**" />
+    <EmbeddedResource Remove="css\**" />
+    <EmbeddedResource Remove="Scripts\**" />
+    <None Remove="css\**" />
+    <None Remove="Scripts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="jQuery" Version="3.7.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.27" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.27" />
@@ -21,11 +32,6 @@
   <ItemGroup>
     <ProjectReference Include="..\BookDeliveryAPI\BookDeliveryAPI.csproj" />
     <ProjectReference Include="..\ConfigManagerAppSettings\ConfigManagerAppSettings.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="css\" />
-    <Folder Include="Scripts\" />
   </ItemGroup>
 
 </Project>

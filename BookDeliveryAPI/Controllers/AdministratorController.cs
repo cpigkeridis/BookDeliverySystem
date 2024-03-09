@@ -182,7 +182,7 @@ namespace BookDeliveryAPI.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]/GetCourierByUsername")]
+        [Route("api/[controller]/[action]")]
         public IActionResult GetCourierByUsername(string username)
         {
             try
@@ -205,7 +205,7 @@ namespace BookDeliveryAPI.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]/GetAgencies")]
+        [Route("api/[controller]/[action]")]
         public IActionResult GetAgencies()
         {
             try
@@ -220,7 +220,7 @@ namespace BookDeliveryAPI.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]/GetUser")]
+        [Route("api/[controller]/[action]")]
         public IActionResult GetUser(string username, string role)
         {
             try
@@ -292,7 +292,7 @@ namespace BookDeliveryAPI.Controllers
         }
 
         [HttpPost]
-        [Route("api/[controller]/EditClient")]
+        [Route("api/[controller]/[action]")]
         public IActionResult EditClient(Client oclient)
         {
             try
@@ -307,7 +307,7 @@ namespace BookDeliveryAPI.Controllers
         }
 
         [HttpPost]
-        [Route("api/[controller]/EditAdministrator")]
+        [Route("api/[controller]/[action]")]
         public IActionResult EditAdministrator(Administrator oAdmin)
         {
             try
@@ -322,7 +322,7 @@ namespace BookDeliveryAPI.Controllers
         }
 
         [HttpPost]
-        [Route("api/[controller]/EditCourier")]
+        [Route("api/[controller]/[action]")]
         public IActionResult EditCourier(Courier oCour)
         {
             try
@@ -333,6 +333,29 @@ namespace BookDeliveryAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { message = "Error editing courier.", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/[action]")]
+        public IActionResult GetOrderByUserName(string ClientUsername)
+        {
+            try
+            {
+                Orders order = _oAdministrator.GetOrderByUserName(ClientUsername);
+
+                if (order != null)
+                {
+                    return Ok(order);
+                }
+                else
+                {
+                    return NotFound(new { message = "Order not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error getting order.", error = ex.Message });
             }
         }
     }

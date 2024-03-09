@@ -20,5 +20,6 @@ namespace BookDeliverySystemAPI.Interfaces
         public void EditClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber, bool enable, string NewRole);
         public void EditAdministrator(string username, string firstname, string lastname, string address, string postalcode, string phonenumber, bool enable, string NewRole);
         public void EditCourier(string username, string? agencyId, string? vehicleNo, string? status, string firstname, string lastname, string address, string postalcode, string phonenumber, string? currentlocation, bool enable, string NewRole);
+        public Orders GetOrderByUserName(string ClientUsername);
     }
 }
