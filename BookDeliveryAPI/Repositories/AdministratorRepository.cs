@@ -320,7 +320,7 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
-        public void EditClient(string username, string firstname, string lastname, string address, string postal_code, string phonumber, bool enable, string NewRole)
+        public void EditClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber, bool enable, string NewRole)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -332,10 +332,10 @@ namespace BookDeliverySystemAPI.Repositories
                     FIRSTNAME = firstname,
                     LASTNAME = lastname,
                     ADDRESS = address,
-                    POSTAL_CODE = postal_code,
-                    PHONE_NUMBER = phonumber,
+                    POSTALCODE = postalcode,
+                    PHONENUMBER = phonenumber,
                     ENABLE = enable,
-                    ROLE = NewRole
+                    NEWROLE = NewRole
                 };
                 oCnn.Execute("[dbo].[SP_EDIT_CLIENT]", parameters, commandType: System.Data.CommandType.StoredProcedure);
             }
@@ -350,7 +350,7 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
         
-        public void EditAdministrator(string username,string firstname, string lastname, string address, string postal_code, string phonumber, bool enable, string NewRole)
+        public void EditAdministrator(string username,string firstname, string lastname, string address, string postalcode, string phonenumber, bool enable, string NewRole)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -362,10 +362,10 @@ namespace BookDeliverySystemAPI.Repositories
                     FIRSTNAME = firstname,
                     LASTNAME = lastname,
                     ADDRESS = address,
-                    POSTAL_CODE = postal_code,
-                    PHONE_NUMBER = phonumber,
+                    POSTALCODE = postalcode,
+                    PHONENUMBER = phonenumber,
                     ENABLE = enable,
-                    ROLE = NewRole
+                    NEWROLE = NewRole
                 };
                 oCnn.Execute("[dbo].[SP_EDIT_ADMINISTRATOR]", parameters, commandType: System.Data.CommandType.StoredProcedure);
             }
@@ -379,7 +379,7 @@ namespace BookDeliverySystemAPI.Repositories
                 oCnn.Dispose();
             }
         }
-        public void EditCourier(string username, string agencyId, string vehicleId, string status, string firstname, string lastname, string address, string postalCode, string phoneNumber, string currentLocation, bool enable, string NewRole)
+        public void EditCourier(string username, string agencyId, string vehicleNo, string status, string firstname, string lastname, string address, string postalcode, string phonenumber, string currentLocation, bool enable, string NewRole)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -388,17 +388,17 @@ namespace BookDeliverySystemAPI.Repositories
                 var parameters = new
                 {
                     USERNAME = username,
-                    AGENCY_ID = agencyId,
-                    VEHICLE_ID = vehicleId,
+                    AGENCYID = agencyId,
+                    VEHICLENO = vehicleNo,
                     STATUS = status,
                     FIRSTNAME = firstname,
                     LASTNAME = lastname,
                     ADDRESS = address,
-                    POSTAL_CODE = postalCode,
-                    PHONE_NUMBER = phoneNumber,
-                    CURRENT_LOCATION = currentLocation,
+                    POSTALCODE = postalcode,
+                    PHONENUMBER = phonenumber,
+                    CURRENTLOCATION = currentLocation,
                     ENABLE = enable,
-                    ROLE = NewRole
+                    NEWROLE = NewRole
                 };
                 oCnn.Execute("[dbo].[SP_EDIT_COURIER]", parameters, commandType: System.Data.CommandType.StoredProcedure);
             }
