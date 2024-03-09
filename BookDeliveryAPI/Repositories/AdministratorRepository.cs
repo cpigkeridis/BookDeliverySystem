@@ -320,7 +320,7 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
-        public void EditClient(string username, string firstname, string lastname, string address, string postal_code, string phonumber, bool enable)
+        public void EditClient(string username, string firstname, string lastname, string address, string postal_code, string phonumber, bool enable, string NewRole)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -334,7 +334,8 @@ namespace BookDeliverySystemAPI.Repositories
                     ADDRESS = address,
                     POSTAL_CODE = postal_code,
                     PHONE_NUMBER = phonumber,
-                    ENABLE = enable
+                    ENABLE = enable,
+                    ROLE = NewRole
                 };
                 oCnn.Execute("[dbo].[SP_EDIT_CLIENT]", parameters, commandType: System.Data.CommandType.StoredProcedure);
             }
@@ -349,7 +350,7 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
         
-        public void EditAdministrator(string username,string firstname, string lastname, string address, string postal_code, string phonumber, bool enable)
+        public void EditAdministrator(string username,string firstname, string lastname, string address, string postal_code, string phonumber, bool enable, string NewRole)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -363,7 +364,8 @@ namespace BookDeliverySystemAPI.Repositories
                     ADDRESS = address,
                     POSTAL_CODE = postal_code,
                     PHONE_NUMBER = phonumber,
-                    ENABLE = enable
+                    ENABLE = enable,
+                    ROLE = NewRole
                 };
                 oCnn.Execute("[dbo].[SP_EDIT_ADMINISTRATOR]", parameters, commandType: System.Data.CommandType.StoredProcedure);
             }
@@ -377,7 +379,7 @@ namespace BookDeliverySystemAPI.Repositories
                 oCnn.Dispose();
             }
         }
-        public void EditCourier(string username, string agencyId, string vehicleId, string status, string firstname, string lastname, string address, string postalCode, string phoneNumber, string currentLocation, bool enable)
+        public void EditCourier(string username, string agencyId, string vehicleId, string status, string firstname, string lastname, string address, string postalCode, string phoneNumber, string currentLocation, bool enable, string NewRole)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -395,7 +397,8 @@ namespace BookDeliverySystemAPI.Repositories
                     POSTAL_CODE = postalCode,
                     PHONE_NUMBER = phoneNumber,
                     CURRENT_LOCATION = currentLocation,
-                    ENABLE = enable
+                    ENABLE = enable,
+                    ROLE = NewRole
                 };
                 oCnn.Execute("[dbo].[SP_EDIT_COURIER]", parameters, commandType: System.Data.CommandType.StoredProcedure);
             }
