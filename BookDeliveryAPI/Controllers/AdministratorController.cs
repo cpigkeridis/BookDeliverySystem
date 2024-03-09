@@ -293,11 +293,11 @@ namespace BookDeliveryAPI.Controllers
 
         [HttpPost]
         [Route("api/[controller]/EditClient")]
-        public IActionResult EditClient(string username, string firstname, string lastname, string address, string postalcode, string phonumber, bool enable, string NewRole)
+        public IActionResult EditClient(Client oclient)
         {
             try
             {
-                _oAdministrator.EditClient(username, firstname, lastname, address, postalcode, phonumber, enable, NewRole);
+                _oAdministrator.EditClient(oclient.USERNAME, oclient.FIRSTNAME, oclient.LASTNAME, oclient.ADDRESS, oclient.POSTAL_CODE, oclient.PHONE_NUMBER, oclient.ENABLE, oclient.ROLE);
                 return Ok(new { message = "client edit succesfully" });
             }
             catch (Exception ex)
@@ -308,11 +308,11 @@ namespace BookDeliveryAPI.Controllers
 
         [HttpPost]
         [Route("api/[controller]/EditAdministrator")]
-        public IActionResult EditAdministrator(string username, string firstname, string lastname, string address, string postalcode, string phonenumber, bool enable, string NewRole)
+        public IActionResult EditAdministrator(Administrator oAdmin)
         {
             try
             {
-                _oAdministrator.EditAdministrator(username, firstname, lastname, address, postalcode, phonenumber, enable, NewRole);
+                _oAdministrator.EditAdministrator(oAdmin.USERNAME, oAdmin.FIRSTNAME, oAdmin.LASTNAME, oAdmin.ADDRESS, oAdmin.POSTAL_CODE, oAdmin.PHONE_NUMBER, oAdmin.ENABLE, oAdmin.ROLE);
                 return Ok(new { message = "admin edit succesfully" });
             }
             catch (Exception ex)
@@ -323,11 +323,11 @@ namespace BookDeliveryAPI.Controllers
 
         [HttpPost]
         [Route("api/[controller]/EditCourier")]
-        public IActionResult EditCourier(string username, string agencyId, string vehicleNo, string status, string firstname, string lastname, string address, string postalcode, string phonenumber, string currentlocation, bool enable, string NewRole)
+        public IActionResult EditCourier(Courier oCour)
         {
             try
             {
-                _oAdministrator.EditCourier(username,  agencyId,  vehicleNo,  status,  firstname,  lastname,  address,  postalcode,  phonenumber,  currentlocation, enable, NewRole);
+                _oAdministrator.EditCourier(oCour.USERNAME, oCour.AGENCY_ID, oCour.VEHICLE_NO, oCour.STATUS.ToString(), oCour.FIRSTNAME, oCour.LASTNAME, oCour.ADDRESS, oCour.POSTAL_CODE, oCour.PHONE_NUMBER, oCour.CURRENT_LOCATION, oCour.ENABLE, oCour.ROLE);
                 return Ok(new { message = "courier edit succesfully" });
             }
             catch (Exception ex)

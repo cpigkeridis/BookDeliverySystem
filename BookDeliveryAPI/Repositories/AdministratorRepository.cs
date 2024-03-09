@@ -379,7 +379,7 @@ namespace BookDeliverySystemAPI.Repositories
                 oCnn.Dispose();
             }
         }
-        public void EditCourier(string username, string agencyId, string vehicleNo, string status, string firstname, string lastname, string address, string postalcode, string phonenumber, string currentLocation, bool enable, string NewRole)
+        public void EditCourier(string username, string? agencyId, string? vehicleNo, string? status, string firstname, string lastname, string address, string postalcode, string phonenumber, string? currentLocation, bool enable, string NewRole)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -388,9 +388,9 @@ namespace BookDeliverySystemAPI.Repositories
                 var parameters = new
                 {
                     USERNAME = username,
-                    AGENCYID = agencyId,
+                    AGENCYID = (agencyId == "") ? null : agencyId,
                     VEHICLENO = vehicleNo,
-                    STATUS = status,
+                    STATUS = (status=="")?null:status,
                     FIRSTNAME = firstname,
                     LASTNAME = lastname,
                     ADDRESS = address,

@@ -3,6 +3,7 @@ using BookDeliverySystem.Areas.Identity.Data;
 using BookDeliverySystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Data;
@@ -36,7 +37,7 @@ namespace BookDeliverySystem.Controllers
             return user.Role;
         }
 
-        public async Task<IActionResult> setUserRole(string role,string username)
+        public async Task<IActionResult> setUserRole(string role, string username)
         {
             if (role.Trim() == "")
             {
@@ -58,7 +59,7 @@ namespace BookDeliverySystem.Controllers
             }
         }
 
-        
+
         public async Task<IActionResult> SearchClients()
         {
             try
@@ -96,7 +97,8 @@ namespace BookDeliverySystem.Controllers
                     return RedirectToAction("AccessDenied", "Error");
                 }
             }
-             catch (Exception ex){
+            catch (Exception ex)
+            {
                 return BadRequest(new { message = "Error searaching clients.", error = ex.Message });
             }
         }
@@ -230,31 +232,31 @@ namespace BookDeliverySystem.Controllers
                 return BadRequest(new { message = "Error searching agencies.", error = ex.Message });
             }
         }
-        public string getRoleUrl(string oldrole,string newrole,string username)
-        {
-            string apiUrl = "";
-            if (oldrole == "CLIE")
-            {
-                apiUrl = $"https://localhost:7203/api/Administrator/ChangeClientRole?username={username}&role={newrole}";
-            }
-            else if (oldrole == "ADMI")
-            {
-                apiUrl = $"https://localhost:7203/api/Administrator/ChangeAdministratorRole?username={username}&role={newrole}";
+        //public string getRoleUrl(string oldrole, string newrole, string username)
+        //{
+        //    string apiUrl = "";
+        //    if (oldrole == "CLIE")
+        //    {
+        //        apiUrl = $"https://localhost:7203/api/Administrator/ChangeClientRole?username={username}&role={newrole}";
+        //    }
+        //    else if (oldrole == "ADMI")
+        //    {
+        //        apiUrl = $"https://localhost:7203/api/Administrator/ChangeAdministratorRole?username={username}&role={newrole}";
 
-            }
-            else if (oldrole == "COUR")
-            {
-                apiUrl = $"https://localhost:7203/api/Administrator/ChangeCourierRole?username={username}&role={newrole}";
+        //    }
+        //    else if (oldrole == "COUR")
+        //    {
+        //        apiUrl = $"https://localhost:7203/api/Administrator/ChangeCourierRole?username={username}&role={newrole}";
 
-            }
-            else
-            {
-                return apiUrl;
-            }
-            return apiUrl;
+        //    }
+        //    else
+        //    {
+        //        return apiUrl;
+        //    }
+        //    return apiUrl;
 
-        }
-        
+        //}
+
         public async Task<IActionResult> UpdateClient([FromBody] SearchUsersReqModel value)
         {
             try
@@ -266,59 +268,43 @@ namespace BookDeliverySystem.Controllers
                     {
                         return RedirectToAction("AccessDenied", "Error");
                     }
-                    var values = new
-                    {
-                        username=value.Username,
-                        firstname = value.Firstname,
-                        lastname = value.Lastname,
-                        address = value.Address,
-                        postalcode = value.PostalCode,
-                        role = value.Role,
-                        phonenumber = value.PhoneNumber,
-                        enabled = value.Enabled,
-                        oldrole=value.OldRole
+                    Client cl = new Client();
 
-                    };
+                    //var values = new
+                    //{
+                    //    username = value.Username,
+                    //    firstname = value.Firstname,
+                    //    lastname = value.Lastname,
+                    //    address = value.Address,
+                    //    postalcode = value.PostalCode,
+                    //    role = value.Role,
+                    //    phonenumber = value.PhoneNumber,
+                    //    enabled = value.Enabled,
+                    //    //oldrole=value.OldRole
+                    //};
+                    cl.USERNAME = value.Username;
+                    cl.FIRSTNAME = value.Firstname;
+                    cl.LASTNAME = value.Lastname;
+                    cl.ADDRESS = value.Address;
+                    cl.POSTAL_CODE = value.PostalCode;
+                    cl.ROLE = value.Role;
+                    cl.PHONE_NUMBER = value.PhoneNumber;
+                    cl.ENABLE = bool.Parse(value.Enabled);
+
+
                     //string json = JsonConvert.SerializeObject(values);
-                    string apiUrl = $"https://localhost:7203/api/Administrator/UpdateUserEnableStatus?username={value.Username}&enable={value.Enabled}";
- 
-
-
-
-
+                    string apiUrl = $"https://localhost:7203/api/Administrator/EditClient";
                     // Make a POST request to the API endpoint for agencies
-                    HttpResponseMessage response1 = await _httpClient.PostAsync(apiUrl, null);
+                    HttpResponseMessage response = await _httpClient.PostAsJsonAsync(apiUrl, cl);
 
                     // Check if the request was successful
-                    if (response1.IsSuccessStatusCode)
+                    if (response.IsSuccessStatusCode)
                     {
-                        string responseBody = await response1.Content.ReadAsStringAsync();
-                        apiUrl = getRoleUrl(values.oldrole,values.role,values.username);
-                        if (apiUrl.Trim() == "")
-                        {
-                            throw new Exception ("Failed to retrieve url for updating role");
-                        }
-                        
-                        HttpResponseMessage response2 = await _httpClient.PostAsync(apiUrl, null);
-                        if (response2.IsSuccessStatusCode)
-                        {
-                            var resp = await setUserRole(values.role,values.username);
-                            responseBody = responseBody + " " + await response2.Content.ReadAsStringAsync() + " asp role:" + resp;
-                            _httpClient.Dispose();
-                            return Ok(new { message = "Request successful.", responseBody });
-                        }
-                        else
-                        {
-                            _httpClient.Dispose();
-
-                            // If the request was not successful, handle the error
-                            // For example, read the error response content
-                            string errorResponse = await response1.Content.ReadAsStringAsync();
-
-                            // Return an appropriate error message
-                            return BadRequest(new { message = "Updated Enabled but failed to update role.", errorResponse });
-                        }
-
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        var resp = await setUserRole(cl.ROLE, cl.USERNAME);
+                        responseBody = responseBody + " asp role:" + resp;
+                        _httpClient.Dispose();
+                        return Ok(new { message = "Request successful.", responseBody });
                     }
                     else
                     {
@@ -326,11 +312,12 @@ namespace BookDeliverySystem.Controllers
 
                         // If the request was not successful, handle the error
                         // For example, read the error response content
-                        string errorResponse = await response1.Content.ReadAsStringAsync();
+                        string errorResponse = await response.Content.ReadAsStringAsync();
 
                         // Return an appropriate error message
-                        return BadRequest(new { message = "Request failed.", errorResponse });
+                        return BadRequest(new { message = "Updated Enabled but failed to update role.", errorResponse });
                     }
+
                 }
                 else
                 {
@@ -339,7 +326,11 @@ namespace BookDeliverySystem.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Error searching agencies.", error = ex.Message });
+                return BadRequest(new
+                {
+                    message = "Error searching agencies.",
+                    error = ex.Message
+                });
             }
 
         }
@@ -355,58 +346,48 @@ namespace BookDeliverySystem.Controllers
                     {
                         return RedirectToAction("AccessDenied", "Error");
                     }
-                    var values = new
-                    {
-                        username = value.Username,
-                        firstname = value.Firstname,
-                        lastname = value.Lastname,
-                        address = value.Address,
-                        postalcode = value.PostalCode,
-                        role = value.Role,
-                        phonenumber = value.PhoneNumber,
-                        enabled = value.Enabled,
-                        oldrole = value.OldRole
+                    Administrator ad = new BookDeliveryCore.Administrator();
 
-                    };
+                    //var values = new
+                    //{
+                    //    username = value.Username,
+                    //    firstname = value.Firstname,
+                    //    lastname = value.Lastname,
+                    //    address = value.Address,
+                    //    postalcode = value.PostalCode,
+                    //    role = value.Role,
+                    //    phonenumber = value.PhoneNumber,
+                    //    enabled = value.Enabled,
+                    //    //oldrole=value.OldRole
+                    //};
+                    ad.USERNAME = value.Username;
+                    ad.FIRSTNAME = value.Firstname;
+                    ad.LASTNAME = value.Lastname;
+                    ad.ADDRESS = value.Address;
+                    ad.POSTAL_CODE = value.PostalCode;
+                    ad.ROLE = value.Role;
+                    ad.PHONE_NUMBER = value.PhoneNumber;
+                    ad.ENABLE = bool.Parse(value.Enabled);
+
                     //string json = JsonConvert.SerializeObject(values);
-                    string apiUrl = $"https://localhost:7203/api/Administrator/UpdateUserEnableStatus?username={value.Username}&enable={value.Enabled}";
+                    string apiUrl = $"https://localhost:7203/api/Administrator/EditAdministrator";
 
 
 
 
 
                     // Make a POST request to the API endpoint for agencies
-                    HttpResponseMessage response1 = await _httpClient.PostAsync(apiUrl, null);
+                    HttpResponseMessage response = await _httpClient.PostAsJsonAsync(apiUrl, ad);
 
                     // Check if the request was successful
-                    if (response1.IsSuccessStatusCode)
+                    if (response.IsSuccessStatusCode)
                     {
-                        string responseBody = await response1.Content.ReadAsStringAsync();
-                        apiUrl = getRoleUrl(values.oldrole, values.role, values.username);
-                        if (apiUrl.Trim() == "")
-                        {
-                            throw new Exception("Failed to retrieve url for updating role");
-                        }
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        var resp = await setUserRole(ad.ROLE, ad.USERNAME);
+                        responseBody = responseBody + " asp role:" + resp;
+                        _httpClient.Dispose();
+                        return Ok(new { message = "Request successful.", responseBody });
 
-                        HttpResponseMessage response2 = await _httpClient.PostAsync(apiUrl, null);
-                        if (response2.IsSuccessStatusCode)
-                        {
-                            var resp = await setUserRole(values.role,values.username);
-                            responseBody = responseBody + " " + await response2.Content.ReadAsStringAsync() + " asp role:" + resp;
-                            _httpClient.Dispose();
-                            return Ok(new { message = "Request successful.", responseBody });
-                        }
-                        else
-                        {
-                            _httpClient.Dispose();
-
-                            // If the request was not successful, handle the error
-                            // For example, read the error response content
-                            string errorResponse = await response1.Content.ReadAsStringAsync();
-
-                            // Return an appropriate error message
-                            return BadRequest(new { message = "Updated Enabled but failed to update role.", errorResponse });
-                        }
 
                     }
                     else
@@ -415,7 +396,7 @@ namespace BookDeliverySystem.Controllers
 
                         // If the request was not successful, handle the error
                         // For example, read the error response content
-                        string errorResponse = await response1.Content.ReadAsStringAsync();
+                        string errorResponse = await response.Content.ReadAsStringAsync();
 
                         // Return an appropriate error message
                         return BadRequest(new { message = "Request failed.", errorResponse });
@@ -445,63 +426,58 @@ namespace BookDeliverySystem.Controllers
                     {
                         return RedirectToAction("AccessDenied", "Error");
                     }
-                    var values = new
-                    {
-                        username = value.Username,
-                        agency = value.Agency,
-                        vehicle= value.Vehicle,
-                        status= value.Status,
-                        firstname = value.Firstname,
-                        lastname = value.Lastname,
-                        address = value.Address,
-                        postalcode = value.PostalCode,
-                        role = value.Role,
-                        phonenumber = value.PhoneNumber,
-                        currentlocation= value.Currentlocation,
-                        enabled = value.Enabled,
-                        oldrole = value.OldRole
-                        //
-                    };
+                    Courier oc = new Courier();
+                    //var values = new
+                    //{
+                    //    username = value.Username,
+                    //    agency = value.Agency,
+                    //    vehicle = value.Vehicle,
+                    //    status = value.Status,
+                    //    firstname = value.Firstname,
+                    //    lastname = value.Lastname,
+                    //    address = value.Address,
+                    //    postalcode = value.PostalCode,
+                    //    role = value.Role,
+                    //    phonenumber = value.PhoneNumber,
+                    //    currentlocation = value.Currentlocation,
+                    //    enabled = value.Enabled,
+                    //    oldrole = value.OldRole
+                    //    //
+                    //};
+
+                    oc.USERNAME = value.Username;
+                    oc.AGENCY_ID = value.Agency;
+                    oc.VEHICLE_NO = value.Vehicle;
+                    oc.STATUS = value.Status;
+                    oc.FIRSTNAME = value.Firstname;
+                    oc.LASTNAME = value.Lastname;
+                    oc.ADDRESS = value.Address;
+                    oc.POSTAL_CODE = value.PostalCode;
+                    oc.ROLE = value.Role;
+                    oc.PHONE_NUMBER = value.PhoneNumber;
+                    oc.CURRENT_LOCATION = value.Currentlocation;
+                    oc.ENABLE = bool.Parse(value.Enabled);
                     //string json = JsonConvert.SerializeObject(values);
-                    string apiUrl = $"https://localhost:7203/api/Administrator/UpdateUserEnableStatus?username={value.Username}&enable={value.Enabled}";
+                    string apiUrl = $"https://localhost:7203/api/Administrator/EditCourier";
 
 
 
 
 
                     // Make a POST request to the API endpoint for agencies
-                    HttpResponseMessage response1 = await _httpClient.PostAsync(apiUrl, null);
+                    HttpResponseMessage response = await _httpClient.PostAsJsonAsync(apiUrl, oc);
 
                     // Check if the request was successful
-                    if (response1.IsSuccessStatusCode)
+                    if (response.IsSuccessStatusCode)
                     {
-                        string responseBody = await response1.Content.ReadAsStringAsync();
-                        apiUrl = getRoleUrl(values.oldrole, values.role, values.username);
-                        if (apiUrl.Trim() == "")
-                        {
-                            throw new Exception("Failed to retrieve url for updating role");
-                        }
+                        string responseBody = await response.Content.ReadAsStringAsync();
 
-                        HttpResponseMessage response2 = await _httpClient.PostAsync(apiUrl, null);
-                        if (response2.IsSuccessStatusCode)
-                        {
-                            var resp = await setUserRole(values.role,values.username);
-                            responseBody = responseBody + " " + await response2.Content.ReadAsStringAsync() + " asp role:" + resp;
-                            _httpClient.Dispose();
-                            return Ok(new { message = "Request successful.", responseBody });
-                        }
-                        else
-                        {
-                            _httpClient.Dispose();
 
-                            // If the request was not successful, handle the error
-                            // For example, read the error response content
-                            string errorResponse = await response1.Content.ReadAsStringAsync();
 
-                            // Return an appropriate error message
-                            return BadRequest(new { message = "Updated Enabled but failed to update role.", errorResponse });
-                        }
-
+                        var resp = await setUserRole(oc.ROLE, oc.USERNAME);
+                        responseBody = responseBody + " asp role:" + resp;
+                        _httpClient.Dispose();
+                        return Ok(new { message = "Request successful.", responseBody });
                     }
                     else
                     {
@@ -509,11 +485,12 @@ namespace BookDeliverySystem.Controllers
 
                         // If the request was not successful, handle the error
                         // For example, read the error response content
-                        string errorResponse = await response1.Content.ReadAsStringAsync();
+                        string errorResponse = await response.Content.ReadAsStringAsync();
 
                         // Return an appropriate error message
-                        return BadRequest(new { message = "Request failed.", errorResponse });
+                        return BadRequest(new { message = "Updated Enabled but failed to update role.", errorResponse });
                     }
+
                 }
                 else
                 {
@@ -522,7 +499,11 @@ namespace BookDeliverySystem.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Error searching agencies.", error = ex.Message });
+                return BadRequest(new
+                {
+                    message = "Error searching agencies.",
+                    error = ex.Message
+                });
             }
 
         }
