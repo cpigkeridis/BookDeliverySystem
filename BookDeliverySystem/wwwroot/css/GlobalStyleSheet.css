@@ -21,7 +21,17 @@
     text-align: center;
 }
 
-.h1{
+.form-container-about-us {
+    width: 90%;
+    background: #ecf0f3;
+    font-family: 'Nunito', sans-serif;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 14px 14px 20px #cbced1, -1px -1px 20px white;
+    margin: 0 auto;
+}
+
+.h1 {
     text-align: center;
 }
 .form-floating {
@@ -41,15 +51,10 @@
     margin: 5px 0;
 }
 
-
-#login-submit {
-    width: 94%; /* Set the button width to 100% */
-}
-
-#registerSubmit {
+.btn{
     width: 94%;
 }
 
-.register-button{
-    padding:5px;
+.register-button {
+    padding: 5px;
 }
