@@ -1,0 +1,55 @@
+﻿body {
+    background-image: url('https://wallpapers-fenix.eu/lar/141214/153152966.jpg');
+    background-size: cover; /* Ensures the entire image fits within the body without stretching */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-position: center; /* Centers the image within the body */
+    font-family: 'Nunito', sans-serif;
+    margin: 0; /* Removes default body margin */
+    padding: 0; /* Removes default body padding */
+    width: 100%;
+}
+
+
+.form-container {
+    width: 30%;
+    background: #ecf0f3;
+    font-family: 'Nunito', sans-serif;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 14px 14px 20px #cbced1, -1px -1px 20px white;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.h1{
+    text-align: center;
+}
+.form-floating {
+    padding: 8px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+
+.testing{
+    padding: 30px;
+    text-align:left;
+    margin-left: -20px;
+}
+
+.testing-1 {
+    margin: 5px 0;
+}
+
+
+#login-submit {
+    width: 94%; /* Set the button width to 100% */
+}
+
+#registerSubmit {
+    width: 94%;
+}
+
+.register-button{
+    padding:5px;
+}
