@@ -45,26 +45,33 @@
 
 <body>
 
-    
-
     <div class="form-container">
         <h1>Contact Us</h1>
         <form action="/submit-contact" method="post">
-            <label class="form-label" for="name">Name:</label>
-            <input class="form-label" type="text" id="name" name="name" required>
+            <div class="form-floating">
+                <input class="form-control" type="text" id="name" name="name" required>
+                <label for="name" class="form-label">Name:</label>
+            </div>
 
-            <label for="email">Email:</label>
-            <input class="form-label" type="email" id="email" name="email" required>
+            <div class="form-floating">
+                <input class="form-control" type="email" id="email" name="email" required>
+                <label for="email" class="form-label">Email:</label>
+            </div>
 
-            <label for="subject">Subject:</label>
-            <input class="form-label" type="text" id="subject" name="subject" required>
+            <div class="form-floating">
+                <input class="form-control" type="text" id="subject" name="subject" required>
+                <label for="subject" class="form-label">Subject:</label>
+            </div>
 
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" rows="4" required></textarea>
+            <div class="form-floating">
+                <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                <label for="message" class="form-label">Message:</label>
+            </div>
 
-            <button type="submit">Submit</button>
+            <div class="register-button">
+                <button type="submit" class="contact-button btn btn-lg btn-primary">Submit</button>
+            </div>
         </form>
     </div>
 
 </body>
-
