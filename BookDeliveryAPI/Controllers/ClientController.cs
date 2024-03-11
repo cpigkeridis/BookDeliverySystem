@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using BookDeliveryCore;
 
 namespace BookDeliverySystemAPI.Controllers
 {
@@ -25,6 +26,35 @@ namespace BookDeliverySystemAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { message = "Error inserting client.", error = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("api/[controller]/[action]")]
+        public IActionResult GetShopItems()
+        {
+            try
+            {
+                List<BookDeliveryCore.Item> obj = _oClient.ShowShopItems();
+                return Ok(obj);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/[action]")]
+        public IActionResult GetAgencySelResp(string city)
+        {
+            try
+            {
+                AgencySelectionResp obj = _oClient.GetAgencySelectionResp(city);
+                return Ok(obj);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
             }
         }
     }

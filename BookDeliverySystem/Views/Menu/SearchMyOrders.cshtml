@@ -3,76 +3,80 @@
     @model List<BookDeliveryCore.Orders>
 
 }
-<head>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
-</head>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+
+<!-- DataTables JavaScript -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 
 <div class="row" style="max-width: 100%; padding: 15px;">
     <div class="col-md-12 col-sm-12">
-         @if (Model == null || Model.Count == 0)
+        @if (Model == null || Model.Count == 0)
         {
             <p>No orders available.</p>
         }
         else
         {
-        <div>
-                <table id="OrdersTable" class="table table-condensed table-hover table-responsive" style="width: 100%">
-                <thead>
-                    <tr>
-                        <th scope="col">Order ID</th>
-                        <th scope="col">Client Username</th>
-                        <th scope="col">Client First Name</th>
-                        <th scope="col">Client Last Name</th>
-                        <th scope="col">Client Phone Number</th>
-                        <th scope="col">Delivery Agency</th>
-                        <th scope="col">Courier Username</th>
-                        <th scope="col">Courier First Name</th>
-                        <th scope="col">Courier Last Name</th>
-                        <th scope="col">Courier Phone Number</th>
-                        <th scope="col">Order Status</th>
-                        <th scope="col">Created Date</th>
-                        <th scope="col">Dispatched Date</th>
-                        <th scope="col">Delivered Date</th>
-                        <th scope="col">Order Review</th>
-                        <th scope="col">Review Comments</th>
-                        <th>EDIT</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var order in Model)
-                    {
+            <div>
+                <table id="OrdersTable" class="table table-condensed table-hover" style="width: 100%">
+                    <thead>
                         <tr>
-                            <td>@order.ORDER_ID</td>
-                            <td>@order.CLIENT_USERNAME</td>
-                            <td>@order.CLIENT_FIRSTNAME</td>
-                            <td>@order.CLIENT_LASTNAME</td>
-                            <td>@order.CLIENT_PHONE</td>
-                            <td>@order.AGENCY_NAME</td>
-                            <td>@order.COURIER_USERNAME</td>
-                            <td>@order.COURIER_FIRSTNAME</td>
-                            <td>@order.COURIER_LASTNAME</td>
-                            <td>@order.COURIER_PHONE</td>
-                            <td>@order.STATUS</td>
-                            <td>@order.ORDERDATE</td>
-                            <td>@order.DISPATCHDATE</td>
-                            <td>@order.DELIVEREDDATE</td>
-                            <td>@order.REVIEW</td>
-                            <td>@order.REVIEW_COMMENTS</td>
-                            <td>
-                                <button onclick="ViewOrder(this)">
-                                    <i class="fa fa-magic" aria-hidden="true"></i>
-
-                                </button>
-                            </td>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Client Username</th>
+                            @*<th scope="col">Client First Name</th>
+                        <th scope="col">Client Last Name</th>
+                        <th scope="col">Client Phone Number</th>*@
+                            <th scope="col">Delivery Agency</th>
+                            @*<th scope="col">Courier Username</th>*@
+                            @* <th scope="col">Courier First Name</th>
+                        <th scope="col">Courier Last Name</th>
+                        <th scope="col">Courier Phone Number</th>*@
+                            <th scope="col">Order Status</th>
+                            <th scope="col">Created Date</th>
+                            <th scope="col">Dispatched Date</th>
+                            <th scope="col">Delivered Date</th>
+                            <th scope="col">Order Review</th>
+                            <th scope="col">Review Comments</th>
+                            <th scope="col">Edit</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td>@order.ORDER_ID</td>
+                                <td>@order.CLIENT_USERNAME</td>
+                                @*                            <td>@order.CLIENT_FIRSTNAME</td>
+                        <td>@order.CLIENT_LASTNAME</td>
+                        <td>@order.CLIENT_PHONE</td>*@
+                                <td>@order.AGENCY_ID</td>
+                                @*<td>@order.COURIER_USERNAME</td>*@
+                                @*                            <td>@order.COURIER_FIRSTNAME</td>
+                        <td>@order.COURIER_LASTNAME</td>
+                        <td>@order.COURIER_PHONE</td>*@
+                                <td>@order.STATUS</td>
+                                <td>@order.ORDERDATE</td>
+                                <td>@order.DISPATCHDATE</td>
+                                <td>@order.DELIVEREDDATE</td>
+                                <td>@order.REVIEW</td>
+                                <td>@order.REVIEW_COMMENTS</td>
+                                <td>
+                                    <button onclick="ViewOrder(this)">
+                                        <i class="fa fa-magic" aria-hidden="true"></i>
+
+                                    </button>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
     </div>
 </div>
+
 <div class="modal fade" id="viewOrderModal" tabindex="-1" aria-labelledby="viewOrderModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -86,38 +90,38 @@
                         <label for="clientUsername" class="form-label">Client Username</label>
                         <input type="text" class="form-control" id="clUsername" disabled>
                     </div>
-                    <div class="mb-3">
-                        <label for="clientFirstName" class="form-label">Client First Name</label>
-                        <input type="text" class="form-control" id="clientFirstName">
+                    @*                    <div class="mb-3">
+                    <label for="clientFirstName" class="form-label">Client First Name</label>
+                    <input type="text" class="form-control" id="clientFirstName">
                     </div>
                     <div class="mb-3">
-                        <label for="clientLastName" class="form-label">Client Last Name</label>
-                        <input type="text" class="form-control" id="clientLastName">
+                    <label for="clientLastName" class="form-label">Client Last Name</label>
+                    <input type="text" class="form-control" id="clientLastName">
                     </div>
                     <div class="mb-3">
-                        <label for="clientPhone" class="form-label">Client Phone</label>
-                        <input type="text" class="form-control" id="clientPhone">
+                    <label for="clientPhone" class="form-label">Client Phone</label>
+                    <input type="text" class="form-control" id="clientPhone">
+                    </div>*@
+                    @*                  <div class="mb-3">
+                    <label for="agency" class="form-label">Agency</label>
+                    <input type="text" class="form-control" id="agency">
+                    </div>*@
+                    @*                    <div class="mb-3">
+                    <label for="courierUsername" class="form-label">Courier Username</label>
+                    <input type="text" class="form-control" id="courierUsername" disabled>
+                    </div>*@
+                    @*                    <div class="mb-3">
+                    <label for="courierFirstName" class="form-label">Courier First Name</label>
+                    <input type="text" class="form-control" id="courierFirstName">
                     </div>
                     <div class="mb-3">
-                        <label for="agency" class="form-label">Agency</label>
-                        <input type="text" class="form-control" id="agency">
+                    <label for="couriertLastName" class="form-label">Courier Last Name</label>
+                    <input type="text" class="form-control" id="couriertLastName">
                     </div>
                     <div class="mb-3">
-                        <label for="courierUsername" class="form-label">Courier Username</label>
-                        <input type="text" class="form-control" id="courierUsername" disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label for="courierFirstName" class="form-label">Courier First Name</label>
-                        <input type="text" class="form-control" id="courierFirstName">
-                    </div>
-                    <div class="mb-3">
-                        <label for="couriertLastName" class="form-label">Courier Last Name</label>
-                        <input type="text" class="form-control" id="courierLastName">
-                    </div>
-                    <div class="mb-3">
-                        <label for="courierPhone" class="form-label">Courier Phone</label>
-                        <input type="text" class="form-control" id="courierPhone">
-                    </div>
+                    <label for="courierPhone" class="form-label">Courier Phone</label>
+                    <input type="text" class="form-control" id="courierPhone">
+                    </div>*@
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
                         <input type="text" class="form-control" id="status" disabled>
@@ -138,9 +142,9 @@
                         <label for="review" class="form-label">Review</label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="review" disabled>
-                                <span class="input-group-text">
-                                    <i class="fas fa-star"></i>
-                                </span>
+                            <span class="input-group-text">
+                                <i class="fas fa-star"></i>
+                            </span>
 
                         </div>
                     </div>
@@ -172,28 +176,9 @@
                 decimal: "."
             },
             responsive: false,
-            scrollX:true,
+            scrollX: true,
             columnDefs: [
                 { className: 'dt-body-left', targets: '_all' }
-            ],
-            columns: [
-                { data: 'ORDER_ID' },
-                { data: 'CLIENT_USERNAME' },
-                { data: 'CLIENT_FIRSTNAME' },
-                { data: 'CLIENT_LASTNAME' },
-                { data: 'CLIENT_PHONE' },
-                { data: 'AGENCY_NAME' },
-                { data: 'COURIER_USERNAME' },
-                { data: 'COURIER_FIRSTNAME' },
-                { data: 'COURIER_LASTNAME' },
-                { data: 'COURIER_PHONE' },
-                { data: 'STATUS' },
-                { data: 'ORDERDATE' },
-                { data: 'DISPATCHDATE' },
-                { data: 'DELIVEREDDATE' },
-                { data: 'REVIEW' },
-                { data: 'REVIEW_COMMENTS' },
-                { data: '' },
             ]
         });
     });
@@ -204,20 +189,14 @@
         var orderData = {
             orderid: cells[0].innerText,
             clusername: cells[1].innerText,
-            clfirstname : cells[2].innerText,
-            cllastname: cells[3].innerText,
-            clphonenum: cells[4].innerText,
-            agency: cells[5].innerText,
-            courusername: cells[6].innerText,
-            courfirstname: cells[7].innerText,
-            courlastname: cells[8].innerText,
-            courphonenum: cells[9].innerText,
-            status: cells[10].innerText,
-            orderdt: cells[11].innerText,
-            dispdt: cells[12].innerText,
-            deldt: cells[13].innerText,
-            review: cells[14].innerText,
-            reviewcom: cells[15].innerText
+            agid: cells[2].innerText,
+            //courusername: cells[3].innerText,
+            status: cells[3].innerText,
+            orderdt: cells[4].innerText,
+            dispdt: cells[5].innerText,
+            deldt: cells[6].innerText,
+            review: cells[7].innerText,
+            reviewcom: cells[8].innerText
         };
 
         console.log(orderData);
@@ -225,16 +204,10 @@
     }
 
     function editOrderModal(orderData) {
-        $('#viewOrderModalLabel').text("Order - " + orderData.username);
-        $('#agency').val(orderData.agency);
+        $('#viewOrderModalLabel').text("Order -" + orderData.username);
+
         $('#clUsername').val(orderData.clusername);
-        $('#clientFirstName').val(orderData.clfirstname);
-        $('#clientLastName').val(orderData.cllastname);
-        $('#clientPhone').val(orderData.clphonenum);
-        $('#courierUsername').val(orderData.courusername);
-        $('#courierFirstName').val(orderData.courfirstname);
-        $('#courierLastName').val(orderData.courlastname);
-        $('#courierPhone').val(orderData.courphonenum);
+        //$('#courierUsername').val(orderData.courusername);
         $('#status').val(orderData.status);
         $('#orderdt').val(orderData.orderdt);
         $('#dispdt').val(orderData.dispdt);
@@ -244,9 +217,9 @@
 
         if (orderData.review >= 5) {
             $('#review').next('.input-group-text').find('i').addClass('text-warning');
-            
+
         }
-        else{
+        else {
             $('#review').next('.input-group-text').find('i').addClass('"fa fa-star-half-o"');
         }
 
