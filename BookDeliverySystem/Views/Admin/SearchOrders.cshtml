@@ -1,0 +1,303 @@
+﻿@{
+    Layout = null;
+    @model List<BookDeliveryCore.Orders>
+
+}
+<head>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+</head>
+
+<div class="row" style="max-width: 100%; padding: 15px;">
+    <div class="col-md-12 col-sm-12">
+         @if (Model == null || Model.Count == 0)
+        {
+            <p>No orders available.</p>
+        }
+        else
+        {
+        <div>
+                <table id="OrdersTable" class="table table-condensed table-hover table-responsive" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Client Username</th>
+                        <th scope="col">Client First Name</th>
+                        <th scope="col">Client Last Name</th>
+                        <th scope="col">Client Phone Number</th>
+                        <th scope="col">Delivery Agency</th>
+                        <th scope="col">Courier Username</th>
+                        <th scope="col">Courier First Name</th>
+                        <th scope="col">Courier Last Name</th>
+                        <th scope="col">Courier Phone Number</th>
+                        <th scope="col">Order Status</th>
+                        <th scope="col">Created Date</th>
+                        <th scope="col">Dispatched Date</th>
+                        <th scope="col">Delivered Date</th>
+                        <th scope="col">Order Review</th>
+                        <th scope="col">Review Comments</th>
+                        <th>EDIT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>@order.ORDER_ID</td>
+                            <td>@order.CLIENT_USERNAME</td>
+                            <td>@order.CLIENT_FIRSTNAME</td>
+                            <td>@order.CLIENT_LASTNAME</td>
+                            <td>@order.CLIENT_PHONE</td>
+                            <td>@order.AGENCY_NAME</td>
+                            <td>@order.COURIER_USERNAME</td>
+                            <td>@order.COURIER_FIRSTNAME</td>
+                            <td>@order.COURIER_LASTNAME</td>
+                            <td>@order.COURIER_PHONE</td>
+                            <td>@order.STATUS</td>
+                            <td>@order.ORDERDATE</td>
+                            <td>@order.DISPATCHDATE</td>
+                            <td>@order.DELIVEREDDATE</td>
+                            <td>@order.REVIEW</td>
+                            <td>@order.REVIEW_COMMENTS</td>
+                            <td>
+                                <button onclick="ViewOrder(this)">
+                                    <i class="fa fa-magic" aria-hidden="true"></i>
+
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>
+</div>
+<div class="modal fade" id="viewOrderModal" tabindex="-1" aria-labelledby="viewOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewOrderModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="clientUsername" class="form-label">Client Username</label>
+                        <input type="text" class="form-control" id="clUsername" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="clientFirstName" class="form-label">Client First Name</label>
+                        <input type="text" class="form-control" id="clientFirstName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="clientLastName" class="form-label">Client Last Name</label>
+                        <input type="text" class="form-control" id="clientLastName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="clientPhone" class="form-label">Client Phone</label>
+                        <input type="text" class="form-control" id="clientPhone">
+                    </div>
+                    <div class="mb-3">
+                        <label for="agency" class="form-label">Agency</label>
+                        <input type="text" class="form-control" id="agency">
+                    </div>
+                    <div class="mb-3">
+                        <label for="courierUsername" class="form-label">Courier Username</label>
+                        <input type="text" class="form-control" id="courierUsername" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="courierFirstName" class="form-label">Courier First Name</label>
+                        <input type="text" class="form-control" id="courierFirstName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="couriertLastName" class="form-label">Courier Last Name</label>
+                        <input type="text" class="form-control" id="courierLastName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="courierPhone" class="form-label">Courier Phone</label>
+                        <input type="text" class="form-control" id="courierPhone">
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <input type="text" class="form-control" id="status" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="orderdt" class="form-label">Created Date</label>
+                        <input type="text" class="form-control" id="orderdt" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dispdt" class="form-label">Dispatched Date</label>
+                        <input type="text" class="form-control" id="dispdt" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deldt" class="form-label">Delivery Date</label>
+                        <input type="text" class="form-control" id="deldt" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="review" class="form-label">Review</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="review" disabled>
+                                <span class="input-group-text">
+                                    <i class="fas fa-star"></i>
+                                </span>
+
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="reviewCom" class="form-label">Review Comments</label>
+                        <input type="text" class="form-control" id="reviewCom" disabled>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary" onclick="saveChanges()">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#OrdersTable').DataTable({
+            paging: true,
+            pagingType: 'simple_numbers',
+            searching: false,
+            pageLength: 15,
+            dom: 'frtip',
+            language: {
+                thousands: ",",
+                decimal: "."
+            },
+            responsive: false,
+            scrollX:true,
+            columnDefs: [
+                { className: 'dt-body-left', targets: '_all' }
+            ],
+            columns: [
+                { data: 'ORDER_ID' },
+                { data: 'CLIENT_USERNAME' },
+                { data: 'CLIENT_FIRSTNAME' },
+                { data: 'CLIENT_LASTNAME' },
+                { data: 'CLIENT_PHONE' },
+                { data: 'AGENCY_NAME' },
+                { data: 'COURIER_USERNAME' },
+                { data: 'COURIER_FIRSTNAME' },
+                { data: 'COURIER_LASTNAME' },
+                { data: 'COURIER_PHONE' },
+                { data: 'STATUS' },
+                { data: 'ORDERDATE' },
+                { data: 'DISPATCHDATE' },
+                { data: 'DELIVEREDDATE' },
+                { data: 'REVIEW' },
+                { data: 'REVIEW_COMMENTS' },
+                { data: '' },
+            ]
+        });
+    });
+
+    function ViewOrder(button) {
+        var row = button.parentNode.parentNode; // Get the row
+        var cells = row.getElementsByTagName("td");
+        var orderData = {
+            orderid: cells[0].innerText,
+            clusername: cells[1].innerText,
+            clfirstname : cells[2].innerText,
+            cllastname: cells[3].innerText,
+            clphonenum: cells[4].innerText,
+            agency: cells[5].innerText,
+            courusername: cells[6].innerText,
+            courfirstname: cells[7].innerText,
+            courlastname: cells[8].innerText,
+            courphonenum: cells[9].innerText,
+            status: cells[10].innerText,
+            orderdt: cells[11].innerText,
+            dispdt: cells[12].innerText,
+            deldt: cells[13].innerText,
+            review: cells[14].innerText,
+            reviewcom: cells[15].innerText
+        };
+
+        console.log(orderData);
+        editOrderModal(orderData)
+    }
+
+    function editOrderModal(orderData) {
+        $('#viewOrderModalLabel').text("Order - " + orderData.username);
+        $('#agency').val(orderData.agency);
+        $('#clUsername').val(orderData.clusername);
+        $('#clientFirstName').val(orderData.clfirstname);
+        $('#clientLastName').val(orderData.cllastname);
+        $('#clientPhone').val(orderData.clphonenum);
+        $('#courierUsername').val(orderData.courusername);
+        $('#courierFirstName').val(orderData.courfirstname);
+        $('#courierLastName').val(orderData.courlastname);
+        $('#courierPhone').val(orderData.courphonenum);
+        $('#status').val(orderData.status);
+        $('#orderdt').val(orderData.orderdt);
+        $('#dispdt').val(orderData.dispdt);
+        $('#deldt').val(orderData.deldt);
+        $('#review').val(orderData.review + "/10");
+        $('#reviewCom').val(orderData.reviewcom);
+
+        if (orderData.review >= 5) {
+            $('#review').next('.input-group-text').find('i').addClass('text-warning');
+            
+        }
+        else{
+            $('#review').next('.input-group-text').find('i').addClass('"fa fa-star-half-o"');
+        }
+
+
+        $('#viewOrderModal').modal('show');
+    }
+
+    function saveChanges() {
+        //var username = $('#username').val();
+        //var firstname = $('#firstname').val();
+        //var lastname = $('#lastname').val();
+        //var address = $('#address').val();
+        //var postalCode = $('#postalCode').val();
+        //var role = $('#role').val();
+        //var phoneNumber = $('#phoneNumber').val();
+        //var enabled = $('#enabled').prop('checked').toString();
+
+        //// Perform actions to save changes here
+        //console.log("Username: " + username);
+        //console.log("First Name: " + firstname);
+        //console.log("Last Name: " + lastname);
+        //console.log("Address: " + address);
+        //console.log("Postal Code: " + postalCode);
+        //console.log("Role: " + role);
+        //console.log("Phone Number: " + phoneNumber);
+        //console.log("Enabled: " + enabled);
+
+        //$.ajax({
+        //    type: "POST",
+        //    url: "@Url.Action("UpdateAdmin", "Admin")",
+        //    contentType: "application/json; charset=utf-8",
+
+        //    // Pass only the 'username' parameter
+        //    data: JSON.stringify({ 'Username': username, 'Firstname': firstname, 'Lastname': lastname, 'Address': address, 'PostalCode': postalCode, 'Role': role, 'PhoneNumber': phoneNumber, 'Enabled': enabled, 'OldRole': $('#role2').val() }),
+        //    async: false,
+        //    success: function (response) {
+        //        console.log(response); // Add this line for logging
+        //        //$('#UserResult').html(response);
+        //        // Initialize DataTable here if needed
+        //    },
+        //    error: function (xhr, status, error) {
+        //        alert(error);
+        //    }
+        //});
+
+        // Close modal after saving changes
+        $('#viewOrderModal').modal('hide');
+        //TODO FIX LATER
+        //window.location.href = '@Url.Action("AdminModule", "Menu", new { select = "ADMI" })';
+
+    }
+
+
+</script>

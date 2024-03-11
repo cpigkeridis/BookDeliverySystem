@@ -1,0 +1,171 @@
+﻿@{
+    @model List<BookDeliveryCore.Item>
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<body>
+    <main class="content-wrapper" style="padding-bottom: 50px;">
+        <div class="content d-flex justify-content-center align-items-center">
+            <div class="row">
+                <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12">
+                    <h2>Shopping Form</h2>
+                    <form method="post">
+                        <label for="username">Username:</label><br />
+                        <input type="text" id="username" name="USERNAME" value="" required /><br /><br />
+
+                        <label for="firstname">First Name:</label><br />
+                        <input type="text" id="firstname" name="FIRSTNAME" value="" required /><br /><br />
+
+                        <label for="lastname">Last Name:</label><br />
+                        <input type="text" id="lastname" name="LASTNAME" value="" required /><br /><br />
+
+                        <label for="address">Address:</label><br />
+                        <input type="text" id="address" name="ADDRESS" value="" required /><br /><br />
+
+
+                        <label for="postalcode">Postal Code:</label><br />
+                        <input type="text" id="postalcode" name="POSTAL_CODE" value="" required /><br /><br />
+                        <label>CITY</label>
+                        <select id="city" tabindex="2" class="form-control form-select" aria-hidden="true" style="width:100%">
+                            <option value="LARNACA">LARNACA</option>
+                            <option value="NICOSIA">NICOSIA</option>
+                            <option value="LIMASSOL">LIMASSOL</option>
+                            <option value="PAPHOS">PAPHOS</option>
+                            <option value="FAMAGUSTA">FAMAGUSTA</option>
+                        </select>
+                        <label for="phone">Phone Number:</label><br />
+                        <input type="text" id="phone" name="PHONE_NUMBER" value="" required /><br /><br />
+                        @if (Model.Any())
+                        {
+                            <div style="height: 200px; overflow-y: auto;">
+                            <fieldset>
+                                <legend>Items:</legend>
+                                @foreach (var item in Model)
+                                {
+                                    <input type="checkbox" id="item@(item.ITEM_ID)" name="item" value="@item.ITEM_ID" data-price="@item.ITEM_PRICE" />
+                                    <label for="item@(item.ITEM_ID)">@(item.ITEM_NAME) - @(item.ITEM_PRICE)</label>
+                                    <br />
+                                }
+                            </fieldset>
+                            </div>
+                        }
+                        else
+                        {
+                            <p>No items available.</p>
+                            <p>Here's a custom list:</p>
+                            <fieldset>
+                                <legend>Custom Items:</legend>
+                                <input type="checkbox" id="item1" name="item" value="1" data-price="10" />
+                                <label for="item1">Custom Item 1 - $10</label>
+                                <br />
+                                <input type="checkbox" id="item2" name="item" value="2" data-price="15" />
+                                <label for="item2">Custom Item 2 - $15</label>
+                                <br />
+                                <input type="checkbox" id="item3" name="item" value="3" data-price="20" />
+                                <label for="item3">Custom Item 3 - $20</label>
+                                <br />
+                            </fieldset>
+                        }
+                        <br />
+                        <div id="selectedItemsContainer"  style="display: none;">
+                            <h3>Selected Items:</h3>
+                            <textarea id="selectedItems" rows="4" cols="50" readonly></textarea>
+                            <h3>Total:</h3>
+                            <span id="total">0</span> €
+                        </div>
+                        <br />
+                        <input type="submit" value="Submit" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Add event listener to checkboxes
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                var selectedItemsContainer = document.getElementById('selectedItemsContainer');
+                var selectedItemsTextarea = document.getElementById('selectedItems');
+                var totalSpan = document.getElementById('total');
+                var totalPrice = 0;
+                selectedItemsTextarea.value = ""; // Clear existing selected items
+                checkboxes.forEach(function (checkbox) {
+                    if (checkbox.checked) {
+                        selectedItemsTextarea.value += checkbox.nextElementSibling.textContent.trim() + "\n";
+                        totalPrice += parseFloat(checkbox.getAttribute('data-price'));
+                    }
+                });
+                totalSpan.textContent = totalPrice.toFixed(2); // Display total price with 2 decimal places
+                selectedItemsContainer.style.display = 'block'; // Show selected items container
+            });
+        });
+
+
+            $(document).ready(function () {
+                // Function to handle form submission via AJAX
+                $("form").submit(function (event) {
+                    // Prevent default form submission
+                    event.preventDefault();
+
+                    // Collect form data
+                    var formData = {
+                        USERNAME: $("#username").val(),
+                        FIRSTNAME: $("#firstname").val(),
+                        LASTNAME: $("#lastname").val(),
+                        ADDRESS: $("#address").val(),
+                        POSTAL_CODE: $("#postalcode").val(),
+                        CITY: $("#city").val(),
+                        PHONE_NUMBER: $("#phone").val(),
+                        // Include selected items
+                    ITEMS: combineSelectedItems()
+                    };
+                    console.log(formData);
+
+                    // Perform AJAX POST request
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("newOrder", "Menu")", // Adjust the URL as per your routing configuration
+                        data: JSON.stringify(formData),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            // Handle success response
+                            alert("Order successfully submitted!");
+                        window.location.href = data.redirectUrl;
+                            // Optionally, you can redirect the user or perform any other actions
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle error response
+                            console.error(xhr.responseText);
+                            alert("An error occurred while submitting the order. Please try again later.");
+                        }
+                    });
+                });
+
+            function combineSelectedItems() {
+                var selectedItems = [];
+                // Get selected items from checkboxes
+                $('input[name="item"]:checked').each(function () {
+                    var itemNameWithPrice = $(this).next().text().trim();
+                    var itemName = itemNameWithPrice.split('-')[0].trim(); // Extract item name before the dash
+                    var itemPrice = parseFloat(itemNameWithPrice.split('-')[1].trim()); // Extract item price after the dash
+                    var item = {
+                        ITEM_ID: $(this).val(),
+                        ITEM_NAME: itemName,
+                        ITEM_PRICE: itemPrice
+                    };
+                    selectedItems.push(item);
+                });
+               
+                return selectedItems;
+            }
+            });
+
+
+    </script>
+
+ 
+   
+</body>

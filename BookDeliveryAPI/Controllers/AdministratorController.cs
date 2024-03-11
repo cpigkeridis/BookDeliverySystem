@@ -342,7 +342,7 @@ namespace BookDeliveryAPI.Controllers
         {
             try
             {
-                Orders order = _oAdministrator.GetOrderByUserName(ClientUsername);
+                List<Orders> order = _oAdministrator.GetOrderByUserName(ClientUsername);
 
                 if (order != null)
                 {

@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Confirmation</title>
+</head>
+<body>
+    <h2>Your order has been submitted</h2>
+    <p>Please proceed to create an account:</p>
+    <a href="@Url.Page("/Account/Register", null, new { area = "Identity" })">Register</a>
+    <p>or if you have an account:</p>
+    <a href="@Url.Page("/Account/Login", null, new { area = "Identity" })">Login</a>
+</body>
+</html>
