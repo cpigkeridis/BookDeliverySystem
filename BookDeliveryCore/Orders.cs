@@ -10,8 +10,15 @@ namespace BookDeliveryCore
     {
         public string? ORDER_ID { get; set; }
         public string? CLIENT_USERNAME { get; set; }
+        //public string? CLIENT_FIRSTNAME { get; set; }
+        //public string? CLIENT_LASTNAME { get; set; }
+        //public string? CLIENT_PHONE { get; set; }
         public string? AGENCY_ID { get; set; }
+        //public string? AGENCY_NAME { get; set; }
         public string? COURIER_USERNAME { get; set; }
+        //public string? COURIER_FIRSTNAME { get; set; }
+        //public string? COURIER_LASTNAME { get; set; }
+        //public string? COURIER_PHONE { get; set; }
         public string? STATUS { get; set; }
         public DateTime ORDERDATE { get; set; }
         public DateTime DISPATCHDATE { get; set; }

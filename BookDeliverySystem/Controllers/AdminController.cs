@@ -507,5 +507,51 @@ namespace BookDeliverySystem.Controllers
             }
 
         }
+
+
+        public async Task<IActionResult> SearchOrders(string username= "New_Client001@gmail.com")
+        {
+            try
+            {
+
+
+                if (_signInManager.IsSignedIn(User))
+                {
+                    //TODO if (!User.Identity.IsAuthenticated) custom function to authenticate based on enabled column
+                    if (await getUserRole() != "ADMI")
+                    {
+                        return RedirectToAction("AccessDenied", "Error");
+                    }
+                    string apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByUserName?ClientUsername={username}";
+                    // Make a GET request to the API endpoint
+                    HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+
+                    // Check if the request was successful
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Read the response content as string
+                        var responseData = await response.Content.ReadAsStringAsync();
+                        //IT RETURNS ONLY ONE ORDER FOR NOW, WILL BE FIXED
+                        List<Orders> orders = JsonConvert.DeserializeObject<List<Orders>>(responseData);
+                        _httpClient.Dispose();
+                        // Do something with the response data
+                        return View(orders);
+                    }
+                    else
+                    {
+                        // Handle the error
+                        return StatusCode((int)response.StatusCode);
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("AccessDenied", "Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error searaching clients.", error = ex.Message });
+            }
+        }
     }
 }

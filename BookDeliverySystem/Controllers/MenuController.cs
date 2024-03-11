@@ -1,8 +1,11 @@
-﻿using BookDeliverySystem.Areas.Identity.Data;
+﻿using BookDeliveryCore;
+using BookDeliverySystem.Areas.Identity.Data;
 using BookDeliverySystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net.Http;
 
 namespace BookDeliverySystem.Controllers
 {
@@ -11,11 +14,14 @@ namespace BookDeliverySystem.Controllers
 
         private readonly ILogger<MenuController> _logger;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly HttpClient _httpClient;
 
         public MenuController(ILogger<MenuController> logger, SignInManager<ApplicationUser> signInManager)
         {
             _logger = logger;
             _signInManager = signInManager;
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri("https://localhost:7203/swagger/index.html");
         }
 
         public async Task<string> getUserRole()
@@ -87,16 +93,46 @@ namespace BookDeliverySystem.Controllers
             }
 
         }
-        public IActionResult MyOrders()
+        public async Task<IActionResult> MyOrders()
         {
             if (_signInManager.IsSignedIn(User))
             {
-                return View();
+                try
+                {
+                    string? userId = HttpContext.User.Identity.Name;
+                    ApplicationUser user = await _signInManager.UserManager.FindByNameAsync(userId);
+                    string apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByUserName?ClientUsername={user.UserName}";
+                        // Make a GET request to the API endpoint
+                        HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+
+                        // Check if the request was successful
+                        if (response.IsSuccessStatusCode)
+                        {
+                            // Read the response content as string
+                            var responseData = await response.Content.ReadAsStringAsync();
+                            //IT RETURNS ONLY ONE ORDER FOR NOW, WILL BE FIXED
+                            List<Orders> orders = JsonConvert.DeserializeObject<List<Orders>>(responseData);
+                            _httpClient.Dispose();
+                            // Do something with the response data
+                            return View(orders);
+                        }
+                        else
+                        {
+                            // Handle the error
+                            return StatusCode((int)response.StatusCode);
+                        }
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { message = "Error searaching clients.", error = ex.Message });
+                }
             }
             else
             {
                 return RedirectToAction("AccessDenied", "Error");
-            }           
+            }
+            
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

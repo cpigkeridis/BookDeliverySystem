@@ -139,12 +139,14 @@ namespace BookDeliverySystem.Areas.Identity.Pages.Account
                     else
                     {
                         ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        await _signInManager.SignOutAsync(); // Sign out the user
                         return Page();
                     }
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    await _signInManager.SignOutAsync(); // Sign out the user
                     return Page();
                 }
             }

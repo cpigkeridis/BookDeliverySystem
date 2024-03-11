@@ -413,7 +413,7 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
-        public Orders GetOrderByUserName(string ClientUsername)
+        public List<Orders> GetOrderByUserName(string ClientUsername)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -423,7 +423,7 @@ namespace BookDeliverySystemAPI.Repositories
                 {
                     CLIENTUSERNAME = ClientUsername,
                 };
-                Orders obj = oCnn.QuerySingleOrDefault<Orders>("[dbo].[SP_GET_ORDER_BY_USERNAME]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                List<Orders> obj = oCnn.Query<Orders>("[dbo].[SP_GET_ORDER_BY_USERNAME]", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
                 return obj;
             }
             catch (Exception ex)

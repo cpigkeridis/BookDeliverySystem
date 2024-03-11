@@ -1,6 +1,7 @@
 ﻿@{
+    Layout = null;
     @model List<BookDeliveryCore.Orders>
-    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 <head>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
@@ -21,11 +22,11 @@
                     <tr>
                         <th scope="col">Order ID</th>
                         <th scope="col">Client Username</th>
-                        @*<th scope="col">Client First Name</th>
+@*                        <th scope="col">Client First Name</th>
                         <th scope="col">Client Last Name</th>
                         <th scope="col">Client Phone Number</th>*@
                         <th scope="col">Delivery Agency</th>
-                        @*<th scope="col">Courier Username</th>*@
+                        <th scope="col">Courier Username</th>
                         @* <th scope="col">Courier First Name</th>
                         <th scope="col">Courier Last Name</th>
                         <th scope="col">Courier Phone Number</th>*@
@@ -43,14 +44,14 @@
                         <tr>
                             <td>@order.ORDER_ID</td>
                             <td>@order.CLIENT_USERNAME</td>
-                            @*                            <td>@order.CLIENT_FIRSTNAME</td>
-                        <td>@order.CLIENT_LASTNAME</td>
-                        <td>@order.CLIENT_PHONE</td>*@
+@*                            <td>@order.CLIENT_FIRSTNAME</td>
+                            <td>@order.CLIENT_LASTNAME</td>
+                            <td>@order.CLIENT_PHONE</td>*@
                             <td>@order.AGENCY_ID</td>
-                            @*<td>@order.COURIER_USERNAME</td>*@
-                            @*                            <td>@order.COURIER_FIRSTNAME</td>
-                        <td>@order.COURIER_LASTNAME</td>
-                        <td>@order.COURIER_PHONE</td>*@
+                            <td>@order.COURIER_USERNAME</td>
+@*                            <td>@order.COURIER_FIRSTNAME</td>
+                            <td>@order.COURIER_LASTNAME</td>
+                            <td>@order.COURIER_PHONE</td>*@
                             <td>@order.STATUS</td>
                             <td>@order.ORDERDATE</td>
                             <td>@order.DISPATCHDATE</td>
@@ -72,7 +73,6 @@
         }
     </div>
 </div>
-
 <div class="modal fade" id="viewOrderModal" tabindex="-1" aria-labelledby="viewOrderModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -86,37 +86,37 @@
                         <label for="clientUsername" class="form-label">Client Username</label>
                         <input type="text" class="form-control" id="clUsername" disabled>
                     </div>
-                    @*                    <div class="mb-3">
-                    <label for="clientFirstName" class="form-label">Client First Name</label>
-                    <input type="text" class="form-control" id="clientFirstName">
-                    </div>
-                    <div class="mb-3">
-                    <label for="clientLastName" class="form-label">Client Last Name</label>
-                    <input type="text" class="form-control" id="clientLastName">
-                    </div>
-                    <div class="mb-3">
-                    <label for="clientPhone" class="form-label">Client Phone</label>
-                    <input type="text" class="form-control" id="clientPhone">
-                    </div>*@
-                    @*                  <div class="mb-3">
-                    <label for="agency" class="form-label">Agency</label>
-                    <input type="text" class="form-control" id="agency">
-                    </div>*@
 @*                    <div class="mb-3">
+                        <label for="clientFirstName" class="form-label">Client First Name</label>
+                        <input type="text" class="form-control" id="clientFirstName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="clientLastName" class="form-label">Client Last Name</label>
+                        <input type="text" class="form-control" id="clientLastName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="clientPhone" class="form-label">Client Phone</label>
+                        <input type="text" class="form-control" id="clientPhone">
+                    </div>*@
+  @*                  <div class="mb-3">
+                        <label for="agency" class="form-label">Agency</label>
+                        <input type="text" class="form-control" id="agency">
+                    </div>*@
+                    <div class="mb-3">
                         <label for="courierUsername" class="form-label">Courier Username</label>
                         <input type="text" class="form-control" id="courierUsername" disabled>
-                    </div>*@
-                    @*                    <div class="mb-3">
-                    <label for="courierFirstName" class="form-label">Courier First Name</label>
-                    <input type="text" class="form-control" id="courierFirstName">
+                    </div>
+@*                    <div class="mb-3">
+                        <label for="courierFirstName" class="form-label">Courier First Name</label>
+                        <input type="text" class="form-control" id="courierFirstName">
                     </div>
                     <div class="mb-3">
-                    <label for="couriertLastName" class="form-label">Courier Last Name</label>
-                    <input type="text" class="form-control" id="couriertLastName">
+                        <label for="couriertLastName" class="form-label">Courier Last Name</label>
+                        <input type="text" class="form-control" id="couriertLastName">
                     </div>
                     <div class="mb-3">
-                    <label for="courierPhone" class="form-label">Courier Phone</label>
-                    <input type="text" class="form-control" id="courierPhone">
+                        <label for="courierPhone" class="form-label">Courier Phone</label>
+                        <input type="text" class="form-control" id="courierPhone">
                     </div>*@
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
@@ -138,9 +138,9 @@
                         <label for="review" class="form-label">Review</label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="review" disabled>
-                            <span class="input-group-text">
-                                <i class="fas fa-star"></i>
-                            </span>
+                                <span class="input-group-text">
+                                    <i class="fas fa-star"></i>
+                                </span>
 
                         </div>
                     </div>
@@ -179,6 +179,7 @@
                 { data: 'ORDER_ID' }, // Specify the data property for each column
                 { data: 'CLIENT_USERNAME' },
                 { data: 'AGENCY_ID' },
+                { data: 'COURIER_USERNAME' },
                 { data: 'STATUS' },
                 { data: 'ORDERDATE' },
                 { data: 'DISPATCHDATE' },
@@ -196,13 +197,13 @@
             orderid: cells[0].innerText,
             clusername: cells[1].innerText,
             agid: cells[2].innerText,
-            //courusername: cells[3].innerText,
-            status: cells[3].innerText,
-            orderdt: cells[4].innerText,
-            dispdt: cells[5].innerText,
-            deldt: cells[6].innerText,
-            review: cells[7].innerText,
-            reviewcom: cells[8].innerText
+            courusername: cells[3].innerText,
+            status: cells[4].innerText,
+            orderdt: cells[5].innerText,
+            dispdt: cells[6].innerText,
+            deldt: cells[7].innerText,
+            review: cells[8].innerText,
+            reviewcom: cells[9].innerText
         };
 
         console.log(orderData);
@@ -210,10 +211,10 @@
     }
 
     function editOrderModal(orderData) {
-        $('#viewOrderModalLabel').text("Order -" + orderData.username);
-
+        $('#viewOrderModalLabel').text("Order - " + orderData.username);;
+        
         $('#clUsername').val(orderData.clusername);
-        //$('#courierUsername').val(orderData.courusername);
+        $('#courierUsername').val(orderData.courusername);
         $('#status').val(orderData.status);
         $('#orderdt').val(orderData.orderdt);
         $('#dispdt').val(orderData.dispdt);
@@ -223,9 +224,9 @@
 
         if (orderData.review >= 5) {
             $('#review').next('.input-group-text').find('i').addClass('text-warning');
-
+            
         }
-        else {
+        else{
             $('#review').next('.input-group-text').find('i').addClass('"fa fa-star-half-o"');
         }
 
