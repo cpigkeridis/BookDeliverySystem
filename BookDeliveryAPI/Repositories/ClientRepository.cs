@@ -1,7 +1,12 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
+using BookDeliveryCore;
 using Dapper;
+using Microsoft.AspNetCore.Mvc;
+
+
 namespace BookDeliverySystemAPI.Repositories
 {
     public class ClientRepository : Interfaces.IClientRepository
@@ -68,30 +73,81 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
-        public BookDeliveryCore.AgencySelectionResp GetAgencySelectionResp(string city)
+        public string InsertOrderByCity(ShopForm data)
         {
-
-            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
-            oCnn.Open();
-            try
+            using (SqlConnection connection = new SqlConnection(_Configuration.APICONSTRING))
             {
-                var values = new
+                using (SqlCommand command = new SqlCommand("SP_FIND_AGENCY_BY_CITY", connection))
                 {
-                    p_input_city=city
-                };
-                BookDeliveryCore.AgencySelectionResp obj = oCnn.QuerySingleOrDefault<BookDeliveryCore.AgencySelectionResp>("[dbo].[SP_FIND_AGENCY_BY_CITY]", values, commandType: System.Data.CommandType.StoredProcedure);
-                return obj;
+                    command.CommandType = CommandType.StoredProcedure;
 
+                    // Add parameters
+                    command.Parameters.AddWithValue("@p_input_city", data.CITY);
+                    command.Parameters.AddWithValue("@p_client_username", data.USERNAME);
+                    command.Parameters.AddWithValue("@p_client_firstname", data.FIRSTNAME);
+                    command.Parameters.AddWithValue("@p_client_lastname", data.LASTNAME);
+                    command.Parameters.AddWithValue("@p_client_phone", data.PHONE_NUMBER);
+                    command.Parameters.AddWithValue("@p_client_postal", data.POSTAL_CODE);
+                    command.Parameters.AddWithValue("@p_client_address", data.ADDRESS);
+
+                    // Create DataTable for ItemsList
+                    DataTable itemsTable = new DataTable();
+                    itemsTable.Columns.Add("ITEM_NAME", typeof(string));
+                    itemsTable.Columns.Add("ITEM_PRICE", typeof(decimal));
+                    itemsTable.Columns.Add("ORDER_ID", typeof(int));
+                    
+
+
+                    foreach (var item in data.Items)
+                    {
+                        itemsTable.Rows.Add(item.ITEM_NAME, item.ITEM_PRICE, item.ITEM_ID );
+                    }
+
+                    // Add table-valued parameter
+                    SqlParameter itemsParam = command.Parameters.AddWithValue("@ItemsList", itemsTable);
+                    itemsParam.SqlDbType = SqlDbType.Structured;
+                    itemsParam.TypeName = "dbo.ItemListType";
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    return "ok";
+                }
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                oCnn.Close();
-                oCnn.Dispose();
-            }
+
+            //SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            //oCnn.Open();
+            //try
+            //{
+            //    var itemsJson = JsonSerializer.Serialize(data.Items.Select(item => new
+            //    {
+            //        item.ITEM_ID,
+            //        item.ITEM_NAME,
+            //        item.ITEM_PRICE
+            //    }));
+            //    var values = new
+            //    {
+            //        p_input_city = data.CITY,
+            //        p_client_username = data.USERNAME,
+            //        p_client_firstname = data.FIRSTNAME,
+            //        p_client_lastname = data.LASTNAME,
+            //        p_client_phone = data.PHONE_NUMBER,
+            //        p_client_postal = data.POSTAL_CODE,
+            //        p_client_address = data.ADDRESS,
+            //        ItemsList = itemsJson
+            //    };
+            //    string res;
+            //    return res= oCnn.QuerySingleOrDefault<string>("[dbo].[SP_FIND_AGENCY_BY_CITY]", values, commandType: System.Data.CommandType.StoredProcedure);
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception(ex.Message);
+            //}
+            //finally
+            //{
+            //    oCnn.Close();
+            //    oCnn.Dispose();
+            //}
         }
 
 

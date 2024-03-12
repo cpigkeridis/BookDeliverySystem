@@ -17,14 +17,12 @@
                         <th scope="col">Username</th>
                         <th scope="col">Agency ID</th>
                         <th scope="col">Vehicle No</th>
-                        <th scope="col">Status</th>
                         <th scope="col">First Name</th>
                         <th scope="col">Last Name</th>
                         <th scope="col">Address</th>
                         <th scope="col">Postal Code</th>
                         <th scope="col">Role</th>
                         <th scope="col">Phone Number</th>
-                        <th scope="col">Current Location</th>
                         <th scope="col">Enabled</th>
                         <th scope="col">Edit</th>
                     </tr>
@@ -36,14 +34,12 @@
                             <td>@courier.USERNAME</td>
                             <td>@courier.AGENCY_ID</td>
                             <td>@courier.VEHICLE_NO</td>
-                            <td>@courier.STATUS</td>
                             <td>@courier.FIRSTNAME</td>
                             <td>@courier.LASTNAME</td>
                             <td>@courier.ADDRESS</td>
                             <td>@courier.POSTAL_CODE</td>
                             <td>@courier.ROLE</td>
                             <td>@courier.PHONE_NUMBER</td>
-                            <td>@courier.CURRENT_LOCATION</td>
                             <td>@courier.ENABLE</td>
                             <td><button onclick="EditUser(this)"><i class="fa fa-magic" aria-hidden="true"></i></button></td>
                         </tr>
@@ -75,10 +71,6 @@
                         <input type="text" class="form-control" id="vehicle" >
                     </div>
                     <div class="mb-3">
-                        <label for="status" class="form-label">Status</label>
-                        <input type="text" class="form-control" id="status" >
-                    </div>
-                    <div class="mb-3">
                         <label for="firstname" class="form-label">First Name</label>
                         <input type="text" class="form-control" id="firstname">
                     </div>
@@ -106,10 +98,6 @@
                     <div class="mb-3">
                         <label for="phoneNumber" class="form-label">Phone Number</label>
                         <input type="text" class="form-control" id="phoneNumber">
-                    </div>
-                    <div class="mb-3">
-                        <label for="currentlocation" class="form-label">Current Location</label>
-                        <input type="text" class="form-control" id="currentlocation">
                     </div>
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="enabled">
@@ -153,15 +141,13 @@
             username: cells[0].innerText,
             agencyid: cells[1].innerText,
             vehicleno: cells[2].innerText,
-            status: cells[3].innerText,
-            firstname: cells[4].innerText,
-            lastname: cells[5].innerText,
-            address: cells[6].innerText,
-            postalcode: cells[7].innerText,
-            role: cells[8].innerText,
-            phonenumber: cells[9].innerText,
-            currentlocation: cells[10].innerText,
-            enabled: cells[11].innerText
+            firstname: cells[3].innerText,
+            lastname: cells[4].innerText,
+            address: cells[5].innerText,
+            postalcode: cells[6].innerText,
+            role: cells[7].innerText,
+            phonenumber: cells[8].innerText,
+            enabled: cells[9].innerText
         };
 
         // Now you can do whatever you want with userData
@@ -174,14 +160,12 @@
         $('#username').val(userData.username);
         $('#agency').val(userData.agencyid);
         $('#vehicle').val(userData.vehicleno);
-        $('#status').val(userData.status);
         $('#firstname').val(userData.firstname);
         $('#lastname').val(userData.lastname);
         $('#address').val(userData.address);
         $('#postalCode').val(userData.postalcode);
         $('#role').val(userData.role);
         $('#phoneNumber').val(userData.phonenumber);
-        $('#currentlocation').val(userData.currentlocation);
         $('#enabled').prop('checked', userData.enabled === 'True');
 
         $('#editUserModal').modal('show');
@@ -191,14 +175,12 @@
         var username = $('#username').val();
         var agency = $('#agency').val();
         var vehicle = $('#vehicle').val();
-        var status = $('#status').val();
         var firstname = $('#firstname').val();
         var lastname = $('#lastname').val();
         var address = $('#address').val();
         var postalCode = $('#postalCode').val();
         var role = $('#role').val();
         var phoneNumber = $('#phoneNumber').val();
-        var currentlocation = $('#currentlocation').val();
         var enabled = $('#enabled').prop('checked').toString();
 
         //// Perform actions to save changes here
@@ -217,7 +199,7 @@
             contentType: "application/json; charset=utf-8",
 
             // Pass only the 'username' parameter
-            data: JSON.stringify({ 'Username': username,'Agency':agency,'Vehicle':vehicle,'Status':status, 'Firstname': firstname, 'Lastname': lastname, 'Address': address, 'PostalCode': postalCode, 'Role': role, 'PhoneNumber': phoneNumber, 'Currentlocation':currentlocation,'Enabled': enabled, 'OldRole': $('#role2').val() }),
+            data: JSON.stringify({ 'Username': username,'Agency':agency,'Vehicle':vehicle, 'Firstname': firstname, 'Lastname': lastname, 'Address': address, 'PostalCode': postalCode, 'Role': role, 'PhoneNumber': phoneNumber, 'Enabled': enabled, 'OldRole': $('#role2').val() }),
             async: false,
             success: function (response) {
                 console.log(response); // Add this line for logging

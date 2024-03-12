@@ -327,7 +327,7 @@ namespace BookDeliveryAPI.Controllers
         {
             try
             {
-                _oAdministrator.EditCourier(oCour.USERNAME, oCour.AGENCY_ID, oCour.VEHICLE_NO, oCour.STATUS.ToString(), oCour.FIRSTNAME, oCour.LASTNAME, oCour.ADDRESS, oCour.POSTAL_CODE, oCour.PHONE_NUMBER, oCour.CURRENT_LOCATION, oCour.ENABLE, oCour.ROLE);
+                _oAdministrator.EditCourier(oCour.USERNAME, oCour.AGENCY_ID, oCour.VEHICLE_NO, oCour.FIRSTNAME, oCour.LASTNAME, oCour.ADDRESS, oCour.POSTAL_CODE, oCour.PHONE_NUMBER,  oCour.ENABLE, oCour.ROLE);
                 return Ok(new { message = "courier edit succesfully" });
             }
             catch (Exception ex)
@@ -343,6 +343,52 @@ namespace BookDeliveryAPI.Controllers
             try
             {
                 List<Orders> order = _oAdministrator.GetOrderByUserName(ClientUsername);
+
+                if (order != null)
+                {
+                    return Ok(order);
+                }
+                else
+                {
+                    return NotFound(new { message = "Order not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error getting order.", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/[action]")]
+        public IActionResult GetOrderByCourUserName(string CourUsername)
+        {
+            try
+            {
+                List<Orders> order = _oAdministrator.GetOrderByCourierUserName(CourUsername);
+
+                if (order != null)
+                {
+                    return Ok(order);
+                }
+                else
+                {
+                    return NotFound(new { message = "Order not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error getting order.", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/[action]")]
+        public IActionResult GetOrderByAgenID(int AgencyID)
+        {
+            try
+            {
+                List<Orders> order = _oAdministrator.GetOrderByAgencyID(AgencyID);
 
                 if (order != null)
                 {

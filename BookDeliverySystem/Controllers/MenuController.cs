@@ -229,35 +229,32 @@ namespace BookDeliverySystem.Controllers
         [HttpPost]
         public async Task<IActionResult> newOrder([FromBody] ShopForm formData)
         {
-            Orders oOrder = new Orders();
-            //GET THIS FROM VIEW
-            oOrder.CLIENT_USERNAME = formData.USERNAME;
-            oOrder.CLIENT_FIRSTNAME = formData.FIRSTNAME;
-            oOrder.CLIENT_LASTNAME = formData.LASTNAME;
-            oOrder.CLIENT_ADDRESS = formData.ADDRESS;
-            oOrder.CLIENT_CITY = formData.CITY;
-            oOrder.CLIENT_PHONE = formData.PHONE_NUMBER;
-            oOrder.CLIENT_POSTALCODE = formData.POSTAL_CODE;
-            oOrder.STATUS = "PENDING";
+            //TODO AT LEAST ONE ITEM MUST BE SELECTED
+
+
+            //Orders oOrder = new Orders();
+            ////GET THIS FROM VIEW
+            //oOrder.CLIENT_USERNAME = formData.USERNAME;
+            //oOrder.CLIENT_FIRSTNAME = formData.FIRSTNAME;
+            //oOrder.CLIENT_LASTNAME = formData.LASTNAME;
+            //oOrder.CLIENT_ADDRESS = formData.ADDRESS;
+            //oOrder.CLIENT_CITY = formData.CITY;
+            //oOrder.CLIENT_PHONE = formData.PHONE_NUMBER;
+            //oOrder.CLIENT_POSTALCODE = formData.POSTAL_CODE;
+            //oOrder.STATUS = "PENDING";
 
             try
             {
-                string apiUrl = $"https://localhost:7203/api/Client/GetAgencySelResp?city={formData.CITY}";
+
+                string apiUrl = $"https://localhost:7203/api/Client/ClientInitialOrder";
                 // Make a GET request to the API endpoint for agencies
-                HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+                HttpResponseMessage response = await _httpClient.PostAsJsonAsync(apiUrl, formData);
 
                 // Check if the request was successful
                 if (response.IsSuccessStatusCode)
                 {
                     // Read the response content as string
-                    var responseData = await response.Content.ReadAsStringAsync();
-                    AgencySelectionResp oAgRes = JsonConvert.DeserializeObject<AgencySelectionResp>(responseData);
-                    oOrder.AGENCY_ID = oAgRes.AGENCY_ID;
-                    oOrder.AGENCY_NAME = oAgRes.AGENCY_NAME;
-                    oOrder.COURIER_USERNAME = oAgRes.COURIER_USERNAME;
-                    oOrder.COURIER_FIRSTNAME = oAgRes.COURIER_FIRSTNAME;
-                    oOrder.COURIER_LASTNAME = oAgRes.COURIER_LASTNAME;
-                    oOrder.COURIER_PHONE = oAgRes.COURIER_PHONE;
+                    //var responseData = await response.Content.ReadAsStringAsync();
                     _httpClient.Dispose();
                     return Json(new { redirectUrl = Url.Action("OrderConfirmation", "Menu") });
 
@@ -271,7 +268,7 @@ namespace BookDeliverySystem.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Error searching agencies.", error = ex.Message });
+                return BadRequest(new { message = "Error inserting order.", error = ex.Message });
             }
         }
             
