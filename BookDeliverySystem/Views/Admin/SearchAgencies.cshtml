@@ -14,14 +14,14 @@
             <table id="UserTable" class="table table-condensed table-hover" style="width: 100%">
                 <thead>
                     <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Role</th>
                         <th scope="col">Agency ID</th>
                         <th scope="col">Reward ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">City</th>
                         <th scope="col">Country</th>
                         <th scope="col">Postal Code</th>
-                        @*<th scope="col">Courier ID</th>*@
-                        <th scope="col">Courier Available</th>
                         <th scope="col">Review</th>
                         <th scope="col">Edit</th>
                     </tr>
@@ -30,6 +30,8 @@
                     @foreach (var agency in Model)
                     {
                         <tr>
+                            <td>@agency.USERNAME</td>
+                            <td>@agency.ROLE</td>
                             <td>@agency.AGENCY_ID</td>
                             <td>@agency.REWARD_ID</td>
                             <td>@agency.NAME</td>
@@ -37,7 +39,6 @@
                             <td>@agency.COUNTRY</td>
                             <td>@agency.POSTAL_CODE</td>
                             @*<td>@agency.COURIER_ID</td>*@
-                            <td>@agency.COURIER_AVAILABLE</td>
                             <td>@agency.REVIEW</td>
                             <td><button><i class="fa fa-magic" aria-hidden="true"></i></button></td>
                         </tr>

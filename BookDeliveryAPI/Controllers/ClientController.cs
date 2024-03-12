@@ -43,14 +43,15 @@ namespace BookDeliverySystemAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/[controller]/[action]")]
-        public IActionResult GetAgencySelResp(string city)
+        public IActionResult ClientInitialOrder(ShopForm data)
         {
             try
             {
-                AgencySelectionResp obj = _oClient.GetAgencySelectionResp(city);
-                return Ok(obj);
+                //TODO fix return message add check
+                string res= _oClient.InsertOrderByCity(data);
+                return Ok(res);
             }
             catch (Exception ex)
             {

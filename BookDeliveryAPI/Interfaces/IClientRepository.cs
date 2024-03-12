@@ -1,4 +1,6 @@
-﻿namespace BookDeliverySystemAPI.Interfaces
+﻿using BookDeliveryCore;
+
+namespace BookDeliverySystemAPI.Interfaces
 {
     public interface IClientRepository
     {
@@ -6,6 +8,6 @@
 
         public List<BookDeliveryCore.Item> ShowShopItems();
 
-        public BookDeliveryCore.AgencySelectionResp GetAgencySelectionResp(string city);
+        public string InsertOrderByCity(ShopForm data);
     }
 }

@@ -379,7 +379,7 @@ namespace BookDeliverySystemAPI.Repositories
                 oCnn.Dispose();
             }
         }
-        public void EditCourier(string username, string? agencyId, string? vehicleNo, string? status, string firstname, string lastname, string address, string postalcode, string phonenumber, string? currentLocation, bool enable, string NewRole)
+        public void EditCourier(string username, string? agencyId, string? vehicleNo, string firstname, string lastname, string address, string postalcode, string phonenumber,  bool enable, string NewRole)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -390,13 +390,11 @@ namespace BookDeliverySystemAPI.Repositories
                     USERNAME = username,
                     AGENCYID = (agencyId == "") ? null : agencyId,
                     VEHICLENO = vehicleNo,
-                    STATUS = (status=="")?null:status,
                     FIRSTNAME = firstname,
                     LASTNAME = lastname,
                     ADDRESS = address,
                     POSTALCODE = postalcode,
                     PHONENUMBER = phonenumber,
-                    CURRENTLOCATION = currentLocation,
                     ENABLE = enable,
                     NEWROLE = NewRole
                 };
@@ -419,11 +417,63 @@ namespace BookDeliverySystemAPI.Repositories
             oCnn.Open();
             try
             {
+                if (ClientUsername == "ADMIN")
+                {
+                    ClientUsername = "";
+                }
                 var parameters = new
                 {
                     CLIENTUSERNAME = ClientUsername,
                 };
                 List<Orders> obj = oCnn.Query<Orders>("[dbo].[SP_GET_ORDER_BY_USERNAME]", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+        }
+
+        public List<Orders> GetOrderByAgencyID(int AgencyID)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var parameters = new
+                {
+                    p_agency_id = AgencyID,
+                };
+                List<Orders> obj = oCnn.Query<Orders>("[dbo].[GET_ORDERS_BY_AGENCY]", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+        }
+
+        public List<Orders> GetOrderByCourierUserName(string CourierUsername)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var parameters = new
+                {
+                    courier_username = CourierUsername,
+                };
+                List<Orders> obj = oCnn.Query<Orders>("[dbo].[GET_ORDERS_BY_COURIER_USERNAME]", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
                 return obj;
             }
             catch (Exception ex)

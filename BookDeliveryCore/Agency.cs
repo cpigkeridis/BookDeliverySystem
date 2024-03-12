@@ -15,8 +15,11 @@ namespace BookDeliveryCore
         public string? COUNTRY { get; set; }
         public string? POSTAL_CODE { get; set; }
         //public int? COURIER_ID { get; set; }
-        public bool? COURIER_AVAILABLE { get; set; }
         public string? REVIEW { get; set; }
+        public string? USERNAME { get; set; }
+        public string? FIRSTNAME { get; set; }
+        public string? LASTNAME { get; set;}
+        public string? ROLE { get; set; }
     }
     public class AgencySelectionResp
     {
