@@ -58,3 +58,14 @@
 .register-button {
     padding: 5px;
 }
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f8f9fa; /* Set the background color of the footer */
+    padding: 10px 0; /* Add padding for better spacing */
+    text-align: center; /* Center-align the content */
+    border-top: 1px solid #ccc; /* Add a border to the top */
+    color: #6c757d; /* Set text color */
+}
