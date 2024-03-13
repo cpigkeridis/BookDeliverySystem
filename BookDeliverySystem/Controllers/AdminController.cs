@@ -3,6 +3,7 @@ using BookDeliverySystem.Areas.Identity.Data;
 using BookDeliverySystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -375,8 +376,7 @@ namespace BookDeliverySystem.Controllers
                     //SEND AGENCYID AS STRING USERNAME
                     else if (role == "AGEN")
                     {
-                        int agencyid = Int32.Parse(username);
-                        apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByAgenID?AgencyID={agencyid}";
+                        apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByAgenUserName?AgenUsername={username}";
                         // Make a GET request to the API endpoint
                         response = await _httpClient.GetAsync(apiUrl);
                     }
@@ -570,6 +570,87 @@ namespace BookDeliverySystem.Controllers
 
 
                             var resp = await setUserRole(oc.ROLE, oc.USERNAME);
+                            responseBody = responseBody + " asp role:" + resp;
+                            _httpClient.Dispose();
+                            return Ok(new { message = "Request successful.", responseBody });
+                        }
+                        else
+                        {
+                            _httpClient.Dispose();
+
+                            // If the request was not successful, handle the error
+                            // For example, read the error response content
+                            string errorResponse = await response.Content.ReadAsStringAsync();
+
+                            // Return an appropriate error message
+                            return BadRequest(new { message = "Updated Enabled but failed to update role.", errorResponse });
+                        }
+                    }
+                    else
+                    {
+                        return Ok(new { message = "Users with orders cannot change role" });
+                    }
+
+                }
+                else
+                {
+                    return RedirectToAction("AccessDenied", "Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    message = "Error searching agencies.",
+                    error = ex.Message
+                });
+            }
+
+        }
+
+
+        public async Task<IActionResult> UpdateAgency([FromBody] SearchAgenciesReqModel value)
+        {
+            try
+            {
+                if (_signInManager.IsSignedIn(User))
+                {
+                    // TODO: if (!User.Identity.IsAuthenticated) custom function to authenticate based on enabled column
+                    if (await getUserRole() != "ADMI")
+                    {
+                        return RedirectToAction("AccessDenied", "Error");
+                    }
+                    IActionResult result = await HasOrder(value.Username, value.OldRole);
+                    if (result is NotFoundResult)
+                    {
+                        Agency ag = new Agency();
+
+                        ag.USERNAME = value.Username;
+                        ag.COUNTRY = value.Country;
+                        //oc.STATUS = value.Status;
+                        ag.NAME = value.Name;
+                        ag.CITY = value.City;
+                        ag.ADDRESS = value.Address;
+                        ag.POSTAL_CODE = value.PostalCode;
+                        ag.ROLE = value.Role;
+                        ag.PHONE_NUMBER = value.PhoneNumber;
+                        ag.ENABLE = bool.Parse(value.Enabled);
+                        string apiUrl = $"https://localhost:7203/api/Administrator/EditAgency";
+
+
+
+
+                        // Make a POST request to the API endpoint for agencies
+                        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(apiUrl, ag);
+
+                        // Check if the request was successful
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string responseBody = await response.Content.ReadAsStringAsync();
+
+
+
+                            var resp = await setUserRole(ag.ROLE, ag.USERNAME);
                             responseBody = responseBody + " asp role:" + resp;
                             _httpClient.Dispose();
                             return Ok(new { message = "Request successful.", responseBody });

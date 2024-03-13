@@ -102,28 +102,29 @@ namespace BookDeliverySystem.Controllers
                 {
                     try
                     {
-                        string? userId = HttpContext.User.Identity.Name;
-                        ApplicationUser user = await _signInManager.UserManager.FindByNameAsync(userId);
-                        string apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByUserName?ClientUsername={user.UserName}";
-                        // Make a GET request to the API endpoint
-                        HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+                        //string? userId = HttpContext.User.Identity.Name;
+                        //ApplicationUser user = await _signInManager.UserManager.FindByNameAsync(userId);
+                        //string apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByUserName?ClientUsername={user.UserName}";
+                        //// Make a GET request to the API endpoint
+                        //HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
 
-                        // Check if the request was successful
-                        if (response.IsSuccessStatusCode)
-                        {
-                            // Read the response content as string
-                            var responseData = await response.Content.ReadAsStringAsync();
-                            //IT RETURNS ONLY ONE ORDER FOR NOW, WILL BE FIXED
-                            List<Orders> orders = JsonConvert.DeserializeObject<List<Orders>>(responseData);
-                            _httpClient.Dispose();
-                            // Do something with the response data
-                            return View(orders);
-                        }
-                        else
-                        {
-                            // Handle the error
-                            return StatusCode((int)response.StatusCode);
-                        }
+                        //// Check if the request was successful
+                        //if (response.IsSuccessStatusCode)
+                        //{
+                        //    // Read the response content as string
+                        //    var responseData = await response.Content.ReadAsStringAsync();
+                        //    //IT RETURNS ONLY ONE ORDER FOR NOW, WILL BE FIXED
+                        //    List<Orders> orders = JsonConvert.DeserializeObject<List<Orders>>(responseData);
+                        //    _httpClient.Dispose();
+                        //    // Do something with the response data
+                            //return View(orders);
+                        return View();
+                    //}
+                    //    else
+                    //    {
+                    //        // Handle the error
+                    //        return StatusCode((int)response.StatusCode);
+                    //    }
 
                     }
                     catch (Exception ex)
@@ -143,7 +144,7 @@ namespace BookDeliverySystem.Controllers
 
         }
 
-
+        //TODO NEXT
         public async Task<IActionResult> SearchMyOrders()
         {
             if (_signInManager.IsSignedIn(User))
@@ -152,7 +153,12 @@ namespace BookDeliverySystem.Controllers
                 {
                     string? userId = HttpContext.User.Identity.Name;
                     ApplicationUser user = await _signInManager.UserManager.FindByNameAsync(userId);
-                    string apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByUserName?ClientUsername={user.UserName}";
+                    
+                    string apiUrl = getMyOrdersUrl(user.UserName,user.Role);
+                    if (apiUrl.Trim() != "")
+                    {
+
+
                         // Make a GET request to the API endpoint
                         HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
 
@@ -172,6 +178,13 @@ namespace BookDeliverySystem.Controllers
                             // Handle the error
                             return StatusCode((int)response.StatusCode);
                         }
+                    }
+                    else
+                    {
+                        List<Orders> emptyOrder = new List<Orders>();
+                        return View(emptyOrder);
+
+                    }
 
                 }
                 catch (Exception ex)
@@ -184,6 +197,43 @@ namespace BookDeliverySystem.Controllers
                 return RedirectToAction("AccessDenied", "Error");
             }
             
+        }
+
+
+        public  string getMyOrdersUrl(string username, string role)
+        {
+            string apiUrl = "";
+            if (_signInManager.IsSignedIn(User))
+                {
+
+                    if (role == "CLIE")
+                    {
+                        apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByUserName?ClientUsername={username}";
+                        // Make a GET request to the API endpoint
+                        
+                    }
+                    else if (role == "COUR")
+                    {
+                        apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByCourUserName?CourUsername={username}";
+                        // Make a GET request to the API endpoint
+
+                    }
+                    //SEND AGENCYID AS STRING USERNAME
+                    else if (role == "AGEN")
+                    {
+                        apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByAgenUserName?AgenUsername={username}";
+                        // Make a GET request to the API endpoint
+                    }
+                    else
+                    {
+                        return apiUrl;
+                    }
+                    return apiUrl;
+                }
+            else
+            {
+                return apiUrl;
+            }
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
