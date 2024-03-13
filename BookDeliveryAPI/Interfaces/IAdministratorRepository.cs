@@ -34,7 +34,6 @@ namespace BookDeliverySystemAPI.Interfaces
 
         public Agency  GetAgencyByCourUserName(string Username);
 
-
         public void AcceptOrderCourier(Orders oOrder);
 
 
