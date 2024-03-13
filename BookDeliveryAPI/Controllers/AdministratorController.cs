@@ -219,6 +219,7 @@ namespace BookDeliveryAPI.Controllers
             }
         }
 
+
         [HttpGet]
         [Route("api/[controller]/[action]")]
         public IActionResult GetUser(string username, string role)
@@ -336,6 +337,22 @@ namespace BookDeliveryAPI.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("api/[controller]/[action]")]
+        public IActionResult EditAgency(Agency oAgen)
+        {
+            try
+            {
+                _oAdministrator.EditAgency(oAgen.USERNAME, oAgen.NAME, oAgen.COUNTRY, oAgen.CITY, oAgen.ADDRESS, oAgen.POSTAL_CODE, oAgen.PHONE_NUMBER, oAgen.ENABLE, oAgen.ROLE);
+                return Ok(new { message = "agency edit succesfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error editing courier.", error = ex.Message });
+            }
+        }
+
+
         [HttpGet]
         [Route("api/[controller]/[action]")]
         public IActionResult GetOrderByUserName(string ClientUsername)
@@ -384,11 +401,11 @@ namespace BookDeliveryAPI.Controllers
 
         [HttpGet]
         [Route("api/[controller]/[action]")]
-        public IActionResult GetOrderByAgenID(int AgencyID)
+        public IActionResult GetOrderByAgenUserName(string AgenUsername)
         {
             try
             {
-                List<Orders> order = _oAdministrator.GetOrderByAgencyID(AgencyID);
+                List<Orders> order = _oAdministrator.GetOrderByAgencyUserName(AgenUsername);
 
                 if (order != null)
                 {
@@ -404,5 +421,106 @@ namespace BookDeliveryAPI.Controllers
                 return BadRequest(new { message = "Error getting order.", error = ex.Message });
             }
         }
+
+        [HttpGet]
+        [Route("api/[controller]/[action]")]
+        public IActionResult GetAgencyByUserName(string Username)
+        {
+            try
+            {
+                Agency agency = _oAdministrator.GetAgencyByUserName(Username);
+
+                if (agency != null)
+                {
+                    return Ok(agency);
+                }
+                else
+                {
+                    return NotFound(new { message = "Order not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error getting order.", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/[action]")]
+        public IActionResult GetAgencyByCourUserName(string Username)
+        {
+            try
+            {
+                Agency agency = _oAdministrator.GetAgencyByCourUserName(Username);
+
+                if (agency != null)
+                {
+                    return Ok(agency);
+                }
+                else
+                {
+                    return NotFound(new { message = "Order not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error getting order.", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/[action]")]
+        public IActionResult GetCityOrder(string AgenUsername)
+        {
+            try
+            {
+                List<Orders> order = _oAdministrator.GetCityOrderByAgencyUserName(AgenUsername);
+
+                if (order != null)
+                {
+                    return Ok(order);
+                }
+                else
+                {
+                    return NotFound(new { message = "Order not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error getting order.", error = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/[action]")]
+        public IActionResult AcceptOrderAgency(Orders oOrder)
+        {
+            try
+            {
+                _oAdministrator.AcceptOrderAgency(oOrder);
+                return Ok(new { message = "agency order accepted succesfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error editing courier.", error = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/[action]")]
+        public IActionResult AcceptOrderCourier(Orders oOrder)
+        {
+            try
+            {
+                _oAdministrator.AcceptOrderCourier(oOrder);
+                return Ok(new { message = "COURIER order accepted succesfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error editing courier.", error = ex.Message });
+            }
+        }
+        
+
     }
 }

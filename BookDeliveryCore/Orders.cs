@@ -27,6 +27,7 @@ namespace BookDeliveryCore
         public string? STATUS { get; set; }
         public DateTime? ORDERDATE { get; set; }
         public DateTime? DISPATCHDATE { get; set; }
+        public DateTime? ESTIMATE_DT { get; set; }    
         public DateTime? DELIVEREDDATE { get; set; }
         public int? REVIEW { get; set; }
         public string? REVIEW_COMMENTS { get; set; }

@@ -22,23 +22,24 @@
                 <table id="OrdersTable" class="table table-condensed table-hover" style="width: 100%">
                     <thead>
                         <tr>
-                            <th scope="col">Order ID</th>
+                            <th scope="col">ID</th>
                             <th scope="col">Client Username</th>
-                            <th scope="col">Client First Name</th>
-                            <th scope="col">Client Last Name</th>
-                            <th scope="col">Client Phone Number</th>
+                            @*<th scope="col">Client First Name</th>
+                        <th scope="col">Client Last Name</th>
+                        <th scope="col">Client Phone Number</th>*@
                             <th scope="col">Delivery Agency</th>
-                            <th scope="col">Courier Username</th>
-                            <th scope="col">Courier First Name</th>
-                            <th scope="col">Courier Last Name</th>
-                            <th scope="col">Courier Phone Number</th>
-                            <th scope="col">Order Status</th>
+                            @*<th scope="col">Courier Username</th>*@
+                            @* <th scope="col">Courier First Name</th>
+                        <th scope="col">Courier Last Name</th>
+                        <th scope="col">Courier Phone Number</th>*@
+                            <th scope="col">City</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Created Date</th>
                             <th scope="col">Dispatched Date</th>
                             <th scope="col">Delivered Date</th>
-                            <th scope="col">Order Review</th>
+                            <th scope="col">Review</th>
                             <th scope="col">Review Comments</th>
-                            <th scope="col">Edit</th>
+                            <th scope="col">GetOrder</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,14 +48,15 @@
                             <tr>
                                 <td>@order.ORDER_ID</td>
                                 <td>@order.CLIENT_USERNAME</td>
-                                <td>@order.CLIENT_FIRSTNAME</td>
-                                <td>@order.CLIENT_LASTNAME</td>
-                                <td>@order.CLIENT_PHONE</td>
-                                <td>@order.AGENCY_NAME</td>
-                                <td>@order.COURIER_USERNAME</td>
-                                <td>@order.COURIER_FIRSTNAME</td>
-                                <td>@order.COURIER_LASTNAME</td>
-                                <td>@order.COURIER_PHONE</td>
+                                @*                            <td>@order.CLIENT_FIRSTNAME</td>
+                        <td>@order.CLIENT_LASTNAME</td>
+                        <td>@order.CLIENT_PHONE</td>*@
+                                <td>@order.AGENCY_ID</td>
+                                @*<td>@order.COURIER_USERNAME</td>*@
+                                @*                            <td>@order.COURIER_FIRSTNAME</td>
+                        <td>@order.COURIER_LASTNAME</td>
+                        <td>@order.COURIER_PHONE</td>*@
+                                <td>@order.CLIENT_CITY</td>
                                 <td>@order.STATUS</td>
                                 <td>@order.ORDERDATE</td>
                                 <td>@order.DISPATCHDATE</td>
@@ -86,41 +88,17 @@
             </div>
             <div class="modal-body">
                 <form>
+                     <div class="mb-3">
+                        <label for="orderID" class="form-label">OrderID</label>
+                        <input type="text" class="form-control" id="orderID" disabled>
+                    </div>
                     <div class="mb-3">
                         <label for="clientUsername" class="form-label">Client Username</label>
                         <input type="text" class="form-control" id="clUsername" disabled>
                     </div>
                     <div class="mb-3">
-                        <label for="clientFirstName" class="form-label">Client First Name</label>
-                        <input type="text" class="form-control" id="clientFirstName">
-                    </div>
-                    <div class="mb-3">
-                        <label for="clientLastName" class="form-label">Client Last Name</label>
-                        <input type="text" class="form-control" id="clientLastName">
-                    </div>
-                    <div class="mb-3">
-                        <label for="clientPhone" class="form-label">Client Phone</label>
-                        <input type="text" class="form-control" id="clientPhone">
-                    </div>
-                    <div class="mb-3">
-                        <label for="agency" class="form-label">Agency</label>
-                        <input type="text" class="form-control" id="agency">
-                    </div>
-                    <div class="mb-3">
-                        <label for="courierUsername" class="form-label">Courier Username</label>
-                        <input type="text" class="form-control" id="courierUsername" disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label for="courierFirstName" class="form-label">Courier First Name</label>
-                        <input type="text" class="form-control" id="courierFirstName">
-                    </div>
-                    <div class="mb-3">
-                        <label for="couriertLastName" class="form-label">Courier Last Name</label>
-                        <input type="text" class="form-control" id="couriertLastName">
-                    </div>
-                    <div class="mb-3">
-                        <label for="courierPhone" class="form-label">Courier Phone</label>
-                        <input type="text" class="form-control" id="courierPhone">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" class="form-control" id="city" disabled>
                     </div>
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
@@ -145,7 +123,6 @@
                             <span class="input-group-text">
                                 <i class="fas fa-star"></i>
                             </span>
-
                         </div>
                     </div>
                     <div class="mb-3">
@@ -156,7 +133,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                @*<button type="button" class="btn btn-primary" onclick="saveChanges()">Save changes</button>*@
+                <button type="button" class="btn btn-primary" onclick="saveChanges()">Accept Order</button>
             </div>
         </div>
     </div>
@@ -189,14 +166,14 @@
         var orderData = {
             orderid: cells[0].innerText,
             clusername: cells[1].innerText,
-            agname: cells[2].innerText,
-            //courusername: cells[3].innerText,
-            status: cells[3].innerText,
-            orderdt: cells[4].innerText,
-            dispdt: cells[5].innerText,
-            deldt: cells[6].innerText,
-            review: cells[7].innerText,
-            reviewcom: cells[8].innerText
+            agid: cells[2].innerText,
+            city: cells[3].innerText,
+            status: cells[4].innerText,
+            orderdt: cells[5].innerText,
+            dispdt: cells[6].innerText,
+            deldt: cells[7].innerText,
+            review: cells[8].innerText,
+            reviewcom: cells[9].innerText
         };
 
         console.log(orderData);
@@ -207,13 +184,14 @@
         $('#viewOrderModalLabel').text("Order -" + orderData.username);
 
         $('#clUsername').val(orderData.clusername);
-        //$('#courierUsername').val(orderData.courusername);
+        $('#city').val(orderData.city);
         $('#status').val(orderData.status);
         $('#orderdt').val(orderData.orderdt);
         $('#dispdt').val(orderData.dispdt);
         $('#deldt').val(orderData.deldt);
         $('#review').val(orderData.review + "/10");
         $('#reviewCom').val(orderData.reviewcom);
+        $('#orderID').val(orderData.orderid);
 
         if (orderData.review >= 5) {
             $('#review').next('.input-group-text').find('i').addClass('text-warning');
@@ -228,42 +206,23 @@
     }
 
     function saveChanges() {
-        //var username = $('#username').val();
-        //var firstname = $('#firstname').val();
-        //var lastname = $('#lastname').val();
-        //var address = $('#address').val();
-        //var postalCode = $('#postalCode').val();
-        //var role = $('#role').val();
-        //var phoneNumber = $('#phoneNumber').val();
-        //var enabled = $('#enabled').prop('checked').toString();
+        console.log($('#orderID').val());
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AcceptOrderAgency", "Agency")",
+            contentType: "application/json; charset=utf-8",
 
-        //// Perform actions to save changes here
-        //console.log("Username: " + username);
-        //console.log("First Name: " + firstname);
-        //console.log("Last Name: " + lastname);
-        //console.log("Address: " + address);
-        //console.log("Postal Code: " + postalCode);
-        //console.log("Role: " + role);
-        //console.log("Phone Number: " + phoneNumber);
-        //console.log("Enabled: " + enabled);
-
-        //$.ajax({
-        //    type: "POST",
-        //    url: "@Url.Action("UpdateAdmin", "Admin")",
-        //    contentType: "application/json; charset=utf-8",
-
-        //    // Pass only the 'username' parameter
-        //    data: JSON.stringify({ 'Username': username, 'Firstname': firstname, 'Lastname': lastname, 'Address': address, 'PostalCode': postalCode, 'Role': role, 'PhoneNumber': phoneNumber, 'Enabled': enabled, 'OldRole': $('#role2').val() }),
-        //    async: false,
-        //    success: function (response) {
-        //        console.log(response); // Add this line for logging
-        //        //$('#UserResult').html(response);
-        //        // Initialize DataTable here if needed
-        //    },
-        //    error: function (xhr, status, error) {
-        //        alert(error);
-        //    }
-        //});
+            // Pass only the 'username' parameter
+            data: JSON.stringify({ 'OrderID': $('#orderID').val() }),
+            async: false,
+            success: function (response) {
+                console.log(response); // Add this line for logging
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
 
         // Close modal after saving changes
         $('#viewOrderModal').modal('hide');

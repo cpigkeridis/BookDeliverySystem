@@ -1,0 +1,45 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<main class="content-wrapper">
+    <div class="content">
+        <div class="form-label">
+            <h1>ORDERS FROM MY AGENCY</h1>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <label>ORDER LIST</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12">
+                <div id="OrderResult"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("SearchOrdersByAgency", "Courier")",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({}),
+            async: true,
+            success: function (response) {
+                console.log(response); // Add this line for logging
+                $('#OrderResult').html(response);
+                // Initialize DataTable here if needed
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    }); // Corrected the closing parenthesis
+</script>
