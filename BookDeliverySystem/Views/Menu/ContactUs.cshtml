@@ -2,76 +2,66 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!-- contact-us-view.html -->
-
-
-    <title>Contact Us</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-
-        }
-
-        form {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input,
-        textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 16px;
-            box-sizing: border-box;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-        }
-
-            button:hover {
-                background-color: #45a049;
-            }
-    </style>
-
+<head>
+    <link href="~/css/globalstylesheet.css" rel="stylesheet" />
+    <link href="~/css/contactus.css" rel="stylesheet" />
+</head>
 <body>
-
     <div class="form-container">
-        <h1>Contact Us</h1>
-        <form action="/submit-contact" method="post">
-            <div class="form-floating">
-                <input class="form-control" type="text" id="name" name="name" required>
-                <label for="name" class="form-label">Name:</label>
-            </div>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="contact-info">
+					<img src="https://image.ibb.co/kUASdV/contact-image.png" alt="image" />
+					<h2>Contact Us</h2>
+					<h4>We would love to hear from you !</h4>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="contact-form">
+					<div class="form-group">
+						<label class="control-label col-sm-2" for="fname">First Name:</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="fname" placeholder="Enter First Name" name="fname">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-2" for="lname">Last Name:</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="lname" placeholder="Enter Last Name" name="lname">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-2" for="email">Email:</label>
+						<div class="col-sm-10">
+							<input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-2" for="subjectSelect">Subject:</label>
+						<div class="col-sm-10">
+							<select class="form-control" id="subjectSelect" name="Subject">
+								<option value="">Select a subject</option>
+								<option value="Delivery Problem">Problem with delivery</option>
+								<option value="Product Inquiry">Product inquiry</option>
+								<option value="Billing Issue">Billing issue</option>
+								<option value="other">Other</option>
+							</select>
+						</div>
+					</div>
 
-            <div class="form-floating">
-                <input class="form-control" type="email" id="email" name="email" required>
-                <label for="email" class="form-label">Email:</label>
-            </div>
-
-            <div class="form-floating">
-                <input class="form-control" type="text" id="subject" name="subject" required>
-                <label for="subject" class="form-label">Subject:</label>
-            </div>
-
-            <div class="form-floating">
-                <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
-                <label for="message" class="form-label">Message:</label>
-            </div>
-
-            <div class="register-button">
-                <button type="submit" class="contact-button btn btn-lg btn-primary">Submit</button>
-            </div>
-        </form>
-    </div>
+					<div class="form-group">
+						<label class="control-label col-sm-2" for="comment">Comment:</label>
+						<div class="col-sm-10">
+							<textarea class="form-control" rows="5" id="comment"></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<button type="submit" class="btn btn-default">Submit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 </body>

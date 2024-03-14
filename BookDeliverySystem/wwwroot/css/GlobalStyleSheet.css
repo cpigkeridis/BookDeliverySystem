@@ -3,69 +3,21 @@
     background-size: cover; /* Ensures the entire image fits within the body without stretching */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-position: center; /* Centers the image within the body */
-    font-family: 'Nunito', sans-serif;
-    margin: 0; /* Removes default body margin */
-    padding: 0; /* Removes default body padding */
-    width: 100%;
-}
-
-
-.form-container {
-    width: 30%;
-    background: #ecf0f3;
-    font-family: 'Nunito', sans-serif;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 14px 14px 20px #cbced1, -1px -1px 20px white;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.form-container-about-us {
-    width: 90%;
-    background: #ecf0f3;
-    font-family: 'Nunito', sans-serif;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 14px 14px 20px #cbced1, -1px -1px 20px white;
-    margin: 0 auto;
-}
-
-.h1 {
-    text-align: center;
-}
-.form-floating {
-    padding: 8px;
-    font-size: 15px;
-    font-weight: 600;
-}
-
-
-.testing{
-    padding: 30px;
-    text-align:left;
-    margin-left: -20px;
-}
-
-.testing-1 {
-    margin: 5px 0;
-}
-
-.btn{
-    width: 94%;
-}
-
-.register-button {
-    padding: 5px;
+    font-family: 'Roboto';
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    font-weight: 400;
+    font-style: normal;
+    color: #494949;
+    font-size: 16px;
 }
 
 footer {
     position: fixed;
-    bottom: 0;
     width: 100%;
     background-color: #f8f9fa; /* Set the background color of the footer */
     padding: 10px 0; /* Add padding for better spacing */
-    text-align: center; /* Center-align the content */
+    text-align: left; /* Center-align the content */
     border-top: 1px solid #ccc; /* Add a border to the top */
     color: #6c757d; /* Set text color */
 }

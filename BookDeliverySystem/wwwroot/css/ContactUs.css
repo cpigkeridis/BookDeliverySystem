@@ -1,0 +1,57 @@
+﻿.contact {
+    padding: 4%;
+    height: 400px;
+}
+
+.col-md-3 {
+    background: #2B526C;
+    padding: 4%;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    color : white;
+}
+
+.contact-info {
+    margin-top: 10%;
+}
+
+ .contact-info img {
+        margin-bottom: 15%;
+    }
+
+    .contact-info h2 {
+        margin-bottom: 10%;
+    }
+
+.col-md-9 {
+    background: #fff;
+    padding: 3%;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    width : 600px;
+}
+
+.contact-form label {
+    font-weight: 600;
+}
+
+.contact-form button {
+    background: #25274d;
+    color: #fff;
+    font-weight: 600;
+    width: 25%;
+    margin: 10px auto -5px 
+    transition: 0.3s;
+}
+    .contact-form button:hover {
+        background: #2B526C; /* Change background color to bright white on hover */
+        color : white;
+    }
+
+.form-container {
+    width: 90%; /* Adjust width as needed */
+    margin: 100px 0 100px 210px; /* Adjust left margin to move the container more to the right */
+}
+
+
+
