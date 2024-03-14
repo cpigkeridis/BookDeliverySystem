@@ -495,6 +495,30 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
+        public List<Orders> GetOrderByAgencyUserNamePend(string AgencyUsername)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var parameters = new
+                {
+                    p_agency_username = AgencyUsername,
+                };
+                List<Orders> obj = oCnn.Query<Orders>("[dbo].[GET_ORDERS_BY_AGENCY_PENDING]", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+        }
+
 
         public List<Orders> GetCityOrderByAgencyUserName(string AgencyUsername)
         {

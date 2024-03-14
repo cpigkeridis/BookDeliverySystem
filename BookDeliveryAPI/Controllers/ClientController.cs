@@ -58,6 +58,26 @@ namespace BookDeliverySystemAPI.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [HttpPost]
+        [Route("api/[controller]/[action]")]
+        public IActionResult OrderUpdateData(OrderUpdate data)
+        {
+            try
+            {
+                //TODO fix return message add check
+                 _oClient.InsertOrderUpdate(data);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
+
+        
     }
 }
 

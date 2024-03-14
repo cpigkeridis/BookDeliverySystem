@@ -32,4 +32,12 @@ namespace BookDeliveryCore
         public int? REVIEW { get; set; }
         public string? REVIEW_COMMENTS { get; set; }
     }
+
+    public class OrderUpdate
+    {
+        public string OrderID { get; set; }
+        public DateTime? EDD { get; set; }
+        public string Status { get; set; }
+        public string Role { get; set; }
+    }
 }

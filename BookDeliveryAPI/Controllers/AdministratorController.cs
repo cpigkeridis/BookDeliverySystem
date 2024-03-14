@@ -424,6 +424,29 @@ namespace BookDeliveryAPI.Controllers
 
         [HttpGet]
         [Route("api/[controller]/[action]")]
+        public IActionResult GetOrderByAgenUserNamePend(string AgenUsername)
+        {
+            try
+            {
+                List<Orders> order = _oAdministrator.GetOrderByAgencyUserNamePend(AgenUsername);
+
+                if (order != null)
+                {
+                    return Ok(order);
+                }
+                else
+                {
+                    return NotFound(new { message = "Order not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error getting order.", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/[action]")]
         public IActionResult GetAgencyByUserName(string Username)
         {
             try

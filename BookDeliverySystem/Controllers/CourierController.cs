@@ -80,7 +80,7 @@ namespace BookDeliverySystem.Controllers
                         Agency agency = JsonConvert.DeserializeObject<Agency>(responseData);
 
 
-                        apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByAgenUserName?AgenUsername={agency.USERNAME}";
+                        apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByAgenUserNamePend?AgenUsername={agency.USERNAME}";
 
                         response = await _httpClient.GetAsync(apiUrl);
                         if (response.IsSuccessStatusCode)

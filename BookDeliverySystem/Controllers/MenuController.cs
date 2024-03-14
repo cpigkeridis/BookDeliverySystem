@@ -169,9 +169,12 @@ namespace BookDeliverySystem.Controllers
                             var responseData = await response.Content.ReadAsStringAsync();
                             //IT RETURNS ONLY ONE ORDER FOR NOW, WILL BE FIXED
                             List<Orders> orders = JsonConvert.DeserializeObject<List<Orders>>(responseData);
+                            MyOrdersAll oMyOrders = new MyOrdersAll();
+                            oMyOrders.MyOrderList = orders;
+                            oMyOrders.myID = await getUserRole();
                             _httpClient.Dispose();
                             // Do something with the response data
-                            return View(orders);
+                            return View(oMyOrders);
                         }
                         else
                         {
@@ -321,7 +324,52 @@ namespace BookDeliverySystem.Controllers
                 return BadRequest(new { message = "Error inserting order.", error = ex.Message });
             }
         }
-            
+
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateOrder([FromBody] UpdateOrderModel data)
+        {
+
+
+            try
+            {
+
+                string apiUrl = $"https://localhost:7203/api/Client/OrderUpdateData";
+                string role = await getUserRole();
+                OrderUpdate oOrder= new OrderUpdate();
+                oOrder.OrderID = data.OrderID;
+                oOrder.Role = role;
+                if (data.EDD< DateTime.Today )
+                {
+                    data.EDD = null;
+                }
+                oOrder.EDD = data.EDD;
+                oOrder.Status = data.Status;
+                // Make a GET request to the API endpoint for agencies
+                HttpResponseMessage response = await _httpClient.PostAsJsonAsync(apiUrl, oOrder);
+
+                // Check if the request was successful
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the response content as string
+                    //var responseData = await response.Content.ReadAsStringAsync();
+                    _httpClient.Dispose();
+                    return Ok();
+
+                    // Do something with the response data, for example, return it to a view
+                }
+                else
+                {
+                    // Handle the error
+                    return StatusCode((int)response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error inserting order.", error = ex.Message });
+            }
+        }
+
         public IActionResult OrderConfirmation()
         {
             return View("OrderConfirmation");

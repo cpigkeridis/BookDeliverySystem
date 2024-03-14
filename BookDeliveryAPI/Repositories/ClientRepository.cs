@@ -95,12 +95,12 @@ namespace BookDeliverySystemAPI.Repositories
                     itemsTable.Columns.Add("ITEM_NAME", typeof(string));
                     itemsTable.Columns.Add("ITEM_PRICE", typeof(decimal));
                     itemsTable.Columns.Add("ORDER_ID", typeof(int));
-                    
+
 
 
                     foreach (var item in data.Items)
                     {
-                        itemsTable.Rows.Add(item.ITEM_NAME, item.ITEM_PRICE, item.ITEM_ID );
+                        itemsTable.Rows.Add(item.ITEM_NAME, item.ITEM_PRICE, item.ITEM_ID);
                     }
 
                     // Add table-valued parameter
@@ -113,6 +113,37 @@ namespace BookDeliverySystemAPI.Repositories
                     return "ok";
                 }
             }
+        }
+
+            public void InsertOrderUpdate(OrderUpdate data)
+            {
+
+                SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+                oCnn.Open();
+                try
+                {
+                    var values = new
+                    {
+
+                        orderId=data.OrderID,
+                        newStatus=data.Status,
+                        newEstimateDate = data.EDD
+                    };
+                    oCnn.ExecuteScalar("[dbo].[SP_UPDATE_ORDER_STATUS]", values, commandType: System.Data.CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    oCnn.Close();
+                    oCnn.Dispose();
+                }
+
+            }
+
+
 
             //SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             //oCnn.Open();
@@ -152,4 +183,4 @@ namespace BookDeliverySystemAPI.Repositories
 
 
     }
-}
+

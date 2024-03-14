@@ -25,6 +25,7 @@ namespace BookDeliverySystemAPI.Interfaces
 
         public List<Orders> GetOrderByCourierUserName(string CourierUsername);
         public List<Orders> GetOrderByAgencyUserName(string AgencyUserName);
+        public List<Orders> GetOrderByAgencyUserNamePend(string AgenUsername);
 
         public List<Orders> GetCityOrderByAgencyUserName(string AgencyUsername);
 
@@ -35,6 +36,8 @@ namespace BookDeliverySystemAPI.Interfaces
         public Agency  GetAgencyByCourUserName(string Username);
 
         public void AcceptOrderCourier(Orders oOrder);
+
+       
 
 
     }

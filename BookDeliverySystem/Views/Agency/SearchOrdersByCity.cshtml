@@ -23,23 +23,11 @@
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Client Username</th>
-                            @*<th scope="col">Client First Name</th>
-                        <th scope="col">Client Last Name</th>
-                        <th scope="col">Client Phone Number</th>*@
-                            <th scope="col">Delivery Agency</th>
-                            @*<th scope="col">Courier Username</th>*@
-                            @* <th scope="col">Courier First Name</th>
-                        <th scope="col">Courier Last Name</th>
-                        <th scope="col">Courier Phone Number</th>*@
-                            <th scope="col">City</th>
+                            <th scope="col">City of Delivery</th>
                             <th scope="col">Status</th>
                             <th scope="col">Created Date</th>
-                            <th scope="col">Dispatched Date</th>
-                            <th scope="col">Delivered Date</th>
-                            <th scope="col">Review</th>
-                            <th scope="col">Review Comments</th>
-                            <th scope="col">GetOrder</th>
+                            <th scope="col">Requested Date</th>
+                            <th scope="col">Get Order</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,22 +35,10 @@
                         {
                             <tr>
                                 <td>@order.ORDER_ID</td>
-                                <td>@order.CLIENT_USERNAME</td>
-                                @*                            <td>@order.CLIENT_FIRSTNAME</td>
-                        <td>@order.CLIENT_LASTNAME</td>
-                        <td>@order.CLIENT_PHONE</td>*@
-                                <td>@order.AGENCY_ID</td>
-                                @*<td>@order.COURIER_USERNAME</td>*@
-                                @*                            <td>@order.COURIER_FIRSTNAME</td>
-                        <td>@order.COURIER_LASTNAME</td>
-                        <td>@order.COURIER_PHONE</td>*@
                                 <td>@order.CLIENT_CITY</td>
                                 <td>@order.STATUS</td>
                                 <td>@order.ORDERDATE</td>
-                                <td>@order.DISPATCHDATE</td>
-                                <td>@order.DELIVEREDDATE</td>
-                                <td>@order.REVIEW</td>
-                                <td>@order.REVIEW_COMMENTS</td>
+                                <td>@order.ESTIMATE_DT</td>
                                 <td>
                                     <button onclick="ViewOrder(this)">
                                         <i class="fa fa-magic" aria-hidden="true"></i>
@@ -88,16 +64,12 @@
             </div>
             <div class="modal-body">
                 <form>
-                     <div class="mb-3">
+@*                     <div class="mb-3">
                         <label for="orderID" class="form-label">OrderID</label>
                         <input type="text" class="form-control" id="orderID" disabled>
-                    </div>
+                    </div>*@
                     <div class="mb-3">
-                        <label for="clientUsername" class="form-label">Client Username</label>
-                        <input type="text" class="form-control" id="clUsername" disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label for="city" class="form-label">City</label>
+                        <label for="city" class="form-label">City of Delivery</label>
                         <input type="text" class="form-control" id="city" disabled>
                     </div>
                     <div class="mb-3">
@@ -109,31 +81,14 @@
                         <input type="text" class="form-control" id="orderdt" disabled>
                     </div>
                     <div class="mb-3">
-                        <label for="dispdt" class="form-label">Dispatched Date</label>
-                        <input type="text" class="form-control" id="dispdt" disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label for="deldt" class="form-label">Delivery Date</label>
-                        <input type="text" class="form-control" id="deldt" disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label for="review" class="form-label">Review</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="review" disabled>
-                            <span class="input-group-text">
-                                <i class="fas fa-star"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="reviewCom" class="form-label">Review Comments</label>
-                        <input type="text" class="form-control" id="reviewCom" disabled>
+                        <label for="edd" class="form-label">Requested Date</label>
+                        <input type="text" class="form-control" id="edd" disabled>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="saveChanges()">Accept Order</button>
+                <button id="saveChangesBtn" type="button" class="btn btn-primary">Accept Order</button>
             </div>
         </div>
     </div>
@@ -165,15 +120,10 @@
         var cells = row.getElementsByTagName("td");
         var orderData = {
             orderid: cells[0].innerText,
-            clusername: cells[1].innerText,
-            agid: cells[2].innerText,
-            city: cells[3].innerText,
-            status: cells[4].innerText,
-            orderdt: cells[5].innerText,
-            dispdt: cells[6].innerText,
-            deldt: cells[7].innerText,
-            review: cells[8].innerText,
-            reviewcom: cells[9].innerText
+            city: cells[1].innerText,
+            status: cells[2].innerText,
+            orderdt: cells[3].innerText,
+            edd: cells[4].innerText,
         };
 
         console.log(orderData);
@@ -181,31 +131,23 @@
     }
 
     function editOrderModal(orderData) {
-        $('#viewOrderModalLabel').text("Order -" + orderData.username);
+        $('#viewOrderModalLabel').text("Order - " + orderData.orderid);
 
-        $('#clUsername').val(orderData.clusername);
         $('#city').val(orderData.city);
         $('#status').val(orderData.status);
         $('#orderdt').val(orderData.orderdt);
-        $('#dispdt').val(orderData.dispdt);
-        $('#deldt').val(orderData.deldt);
-        $('#review').val(orderData.review + "/10");
-        $('#reviewCom').val(orderData.reviewcom);
-        $('#orderID').val(orderData.orderid);
+        $('#edd').val(orderData.edd);
 
-        if (orderData.review >= 5) {
-            $('#review').next('.input-group-text').find('i').addClass('text-warning');
-
-        }
-        else {
-            $('#review').next('.input-group-text').find('i').addClass('"fa fa-star-half-o"');
-        }
 
 
         $('#viewOrderModal').modal('show');
+        $('#saveChangesBtn').on('click', function () {
+            saveChanges(orderData);
+        });
     }
 
-    function saveChanges() {
+    function saveChanges(orderData) {
+        var orderID = orderData.orderid;
         console.log($('#orderID').val());
         $.ajax({
             type: "POST",
@@ -213,7 +155,7 @@
             contentType: "application/json; charset=utf-8",
 
             // Pass only the 'username' parameter
-            data: JSON.stringify({ 'OrderID': $('#orderID').val() }),
+            data: JSON.stringify({ 'OrderID': orderID }),
             async: false,
             success: function (response) {
                 console.log(response); // Add this line for logging

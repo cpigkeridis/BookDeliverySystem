@@ -9,5 +9,7 @@ namespace BookDeliverySystemAPI.Interfaces
         public List<BookDeliveryCore.Item> ShowShopItems();
 
         public string InsertOrderByCity(ShopForm data);
+
+        public void InsertOrderUpdate(OrderUpdate data);
     }
 }
