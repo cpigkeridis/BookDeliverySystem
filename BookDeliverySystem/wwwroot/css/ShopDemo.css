@@ -1,0 +1,94 @@
+﻿/* Form container */
+.content-wrapper {
+    padding-top: 50px; /* Adjusted padding */
+}
+
+.content {
+    margin-top: 50px; /* Adjusted margin */
+}
+
+/* Form section */
+.col-md-8 {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow */
+}
+
+/* Form inputs */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+/* Checkbox */
+.form-check {
+    margin-bottom: 10px;
+}
+
+/* Submit button */
+.btn-primary {
+    background-color: #25274d;
+    color: #fff;
+    font-weight: 600;
+    width: 100%;
+    transition: 0.3s;
+}
+
+    .btn-primary:hover {
+        background-color: #2b526c;
+    }
+
+/* Selected items container */
+#selectedItemsContainer {
+    display: none;
+    margin-top: 20px;
+}
+
+#selectedItems,
+#total {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+#total {
+    font-weight: bold;
+}
+
+/* Custom Items section */
+.form-check-label {
+    margin-left: 5px;
+}
+
+/* Items container */
+.items-container {
+    height: 200px; /* Set a fixed height */
+    overflow-y: auto; /* Enable vertical scroll */
+}
+
+/* Total container */
+.total-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Total amount */
+#total {
+    margin-right: 5px; /* Adjust margin as needed */
+}
+
+/* Currency */
+.currency {
+    font-size: inherit; /* Inherit font size to match the total amount */
+}

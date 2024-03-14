@@ -2,79 +2,113 @@
     @model List<BookDeliveryCore.Item>
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="~/css/shopdemo.css" rel="stylesheet" />
+    <link href="~/css/globalstylesheet.css" rel="stylesheet" />
+</head>
 <body>
-    <main class="content-wrapper" style="padding-bottom: 50px;">
-        <div class="content d-flex justify-content-center align-items-center">
-            <div class="row">
-                <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12">
-                    <h2>Shopping Form</h2>
-                    <form method="post">
-                        <label for="username">Username:</label><br />
-                        <input type="text" id="username" name="USERNAME" value="" required /><br /><br />
+    <main class="content-wrapper">
+        <div class="content">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <h2 class="text-center">Shopping Form</h2>
+                    <form id="shoppingForm" method="post">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="USERNAME" class="form-control" required />
+                        </div>
 
-                        <label for="firstname">First Name:</label><br />
-                        <input type="text" id="firstname" name="FIRSTNAME" value="" required /><br /><br />
+                        <div class="form-group">
+                            <label for="firstname">First Name:</label>
+                            <input type="text" id="firstname" name="FIRSTNAME" class="form-control" required />
+                        </div>
 
-                        <label for="lastname">Last Name:</label><br />
-                        <input type="text" id="lastname" name="LASTNAME" value="" required /><br /><br />
+                        <div class="form-group">
+                            <label for="lastname">Last Name:</label>
+                            <input type="text" id="lastname" name="LASTNAME" class="form-control" required />
+                        </div>
 
-                        <label for="address">Address:</label><br />
-                        <input type="text" id="address" name="ADDRESS" value="" required /><br /><br />
+                        <div class="form-group">
+                            <label for="address">Address:</label>
+                            <input type="text" id="address" name="ADDRESS" class="form-control" required />
+                        </div>
 
+                        <div class="form-group">
+                            <label for="postalcode">Postal Code:</label>
+                            <input type="text" id="postalcode" name="POSTAL_CODE" class="form-control" required />
+                        </div>
 
-                        <label for="postalcode">Postal Code:</label><br />
-                        <input type="text" id="postalcode" name="POSTAL_CODE" value="" required /><br /><br />
-                        <label>CITY</label>
-                        <select id="city" tabindex="2" class="form-control form-select" aria-hidden="true" style="width:100%">
-                            <option value="LARNACA">LARNACA</option>
-                            <option value="NICOSIA">NICOSIA</option>
-                            <option value="LIMASSOL">LIMASSOL</option>
-                            <option value="PAPHOS">PAPHOS</option>
-                            <option value="FAMAGUSTA">FAMAGUSTA</option>
-                        </select>
-                        <label for="phone">Phone Number:</label><br />
-                        <input type="text" id="phone" name="PHONE_NUMBER" value="" required /><br /><br />
+                        <div class="form-group">
+                            <label for="city">City:</label>
+                            <select id="city" name="CITY" class="form-control">
+                                <option value="LARNACA">LARNACA</option>
+                                <option value="NICOSIA">NICOSIA</option>
+                                <option value="LIMASSOL">LIMASSOL</option>
+                                <option value="PAPHOS">PAPHOS</option>
+                                <option value="FAMAGUSTA">FAMAGUSTA</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number:</label>
+                            <input type="text" id="phone" name="PHONE_NUMBER" class="form-control" required />
+                        </div>
+
                         @if (Model.Any())
                         {
-                            <div style="height: 200px; overflow-y: auto;">
-                            <fieldset>
-                                <legend>Items:</legend>
-                                @foreach (var item in Model)
-                                {
-                                    <input type="checkbox" id="item@(item.ITEM_ID)" name="item" value="@item.ITEM_ID" data-price="@item.ITEM_PRICE" />
-                                    <label for="item@(item.ITEM_ID)">@(item.ITEM_NAME) - @(item.ITEM_PRICE)</label>
-                                    <br />
-                                }
-                            </fieldset>
+                            <div class="items-container">
+                                <fieldset>
+                                    <legend>Items:</legend>
+                                    @foreach (var item in Model)
+                                    {
+                                        <div class="form-check">
+                                            <input type="checkbox" id="item@(item.ITEM_ID)" name="item" value="@item.ITEM_ID" data-price="@item.ITEM_PRICE" class="form-check-input" />
+                                            <label for="item@(item.ITEM_ID)" class="form-check-label">@item.ITEM_NAME - @item.ITEM_PRICE</label>
+                                        </div>
+                                    }
+                                </fieldset>
                             </div>
                         }
+
                         else
                         {
-                            <p>No items available.</p>
-                            <p>Here's a custom list:</p>
-                            <fieldset>
-                                <legend>Custom Items:</legend>
-                                <input type="checkbox" id="item1" name="item" value="1" data-price="10" />
-                                <label for="item1">Custom Item 1 - $10</label>
-                                <br />
-                                <input type="checkbox" id="item2" name="item" value="2" data-price="15" />
-                                <label for="item2">Custom Item 2 - $15</label>
-                                <br />
-                                <input type="checkbox" id="item3" name="item" value="3" data-price="20" />
-                                <label for="item3">Custom Item 3 - $20</label>
-                                <br />
-                            </fieldset>
+                            <div class="form-group">
+                                <p>No items available.</p>
+                                <p>Here's a custom list:</p>
+                                <fieldset>
+                                    <legend>Custom Items:</legend>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="item1" name="item" value="1" data-price="10" class="form-check-input" />
+                                        <label for="item1" class="form-check-label">Custom Item 1 - $10</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="item2" name="item" value="2" data-price="15" class="form-check-input" />
+                                        <label for="item2" class="form-check-label">Custom Item 2 - $15</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="item3" name="item" value="3" data-price="20" class="form-check-input" />
+                                        <label for="item3" class="form-check-label">Custom Item 3 - $20</label>
+                                    </div>
+                                </fieldset>
+                            </div>
                         }
-                        <br />
-                        <div id="selectedItemsContainer"  style="display: none;">
+
+                        <div id="selectedItemsContainer" style="display: none;">
                             <h3>Selected Items:</h3>
                             <textarea id="selectedItems" rows="4" cols="50" readonly></textarea>
-                            <h3>Total:</h3>
-                            <span id="total">0</span> €
+                            <div class="total-container">
+                                <h3>Total:</h3>
+                                <span id="total">0</span><span class="currency">€</span>
+                            </div>
                         </div>
-                        <br />
-                        <input type="submit" value="Submit" />
+
+
+                        <div class="form-group">
+                            <input type="submit" value="Submit" class="btn btn-primary" />
+                        </div>
                     </form>
                 </div>
             </div>
@@ -82,75 +116,66 @@
     </main>
 
     <script>
-        // Add event listener to checkboxes
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener('change', function () {
-                var selectedItemsContainer = document.getElementById('selectedItemsContainer');
-                var selectedItemsTextarea = document.getElementById('selectedItems');
-                var totalSpan = document.getElementById('total');
+        $(document).ready(function () {
+            // Add event listener to checkboxes
+            $('input[type="checkbox"]').change(function () {
+                var selectedItemsTextarea = $('#selectedItems');
+                var totalSpan = $('#total');
                 var totalPrice = 0;
-                selectedItemsTextarea.value = ""; // Clear existing selected items
-                checkboxes.forEach(function (checkbox) {
-                    if (checkbox.checked) {
-                        selectedItemsTextarea.value += checkbox.nextElementSibling.textContent.trim() + "\n";
-                        totalPrice += parseFloat(checkbox.getAttribute('data-price'));
+                selectedItemsTextarea.val(""); // Clear existing selected items
+                $('input[name="item"]:checked').each(function () {
+                    selectedItemsTextarea.val(selectedItemsTextarea.val() + $(this).next().text().trim() + "\n");
+                    totalPrice += parseFloat($(this).data('price'));
+                });
+                totalSpan.text(totalPrice.toFixed(2)); // Display total price with 2 decimal places
+                $('#selectedItemsContainer').show(); // Show selected items container
+            });
+
+            // Function to handle form submission via AJAX
+            $('#shoppingForm').submit(function (event) {
+                // Prevent default form submission
+                event.preventDefault();
+
+                // Collect form data
+                var formData = {
+                    USERNAME: $('#username').val(),
+                    FIRSTNAME: $('#firstname').val(),
+                    LASTNAME: $('#lastname').val(),
+                    ADDRESS: $('#address').val(),
+                    POSTAL_CODE: $('#postalcode').val(),
+                    CITY: $('#city').val(),
+                    PHONE_NUMBER: $('#phone').val(),
+                    ITEMS: combineSelectedItems()
+                };
+
+                // Perform AJAX POST request
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("newOrder", "Menu")', // Adjust the URL as per your routing configuration
+                    data: JSON.stringify(formData),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        // Handle success response
+                        alert('Order successfully submitted!');
+                        window.location.href = data.redirectUrl;
+                        // Optionally, you can redirect the user or perform any other actions
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error response
+                        console.error(xhr.responseText);
+                        alert('An error occurred while submitting the order. Please try again later.');
                     }
                 });
-                totalSpan.textContent = totalPrice.toFixed(2); // Display total price with 2 decimal places
-                selectedItemsContainer.style.display = 'block'; // Show selected items container
             });
-        });
 
-
-            $(document).ready(function () {
-                // Function to handle form submission via AJAX
-                $("form").submit(function (event) {
-                    // Prevent default form submission
-                    event.preventDefault();
-
-                    // Collect form data
-                    var formData = {
-                        USERNAME: $("#username").val(),
-                        FIRSTNAME: $("#firstname").val(),
-                        LASTNAME: $("#lastname").val(),
-                        ADDRESS: $("#address").val(),
-                        POSTAL_CODE: $("#postalcode").val(),
-                        CITY: $("#city").val(),
-                        PHONE_NUMBER: $("#phone").val(),
-                        // Include selected items
-                    ITEMS: combineSelectedItems()
-                    };
-                    console.log(formData);
-
-                    // Perform AJAX POST request
-                    $.ajax({
-                        type: "POST",
-                        url: "@Url.Action("newOrder", "Menu")", // Adjust the URL as per your routing configuration
-                        data: JSON.stringify(formData),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (data) {
-                            // Handle success response
-                            alert("Order successfully submitted!");
-                        window.location.href = data.redirectUrl;
-                            // Optionally, you can redirect the user or perform any other actions
-                        },
-                        error: function (xhr, status, error) {
-                            // Handle error response
-                            console.error(xhr.responseText);
-                            alert("An error occurred while submitting the order. Please try again later.");
-                        }
-                    });
-                });
-
+            // Function to combine selected items
             function combineSelectedItems() {
                 var selectedItems = [];
-                // Get selected items from checkboxes
                 $('input[name="item"]:checked').each(function () {
                     var itemNameWithPrice = $(this).next().text().trim();
-                    var itemName = itemNameWithPrice.split('-')[0].trim(); // Extract item name before the dash
-                    var itemPrice = parseFloat(itemNameWithPrice.split('-')[1].trim()); // Extract item price after the dash
+                    var itemName = itemNameWithPrice.split('-')[0].trim();
+                    var itemPrice = parseFloat(itemNameWithPrice.split('-')[1].trim());
                     var item = {
                         ITEM_ID: $(this).val(),
                         ITEM_NAME: itemName,
@@ -158,14 +183,8 @@
                     };
                     selectedItems.push(item);
                 });
-               
                 return selectedItems;
             }
-            });
-
-
+        });
     </script>
-
- 
-   
 </body>

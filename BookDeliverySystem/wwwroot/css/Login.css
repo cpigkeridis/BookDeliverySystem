@@ -1,0 +1,70 @@
+﻿/* Form container */
+.form-container {
+    width: 90%;
+    margin: 100px auto; /* Adjusted margin to align with the contact us form */
+}
+
+/* Form section */
+.col-md-12 section {
+    background-color: #fff; /* Changed background color to white */
+    padding: 3%; /* Reduced padding */
+    border-radius: 0.5rem; /* Added border radius */
+    box-shadow: none; /* Removed box shadow */
+}
+
+/* Form inputs */
+.form-floating {
+    margin-bottom: 20px;
+}
+
+    .form-floating input[type="text"],
+    .form-floating input[type="email"],
+    .form-floating input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+/* Checkbox */
+.checkbox {
+    margin-bottom: 20px;
+}
+
+.btn btn-lg btn-primary {
+    background: #25274d; /* Changed background color to match the contact us form */
+    color: #fff;
+    font-weight: 600;
+    width: 25%;
+    margin: 10px auto -5px; /* Adjusted margin */
+    transition: 0.3s;
+}
+
+/* Submit button */
+#login-submit {
+    background: #25274d; /* Changed background color to match the contact us form */
+    color: #fff;
+    font-weight: 600;
+    width: 25%;
+    margin: 10px auto -5px; /* Adjusted margin */
+    transition: 0.3s;
+}
+
+    #login-submit:hover {
+        background: #2B526C; /* Change background color to match hover effect of contact us form */
+    }
+
+/* Forgot password and registration links */
+.option {
+    margin-bottom: 10px;
+    margin-top : 20px;
+}
+
+    .option a {
+        color: #25274d; /* Changed link color to match the contact us form */
+        text-decoration: none;
+    }
+
+        .option a:hover {
+            text-decoration: underline;
+        }
