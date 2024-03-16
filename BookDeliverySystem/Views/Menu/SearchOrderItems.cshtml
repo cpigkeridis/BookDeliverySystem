@@ -1,0 +1,17 @@
+﻿@{
+    Layout = null;
+    @model List<BookDeliveryCore.OrderItems>
+
+}
+
+@{
+    int counter = 1;
+}
+
+@foreach (var item in Model)
+{
+    <p>@counter. @item.ITEM_NAME - €@item.ITEM_PRICE</p>
+     
+        counter++;
+   
+}

@@ -270,6 +270,11 @@ namespace BookDeliverySystem.Controllers
                         return RedirectToAction("AccessDenied", "Error");
                     }
                     IActionResult result = await HasOrder(value.Username, value.OldRole);
+                    if (result is OkObjectResult && value.Role == value.OldRole)
+                    {
+                        result = new NotFoundResult();
+                    }
+
                     if (result is NotFoundResult)
                     {
 
