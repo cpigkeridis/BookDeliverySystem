@@ -84,6 +84,10 @@
                         <label for="edd" class="form-label">Requested Date</label>
                         <input type="text" class="form-control" id="edd" disabled>
                     </div>
+                                        <div class="mb-3">
+                        <label for="deldt" class="form-label">Order Items</label>
+                        <div id="ItemResult"></div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -131,6 +135,19 @@
     }
 
     function editOrderModal(orderData) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("SearchOrderItems", "Menu")",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ 'OrderID': orderData.orderid }),
+            async: false,
+            success: function (response) {
+                $('#ItemResult').html(response);
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
         $('#viewOrderModalLabel').text("Order - " + orderData.orderid);
 
         $('#city').val(orderData.city);

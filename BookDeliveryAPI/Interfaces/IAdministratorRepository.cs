@@ -37,7 +37,9 @@ namespace BookDeliverySystemAPI.Interfaces
 
         public void AcceptOrderCourier(Orders oOrder);
 
-       
+        public List<OrderItems> GetOrderItems(string OrderID);
+
+
 
 
     }

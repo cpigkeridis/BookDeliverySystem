@@ -117,14 +117,14 @@ namespace BookDeliverySystem.Controllers
                         //    List<Orders> orders = JsonConvert.DeserializeObject<List<Orders>>(responseData);
                         //    _httpClient.Dispose();
                         //    // Do something with the response data
-                            //return View(orders);
+                        //return View(orders);
                         return View();
-                    //}
-                    //    else
-                    //    {
-                    //        // Handle the error
-                    //        return StatusCode((int)response.StatusCode);
-                    //    }
+                        //}
+                        //    else
+                        //    {
+                        //        // Handle the error
+                        //        return StatusCode((int)response.StatusCode);
+                        //    }
 
                     }
                     catch (Exception ex)
@@ -153,8 +153,8 @@ namespace BookDeliverySystem.Controllers
                 {
                     string? userId = HttpContext.User.Identity.Name;
                     ApplicationUser user = await _signInManager.UserManager.FindByNameAsync(userId);
-                    
-                    string apiUrl = getMyOrdersUrl(user.UserName,user.Role);
+
+                    string apiUrl = getMyOrdersUrl(user.UserName, user.Role);
                     if (apiUrl.Trim() != "")
                     {
 
@@ -199,40 +199,40 @@ namespace BookDeliverySystem.Controllers
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
-            
+
         }
 
 
-        public  string getMyOrdersUrl(string username, string role)
+        public string getMyOrdersUrl(string username, string role)
         {
             string apiUrl = "";
             if (_signInManager.IsSignedIn(User))
+            {
+
+                if (role == "CLIE")
                 {
+                    apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByUserName?ClientUsername={username}";
+                    // Make a GET request to the API endpoint
 
-                    if (role == "CLIE")
-                    {
-                        apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByUserName?ClientUsername={username}";
-                        // Make a GET request to the API endpoint
-                        
-                    }
-                    else if (role == "COUR")
-                    {
-                        apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByCourUserName?CourUsername={username}";
-                        // Make a GET request to the API endpoint
+                }
+                else if (role == "COUR")
+                {
+                    apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByCourUserName?CourUsername={username}";
+                    // Make a GET request to the API endpoint
 
-                    }
-                    //SEND AGENCYID AS STRING USERNAME
-                    else if (role == "AGEN")
-                    {
-                        apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByAgenUserName?AgenUsername={username}";
-                        // Make a GET request to the API endpoint
-                    }
-                    else
-                    {
-                        return apiUrl;
-                    }
+                }
+                //SEND AGENCYID AS STRING USERNAME
+                else if (role == "AGEN")
+                {
+                    apiUrl = $"https://localhost:7203/api/Administrator/GetOrderByAgenUserName?AgenUsername={username}";
+                    // Make a GET request to the API endpoint
+                }
+                else
+                {
                     return apiUrl;
                 }
+                return apiUrl;
+            }
             else
             {
                 return apiUrl;
@@ -251,25 +251,25 @@ namespace BookDeliverySystem.Controllers
 
 
 
-                    // Make a GET request to the API endpoint for agencies
-                    HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7203/api/Client/GetShopItems");
+                // Make a GET request to the API endpoint for agencies
+                HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7203/api/Client/GetShopItems");
 
-                    // Check if the request was successful
-                    if (response.IsSuccessStatusCode)
-                    {
-                        // Read the response content as string
-                        var responseData = await response.Content.ReadAsStringAsync();
-                        List<Item> oItem = JsonConvert.DeserializeObject<List<Item>>(responseData);
-                        _httpClient.Dispose();
+                // Check if the request was successful
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the response content as string
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    List<Item> oItem = JsonConvert.DeserializeObject<List<Item>>(responseData);
+                    _httpClient.Dispose();
 
-                        // Do something with the response data, for example, return it to a view
-                        return View(oItem);
-                    }
-                    else
-                    {
-                        // Handle the error
-                        return StatusCode((int)response.StatusCode);
-                    }
+                    // Do something with the response data, for example, return it to a view
+                    return View(oItem);
+                }
+                else
+                {
+                    // Handle the error
+                    return StatusCode((int)response.StatusCode);
+                }
             }
             catch (Exception ex)
             {
@@ -336,10 +336,10 @@ namespace BookDeliverySystem.Controllers
 
                 string apiUrl = $"https://localhost:7203/api/Client/OrderUpdateData";
                 string role = await getUserRole();
-                OrderUpdate oOrder= new OrderUpdate();
+                OrderUpdate oOrder = new OrderUpdate();
                 oOrder.OrderID = data.OrderID;
                 oOrder.Role = role;
-                if (data.EDD< DateTime.Today )
+                if (data.EDD < DateTime.Today)
                 {
                     data.EDD = null;
                 }
@@ -413,5 +413,45 @@ namespace BookDeliverySystem.Controllers
         {
             return View("OrderConfirmation");
         }
+        public async Task<IActionResult> SearchOrderItems([FromBody] FetchOrderItemsModel data)
+        {
+            {
+                if (_signInManager.IsSignedIn(User))
+                {
+                    try
+                    {
+                        string apiUrl = $"https://localhost:7203/api/Administrator/GetOrderItems?OrderID={data.OrderID}";
+
+                        // Make a GET request to the API endpoint
+                        HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+
+                        // Check if the request was successful
+                        if (response.IsSuccessStatusCode)
+                        {
+                            // Read the response content as string
+                            var responseData = await response.Content.ReadAsStringAsync();
+                            List<OrderItems> oOrderItems = JsonConvert.DeserializeObject<List<OrderItems>>(responseData);
+                            return View(oOrderItems);
+                        }
+                        else
+                        {
+                            // Handle the error
+                            return StatusCode((int)response.StatusCode);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return BadRequest(new { message = "Error searaching Order Items.", error = ex.Message });
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("AccessDenied", "Error");
+                }
+
+            }
+
+        }
+
     }
 }

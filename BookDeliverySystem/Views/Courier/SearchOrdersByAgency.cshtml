@@ -110,6 +110,10 @@
                         <label for="eddt" class="form-label">Estimated Delivery Date</label>
                         <input type="date" class="form-control" id="eddt">
                     </div>
+                    <div class="mb-3">
+                        <label for="deldt" class="form-label">Order Items</label>
+                        <div id="ItemResult"></div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -188,6 +192,19 @@
     }
 
     function editOrderModal(orderData) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("SearchOrderItems", "Menu")",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ 'OrderID': orderData.orderid }),
+            async: false,
+            success: function (response) {
+                $('#ItemResult').html(response);
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
         $('#viewOrderModalLabel').text("Order -" + orderData.orderid);
 
         $('#orderID').val(orderData.orderid);
@@ -198,7 +215,30 @@
         $('#postal').val(orderData.clpostalcode);
         $('#phone').val(orderData.clphone);
         $('#orderdt').val(orderData.orderdt);
-        $('#eddt').val(orderData.eddt);
+        if(orderData.eddt !=""){
+        var datetimeString = orderData.eddt;
+        var parts = datetimeString.split(" "); // Split the string into date and time parts
+        var dateStringParts = parts[0].split("/"); // Split the date part into day, month, and year
+        var timeStringParts = parts[1].split(":"); // Split the time part into hours, minutes, and seconds
+
+        // Create a Date object from the parsed parts
+        var date = new Date(dateStringParts[2], dateStringParts[1] - 1, dateStringParts[0]); // Months are zero-based in JavaScript Date objects
+
+        // Get the year, month, and day from the Date object
+        var year = date.getFullYear();
+        var month = String(date.getMonth() + 1).padStart(2, '0'); // Adding 1 because getMonth() returns zero-based months
+        var day = String(date.getDate()).padStart(2, '0');
+
+        // Create the date string in the format YYYY-MM-DD
+        var dateString = year + '-' + month + '-' + day;
+
+        // Set the value of the input element with id "eddt"
+        $('#eddt').val(dateString);
+        }
+        else{
+            $('#eddt').val(orderData.eddt);
+        }
+
 
 
         $('#viewOrderModal').modal('show');
@@ -210,28 +250,30 @@
     function saveChanges(orderData) {
         var orderID = orderData.orderid;
         var eddt;
-        if(orderData.eddt == ""){
-            eddt = $('#eddt').val();
-        }
-        else{
-            eddt = orderData.eddt;
-        }
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("AcceptOrderCourier", "Courier")",
-            contentType: "application/json; charset=utf-8",
 
-            // Pass only the 'username' parameter
-            data: JSON.stringify({ 'OrderID': orderID, 'EDD': eddt}),
-            async: false,
-            success: function (response) {
-                console.log(response); // Add this line for logging
-                location.reload();
-            },
-            error: function (xhr, status, error) {
-                alert(error);
+            eddt = $('#eddt').val();
+            if(eddt ==""){
+                alert("Please select estimated dates");
             }
-        });
+            else{
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AcceptOrderCourier", "Courier")",
+                contentType: "application/json; charset=utf-8",
+
+                // Pass only the 'username' parameter
+                data: JSON.stringify({ 'OrderID': orderID, 'EDD': eddt }),
+                async: false,
+                success: function (response) {
+                    console.log(response); // Add this line for logging
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+            }
+       
 
         // Close modal after saving changes
         $('#viewOrderModal').modal('hide');

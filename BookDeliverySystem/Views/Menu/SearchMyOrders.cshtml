@@ -162,9 +162,27 @@
                         <input type="text" class="form-control" id="deldt" disabled>
                     </div>
                     <div class="mb-3">
+                        <label for="deldt" class="form-label">Order Items</label>
+                        <div id="ItemResult"></div>
+                    </div>
+                    
+                    <div class="mb-3">
                         <label for="review" class="form-label">Review</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="review" disabled>
+                          <select id="review" tabindex="2" class="form-control form-select" aria-hidden="true" style="width:100%" disabled>
+                            <option value="0"></option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            </select>
+                            @*<input type="text" class="form-control" id="review" disabled>*@
                             <span class="input-group-text">
                                 <i class="fas fa-star"></i>
                             </span>
@@ -311,7 +329,7 @@
             if ($('#savebtn').length == 0) {
                 $('#savebtnprev').append(savediv);
             }
-        } 
+        }
         else {
             // Disable review fields and hide save button if reviews are not empty
             $('#review').prop('disabled', true);
@@ -319,6 +337,9 @@
             $('#savebtn').remove();
             // Unblock status field for other conditions
             $('#status').prop('disabled', false);
+        }
+        if (orderData.status == 'DELIVERED') {
+            $('#status').prop('disabled', true);
         }
 
         var today = new Date();
@@ -334,6 +355,19 @@
     }
 
     function editOrderModal(orderData) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("SearchOrderItems", "Menu")",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ 'OrderID': orderData.orderid}),
+            async: false,
+            success: function (response) {
+                $('#ItemResult').html(response);
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
         $('#viewOrderModalLabel').text("Order -" + orderData.orderid);
         $('#orderid').val(orderData.orderid);
         $('#clientName').val(orderData.clname);
@@ -345,7 +379,29 @@
         $('#orderdt').val(orderData.orderdt);
         $('#dispdt').val(orderData.dispdt);
         $('#deldt').val(orderData.deldt);
-        $('#eddt').val(orderData.eddt);
+        if (orderData.eddt != "") {
+            var datetimeString = orderData.eddt;
+            var parts = datetimeString.split(" "); // Split the string into date and time parts
+            var dateStringParts = parts[0].split("/"); // Split the date part into day, month, and year
+            var timeStringParts = parts[1].split(":"); // Split the time part into hours, minutes, and seconds
+
+            // Create a Date object from the parsed parts
+            var date = new Date(dateStringParts[2], dateStringParts[1] - 1, dateStringParts[0]); // Months are zero-based in JavaScript Date objects
+
+            // Get the year, month, and day from the Date object
+            var year = date.getFullYear();
+            var month = String(date.getMonth() + 1).padStart(2, '0'); // Adding 1 because getMonth() returns zero-based months
+            var day = String(date.getDate()).padStart(2, '0');
+
+            // Create the date string in the format YYYY-MM-DD
+            var dateString = year + '-' + month + '-' + day;
+
+            // Set the value of the input element with id "eddt"
+            $('#eddt').val(dateString);
+        }
+        else {
+            $('#eddt').val(orderData.eddt);
+        }
         $('#review').val(orderData.review);
         $('#reviewCom').val(orderData.reviewcom);
 
@@ -363,16 +419,19 @@
         var status = $('#status').val();
         var eddt = $('#eddt').val();
         var role = $('#role').val();
-        var review = $('#review').val();        
-            var reviewComments = $('#reviewCom').val(); 
-       
+        var review = $('#review').val();
+        var reviewComments = $('#reviewCom').val();
+        var deldt =  $('#deldt').val();
 
         console.log("STATUS: " + status);
         console.log("ESTIMATED DATE: " + eddt);
 
-        if (role == "CLIE" && (status == "CANCELED" || eddt != '')) {
+        if (role == "CLIE" && (status == "CANCELED" || status == 'RESCHEDULE')) {
             if (eddt == '') {
                 eddt = null;
+            }
+            if (status == 'RESCHEDULE' && eddt == null) {
+                alert('PLEASE SELECT A DATE TO RESCHEDULEYOUR ORDER');
             }
             $.ajax({
                 type: "POST",
@@ -388,7 +447,9 @@
                     alert(error);
                 }
             });
-        } else if (role == "COUR" && statusCour == "DELIVERED" && review =="" && reviewComments=="") {
+
+        } 
+        if (role == "COUR" && statusCour == "DELIVERED" && review == null && reviewComments == "") {
             if (eddt == '') {
                 eddt = null;
             }
@@ -408,12 +469,13 @@
                 }
             });
         }
-        
+
+        if (role == 'CLIE' && review != null && review != 0) {
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("UpdateOrderReview", "Menu")",
                 contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({ 'OrderID': $('#orderid').val(), 'Review': $('#review').val(), 'ReviewComments': $('#reviewCom').val() }),
+                data: JSON.stringify({ 'OrderID': $('#orderid').val(), 'Review': $('#review').val(), 'ReviewComments': $('#reviewCom').val() }),
                 async: false,
                 success: function (response) {
                     console.log(response);
@@ -423,7 +485,12 @@
                     alert(error);
                 }
             });
-
+        }
+        //alert(deldt);
+        //console.log(deldt);
+        if (role == 'CLIE' && (review == null || review == 0) && deldt != ''){
+            alert('PLEASE SELECT A REVIEW SCORE');
+        }
         $('#viewOrderModal').modal('hide');
     }
 </script>

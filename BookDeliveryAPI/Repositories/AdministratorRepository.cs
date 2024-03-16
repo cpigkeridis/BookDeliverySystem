@@ -670,5 +670,30 @@ namespace BookDeliverySystemAPI.Repositories
                 oCnn.Dispose();
             }
         }
+
+        public List<OrderItems> GetOrderItems(string OrderID)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var parameters = new
+                {
+                    OrderID = Int32.Parse(OrderID)
+                };
+
+                List<OrderItems> obj = oCnn.Query<OrderItems>("[dbo].[SP_GET_ORDER_ITEMS]", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+        }
     }
 }
