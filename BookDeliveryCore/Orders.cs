@@ -40,4 +40,12 @@ namespace BookDeliveryCore
         public string Status { get; set; }
         public string Role { get; set; }
     }
+
+    public class OrderUpdateReview
+    {
+        public string OrderID { get; set; }
+        public int Review { get; set; }
+        public string ReviewComments { get; set; }
+        public string Role { get; set; }
+    }
 }

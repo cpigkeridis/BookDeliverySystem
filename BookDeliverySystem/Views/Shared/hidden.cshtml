@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dino JS</title>
+    <link href="~/css/hidden.css" rel="stylesheet" />
+</head>
+<body onclick="jump()">
+
+    <div class="game-container">
+        <div class="score-card">
+            <span>HI</span>
+            <span class="high-score"></span>
+            <span class="score"></span>
+        </div>
+        <div class="player"></div>
+
+        <div class="obstacle"></div>
+
+        <div class="restart-game">
+            <div class="content">
+                <span class="text">RESTART</span>
+                <button onclick="restart()" class="btn-reset-game"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="car-container">
+        <div class="road">
+        </div> <div class="car">
+            <div class="wheel front-left"></div>
+            <div class="wheel front-right"></div>
+            <div class="wheel rear-left"></div>
+            <div class="wheel rear-right"></div>
+            <div class="glass"></div>
+            <div class="shield"></div>
+            <div class="light left"></div>
+            <div class="light right"></div>
+        </div>
+    </div>
+
+
+    <script src="~/js/assets.js"></script>
+</body>
+</html>

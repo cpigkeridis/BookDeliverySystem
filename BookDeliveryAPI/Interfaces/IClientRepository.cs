@@ -11,5 +11,7 @@ namespace BookDeliverySystemAPI.Interfaces
         public string InsertOrderByCity(ShopForm data);
 
         public void InsertOrderUpdate(OrderUpdate data);
+        public void InsertOrderReviewUpdate(OrderUpdateReview data);
+
     }
 }

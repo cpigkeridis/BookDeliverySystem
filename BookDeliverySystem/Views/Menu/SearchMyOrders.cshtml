@@ -116,7 +116,7 @@
                     {
                         <div class="mb-3">
                             <label for="status" class="form-label">Status</label>
-                            <input type="text" class="form-control" id="status" disabled>
+                            <input type="text" class="form-control" id="statusIn">
                         </div>
                     }
                     else if (Model.myID == "COUR")
@@ -124,7 +124,7 @@
 
                         <div class="mb-3">
                             <label for="status" class="form-label">Status</label>
-                            <select id="status" tabindex="2" class="form-control form-select" aria-hidden="true" style="width:100%">
+                            <select id="statusCour" tabindex="2" class="form-control form-select" aria-hidden="true" style="width:100%">
                                 <option value="DISPATCHED">DISPATCHED</option>
                                 <option value="DELIVERED">DELIVERED</option>
                             </select>
@@ -197,11 +197,240 @@
 
 <script>
     $(document).ready(function () {
+        $('#OrdersTable').DataTable({
+            paging: true,
+            pagingType: 'simple_numbers',
+            searching: true,
+            pageLength: 15,
+            dom: 'frtip',
+            language: {
+                thousands: ",",
+                decimal: "."
+            },
+            responsive: true,
+            scrollX: false,
+            columnDefs: [
+                { className: 'dt-body-left', targets: '_all' }
+            ]
+        });
+    });
+
+    function ViewOrder(button) {
+        $('#eddt').prop('disabled', true);
+        var row = button.parentNode.parentNode; // Get the row
+        var cells = row.getElementsByTagName("td");
+        var orderData = {
+            orderid: cells[0].innerText,
+            clname: cells[1].innerText,
+            clphone: cells[2].innerText,
+            agname: cells[3].innerText,
+            courname: cells[4].innerText,
+            courphone: cells[5].innerText,
+            status: cells[6].innerText,
+            orderdt: cells[7].innerText,
+            dispdt: cells[8].innerText,
+            eddt: cells[9].innerText,
+            deldt: cells[10].innerText,
+            review: cells[11].innerText,
+            reviewcom: cells[12].innerText
+        };
+
+        var role = $('#role').val();
+
+        switch (role) {
+            case "CLIE":
+                if (orderData.status != "PENDING" && $('#eddtdiv').length != 0) {
+                    $('#eddtdiv').remove();
+                } else {
+                    if ($('#eddtdiv').length == 0) {
+                        $('#ddtdiv').append('<div id="eddtdiv" class="mb-3"><label for="eddt" class="form-label">Estimated Delivery Date</label><input type="date" class="form-control" id="eddt" disabled></div>');
+                    }
+                }
+                if (orderData.status == "DISPATCHED" && $('#stsdiv').length != 0) {
+                    $('#stsdiv').remove();
+                    $('#status').prop('disabled', true);
+                    $('#reviewCom').prop('disabled', true);
+                    $('#review').prop('disabled', true);
+                } else {
+                    if ($('#stsdiv').length == 0) {
+                        $('#stsprev').append('<div id="stsdiv" class="mb-3"><label for="status" class="form-label">Status</label><select id="status" tabindex="2" class="form-control form-select" aria-hidden="true" style="width:100%"><option value="NOCHOICE">&ensp;</option><option value="RESCHEDULE">RESCHEDULE</option><option value="CANCELED">CANCELED</option></select></div>');
+                    }
+                }
+                break;
+            case "AGEN":
+                if (orderData.status == "CANCELED" || orderData.status == "DISPATCHED" || orderData.status == "DELIVERED" || orderData.status == "PENDING") {
+                    $('#statusIn').prop('disabled', true).val(orderData.status);
+                }
+                break;
+            case "COUR":
+                if (orderData.status == "DELIVERED") {
+                    $('#statusCour').prop('disabled', true).val(orderData.status);
+                } else {
+                    $('#statusCour').prop('disabled', false);
+                }
+                break;
+            default:
+                break;
+        }
 
 
+        var savediv = '<div id="savebtn">' +
+            '<button type="button" class="btn btn-primary" onclick="saveChanges()">Save changes</button>' +
+            '</div>';
+
+        $('#status').change(function () {
+            var selectedValue = $(this).val();
+            if (selectedValue == "RESCHEDULE") {
+                $('#eddt').prop('disabled', false);
+            } else {
+                $('#eddt').prop('disabled', true);
+                $('#eddt').val('');
+            }
+        });
 
 
+        if ((orderData.status == "CANCELED") && (role == "CLIE" || role == "COUR")) {
+            $('#savebtn').remove();
+            $('#status').prop('disabled', true);
+        } else if (orderData.status == "PENDING" && role == "CLIE") {
+            $('#status').prop('disabled', false);
+            if ($('#savebtn').length == 0) {
+                $('#savebtnprev').append(savediv);
+            }
+        } else if (orderData.status == "DELIVERED" && role == "CLIE" && orderData.review == "" && orderData.reviewcom == "") {
+            // Enable review fields and show save button if reviews are empty
+            $('#review').prop('disabled', false);
+            $('#reviewCom').prop('disabled', false);
+            if ($('#savebtn').length == 0) {
+                $('#savebtnprev').append(savediv);
+            }
+            // Disable status field
+            $('#status').prop('disabled', true);
+        } else if (orderData.status == "DISPATCHED" && role == "COUR") {
+            // Make save button visible and append it
+            if ($('#savebtn').length == 0) {
+                $('#savebtnprev').append(savediv);
+            }
+        } 
+        else {
+            // Disable review fields and hide save button if reviews are not empty
+            $('#review').prop('disabled', true);
+            $('#reviewCom').prop('disabled', true);
+            $('#savebtn').remove();
+            // Unblock status field for other conditions
+            $('#status').prop('disabled', false);
+        }
 
+        var today = new Date();
+        var maxDate = new Date(today);
+        maxDate.setMonth(maxDate.getMonth() + 1);
+        var maxDateString = maxDate.toISOString().split('T')[0];
+        $('#eddt').attr('max', maxDateString);
+        var minDateString = today.toISOString().split('T')[0];
+        $('#eddt').attr('min', minDateString);
+
+        console.log(orderData);
+        editOrderModal(orderData);
+    }
+
+    function editOrderModal(orderData) {
+        $('#viewOrderModalLabel').text("Order -" + orderData.orderid);
+        $('#orderid').val(orderData.orderid);
+        $('#clientName').val(orderData.clname);
+        $('#clientPhone').val(orderData.clphone);
+        $('#agency').val(orderData.agname);
+        $('#courierName').val(orderData.courname);
+        $('#courierPhone').val(orderData.courphone);
+        $('#status').val(orderData.status);
+        $('#orderdt').val(orderData.orderdt);
+        $('#dispdt').val(orderData.dispdt);
+        $('#deldt').val(orderData.deldt);
+        $('#eddt').val(orderData.eddt);
+        $('#review').val(orderData.review);
+        $('#reviewCom').val(orderData.reviewcom);
+
+        if (orderData.review >= 5) {
+            $('#review').next('.input-group-text').find('i').addClass('text-warning');
+        } else {
+            $('#review').next('.input-group-text').find('i').addClass('"fa fa-star-half-o"');
+        }
+
+        $('#viewOrderModal').modal('show');
+    }
+
+    function saveChanges() {
+        var statusCour = $('#statusCour').val();
+        var status = $('#status').val();
+        var eddt = $('#eddt').val();
+        var role = $('#role').val();
+        var review = $('#review').val();        
+            var reviewComments = $('#reviewCom').val(); 
+       
+
+        console.log("STATUS: " + status);
+        console.log("ESTIMATED DATE: " + eddt);
+
+        if (role == "CLIE" && (status == "CANCELED" || eddt != '')) {
+            if (eddt == '') {
+                eddt = null;
+            }
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateOrder", "Menu")",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({ 'OrderID': $('#orderid').val(), 'Status': status, 'EDD': eddt }),
+                async: false,
+                success: function (response) {
+                    console.log(response);
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        } else if (role == "COUR" && statusCour == "DELIVERED" && review =="" && reviewComments=="") {
+            if (eddt == '') {
+                eddt = null;
+            }
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateOrder", "Menu")",
+                contentType: "application/json; charset=utf-8",
+
+                // Pass only the 'username' parameter
+                data: JSON.stringify({ 'Status': statusCour, 'OrderID': $('#orderid').val(), 'EDD': eddt }),
+                async: false,
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+        
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateOrderReview", "Menu")",
+                contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ 'OrderID': $('#orderid').val(), 'Review': $('#review').val(), 'ReviewComments': $('#reviewCom').val() }),
+                async: false,
+                success: function (response) {
+                    console.log(response);
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+
+        $('#viewOrderModal').modal('hide');
+    }
+</script>
+
+
+@* <script>
+    $(document).ready(function () {
         $('#OrdersTable').DataTable({
             paging: true,
             pagingType: 'simple_numbers',
@@ -243,8 +472,8 @@
 
 
         var role = $('#role').val();
-        var divContent = '<div id="eddtdiv" class="mb-3"><label for="eddt" class="form-label">Estimated Delivery Date</label><input type="date" class="form-control" id="eddt" disabled></div>';
-        var divstsContent = '<div id="stsdiv" class="mb-3"><label for="status" class="form-label">Status</label><select id="status" tabindex="2" class="form-control form-select" aria-hidden="true" style="width:100%"><option value="NOCHOICE">&ensp;</option><option value="RESCHEDULE">RESCHEDULE</option><option value="CANCELED">CANCELED</option></select></div>';
+        // var divContent = '<div id="eddtdiv" class="mb-3"><label for="eddt" class="form-label">Estimated Delivery Date</label><input type="date" class="form-control" id="eddt" disabled></div>';
+        // var divstsContent = '<div id="stsdiv" class="mb-3"><label for="status" class="form-label">Status</label><select id="status" tabindex="2" class="form-control form-select" aria-hidden="true" style="width:100%"><option value="NOCHOICE">&ensp;</option><option value="RESCHEDULE">RESCHEDULE</option><option value="CANCELED">CANCELED</option></select></div>';
 
         if (role == "CLIE") {
             if (orderData.status != "PENDING" && $('#eddtdiv').length != 0) {
@@ -316,10 +545,8 @@
         }
         else {
             $('#status').prop('disabled', false);
- 
             $('#reviewCom').prop('disabled', true);
             $('#review').prop('disabled', true);
-
         }
 
         // Get today's date
@@ -441,4 +668,4 @@
     }
 
 
-</script>
+</script> *@

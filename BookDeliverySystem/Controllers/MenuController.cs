@@ -370,6 +370,45 @@ namespace BookDeliverySystem.Controllers
             }
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateOrderReview([FromBody] UpdateOrderReviewModel data)
+        {
+            try
+            {
+
+                string apiUrl = $"https://localhost:7203/api/Client/InsertOrderReviewUpdate";
+                string role = await getUserRole();
+                OrderUpdateReview oOrder = new OrderUpdateReview();
+                oOrder.OrderID = data.OrderID;
+                oOrder.Role = role;
+                oOrder.Review = Convert.ToInt32(data.Review);
+                oOrder.ReviewComments = data.ReviewComments;
+                // Make a GET request to the API endpoint for agencies
+                HttpResponseMessage response = await _httpClient.PostAsJsonAsync(apiUrl, oOrder);
+
+                // Check if the request was successful
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the response content as string
+                    //var responseData = await response.Content.ReadAsStringAsync();
+                    _httpClient.Dispose();
+                    return Ok();
+
+                    // Do something with the response data, for example, return it to a view
+                }
+                else
+                {
+                    // Handle the error
+                    return StatusCode((int)response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error inserting order.", error = ex.Message });
+            }
+        }
+
         public IActionResult OrderConfirmation()
         {
             return View("OrderConfirmation");

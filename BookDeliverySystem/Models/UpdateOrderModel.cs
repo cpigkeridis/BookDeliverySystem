@@ -6,4 +6,12 @@
         public DateTime? EDD { get; set; } = null;
         public string? Status { get; set; }
     }
+
+    public class UpdateOrderReviewModel
+    {
+        public string? OrderID { get; set; } 
+
+        public int? Review { get; set;}
+        public string? ReviewComments { get; set; }
+    }
 }

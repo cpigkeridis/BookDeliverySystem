@@ -143,43 +143,71 @@ namespace BookDeliverySystemAPI.Repositories
 
             }
 
+        public void InsertOrderReviewUpdate(OrderUpdateReview data)
+        {
 
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var values = new
+                {
 
-            //SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
-            //oCnn.Open();
-            //try
-            //{
-            //    var itemsJson = JsonSerializer.Serialize(data.Items.Select(item => new
-            //    {
-            //        item.ITEM_ID,
-            //        item.ITEM_NAME,
-            //        item.ITEM_PRICE
-            //    }));
-            //    var values = new
-            //    {
-            //        p_input_city = data.CITY,
-            //        p_client_username = data.USERNAME,
-            //        p_client_firstname = data.FIRSTNAME,
-            //        p_client_lastname = data.LASTNAME,
-            //        p_client_phone = data.PHONE_NUMBER,
-            //        p_client_postal = data.POSTAL_CODE,
-            //        p_client_address = data.ADDRESS,
-            //        ItemsList = itemsJson
-            //    };
-            //    string res;
-            //    return res= oCnn.QuerySingleOrDefault<string>("[dbo].[SP_FIND_AGENCY_BY_CITY]", values, commandType: System.Data.CommandType.StoredProcedure);
+                    orderId = data.OrderID,
+                    review = data.Review,
+                    reviewComments = data.ReviewComments
+                };
+                oCnn.ExecuteScalar("[dbo].[SP_UPDATE_ORDER_REVIEW]", values, commandType: System.Data.CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new Exception(ex.Message);
-            //}
-            //finally
-            //{
-            //    oCnn.Close();
-            //    oCnn.Dispose();
-            //}
         }
+
+
+
+        //SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+        //oCnn.Open();
+        //try
+        //{
+        //    var itemsJson = JsonSerializer.Serialize(data.Items.Select(item => new
+        //    {
+        //        item.ITEM_ID,
+        //        item.ITEM_NAME,
+        //        item.ITEM_PRICE
+        //    }));
+        //    var values = new
+        //    {
+        //        p_input_city = data.CITY,
+        //        p_client_username = data.USERNAME,
+        //        p_client_firstname = data.FIRSTNAME,
+        //        p_client_lastname = data.LASTNAME,
+        //        p_client_phone = data.PHONE_NUMBER,
+        //        p_client_postal = data.POSTAL_CODE,
+        //        p_client_address = data.ADDRESS,
+        //        ItemsList = itemsJson
+        //    };
+        //    string res;
+        //    return res= oCnn.QuerySingleOrDefault<string>("[dbo].[SP_FIND_AGENCY_BY_CITY]", values, commandType: System.Data.CommandType.StoredProcedure);
+
+        //}
+        //catch (Exception ex)
+        //{
+        //    throw new Exception(ex.Message);
+        //}
+        //finally
+        //{
+        //    oCnn.Close();
+        //    oCnn.Dispose();
+        //}
+    }
 
 
     }
