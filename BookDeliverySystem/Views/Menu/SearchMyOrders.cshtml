@@ -433,6 +433,9 @@
             if (status == 'RESCHEDULE' && eddt == null) {
                 alert('PLEASE SELECT A DATE TO RESCHEDULEYOUR ORDER');
             }
+            if (status == 'CANCELED'){
+                alert('SUCCESFULLY CANCELED THE ORDER');
+            }
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("UpdateOrder", "Menu")",

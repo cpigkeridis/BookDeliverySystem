@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using BookDeliveryCore;
+using Microsoft.Extensions.Configuration;
+using System.Data.SqlClient;
+using Dapper;
 
 namespace BookDeliverySystemAPI.Controllers
 {
@@ -88,6 +91,21 @@ namespace BookDeliverySystemAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/[action]")]
+        public IActionResult updateReward(string agencyName, int review, int orderID)
+        {
+            try
+            {
+                _oClient.updateReward(agencyName, review, orderID);
+                return Ok(new { message = "successfully updating reward." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error updating reward .", error = ex.Message });
             }
         }
     }

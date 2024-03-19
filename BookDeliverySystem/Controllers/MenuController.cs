@@ -409,6 +409,8 @@ namespace BookDeliverySystem.Controllers
             }
         }
 
+        //TODO NA GINI TO REWARDS ENIMEROSI
+
         public IActionResult OrderConfirmation()
         {
             return View("OrderConfirmation");

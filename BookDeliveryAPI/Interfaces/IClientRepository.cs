@@ -13,5 +13,7 @@ namespace BookDeliverySystemAPI.Interfaces
         public void InsertOrderUpdate(OrderUpdate data);
         public void InsertOrderReviewUpdate(OrderUpdateReview data);
 
+        public void updateReward(string agencyName, int review, int orderID);
+
     }
 }

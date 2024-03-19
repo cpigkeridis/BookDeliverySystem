@@ -5,6 +5,7 @@ using System.Text.Json;
 using BookDeliveryCore;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 
 namespace BookDeliverySystemAPI.Repositories
@@ -16,7 +17,7 @@ namespace BookDeliverySystemAPI.Repositories
         {
             _Configuration = oConfig;
         }
-        
+
 
         public void InsertClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber)
         {
@@ -115,33 +116,33 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
-            public void InsertOrderUpdate(OrderUpdate data)
+        public void InsertOrderUpdate(OrderUpdate data)
+        {
+
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
             {
-
-                SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
-                oCnn.Open();
-                try
+                var values = new
                 {
-                    var values = new
-                    {
 
-                        orderId=data.OrderID,
-                        newStatus=data.Status,
-                        newEstimateDate = data.EDD
-                    };
-                    oCnn.ExecuteScalar("[dbo].[SP_UPDATE_ORDER_STATUS]", values, commandType: System.Data.CommandType.StoredProcedure);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
-                finally
-                {
-                    oCnn.Close();
-                    oCnn.Dispose();
-                }
-
+                    orderId = data.OrderID,
+                    newStatus = data.Status,
+                    newEstimateDate = data.EDD
+                };
+                oCnn.ExecuteScalar("[dbo].[SP_UPDATE_ORDER_STATUS]", values, commandType: System.Data.CommandType.StoredProcedure);
             }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
+
+        }
 
         public void InsertOrderReviewUpdate(OrderUpdateReview data)
         {
@@ -171,44 +172,33 @@ namespace BookDeliverySystemAPI.Repositories
 
         }
 
+        public void updateReward(string agencyName, int review, int orderID)
+        {
+            SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
+            oCnn.Open();
+            try
+            {
+                var values = new
+                {
+                    AGENCY_NAME = agencyName,
+                    REVIEW = review,
+                    ORDER_ID = orderID
+                };
 
+                oCnn.ExecuteScalar("[dbo].[SP_UPDATE_REWARD_AND_ORDER]", values, commandType: System.Data.CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oCnn.Close();
+                oCnn.Dispose();
+            }
 
-        //SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
-        //oCnn.Open();
-        //try
-        //{
-        //    var itemsJson = JsonSerializer.Serialize(data.Items.Select(item => new
-        //    {
-        //        item.ITEM_ID,
-        //        item.ITEM_NAME,
-        //        item.ITEM_PRICE
-        //    }));
-        //    var values = new
-        //    {
-        //        p_input_city = data.CITY,
-        //        p_client_username = data.USERNAME,
-        //        p_client_firstname = data.FIRSTNAME,
-        //        p_client_lastname = data.LASTNAME,
-        //        p_client_phone = data.PHONE_NUMBER,
-        //        p_client_postal = data.POSTAL_CODE,
-        //        p_client_address = data.ADDRESS,
-        //        ItemsList = itemsJson
-        //    };
-        //    string res;
-        //    return res= oCnn.QuerySingleOrDefault<string>("[dbo].[SP_FIND_AGENCY_BY_CITY]", values, commandType: System.Data.CommandType.StoredProcedure);
-
-        //}
-        //catch (Exception ex)
-        //{
-        //    throw new Exception(ex.Message);
-        //}
-        //finally
-        //{
-        //    oCnn.Close();
-        //    oCnn.Dispose();
-        //}
-    }
-
+        }
 
     }
+}
 
