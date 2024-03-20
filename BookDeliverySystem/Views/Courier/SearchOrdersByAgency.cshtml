@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
 
 <!-- DataTables JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 
 <div class="row" style="max-width: 100%; padding: 15px;">
@@ -253,7 +254,10 @@
 
             eddt = $('#eddt').val();
             if(eddt ==""){
-                alert("Please select estimated dates");
+            Swal.fire({
+                icon: 'warning',
+                title: 'Please select estimated dates'
+            });
             }
             else{
             $.ajax({

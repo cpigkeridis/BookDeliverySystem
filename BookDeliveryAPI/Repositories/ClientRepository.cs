@@ -172,7 +172,7 @@ namespace BookDeliverySystemAPI.Repositories
 
         }
 
-        public void updateReward(string agencyName, int review, int orderID)
+        public void updateReward(OrderUpdateReward data)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -180,9 +180,9 @@ namespace BookDeliverySystemAPI.Repositories
             {
                 var values = new
                 {
-                    AGENCY_NAME = agencyName,
-                    REVIEW = review,
-                    ORDER_ID = orderID
+                    AGENCY_NAME = data.AgencyName,
+                    REVIEW = data.Review,
+                    ORDER_ID = data.OrderID,
                 };
 
                 oCnn.ExecuteScalar("[dbo].[SP_UPDATE_REWARD_AND_ORDER]", values, commandType: System.Data.CommandType.StoredProcedure);

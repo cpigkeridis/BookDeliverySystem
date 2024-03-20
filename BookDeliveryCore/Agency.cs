@@ -14,7 +14,6 @@ namespace BookDeliveryCore
         public string? CITY { get; set; }
         public string? COUNTRY { get; set; }
         public string? POSTAL_CODE { get; set; }
-        //public int? COURIER_ID { get; set; }
         public string? REVIEW { get; set; }
         public string? USERNAME { get; set; }
         public string? FIRSTNAME { get; set; }

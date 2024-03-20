@@ -14,4 +14,13 @@
         public int? Review { get; set;}
         public string? ReviewComments { get; set; }
     }
+
+    public class UpdateOrderRewardModel
+    {
+        public string? OrderID { get; set; }
+
+        public string? AgencyName { get; set; }
+
+        public int? Review { get; set; }
+    }
 }

@@ -409,7 +409,43 @@ namespace BookDeliverySystem.Controllers
             }
         }
 
-        //TODO NA GINI TO REWARDS ENIMEROSI
+        [HttpPost]
+        public async Task<IActionResult> UpdateOrderReward([FromBody] UpdateOrderRewardModel data)
+        {
+            try
+            {
+
+                string apiUrl = $"https://localhost:7203/api/Client/updateReward";
+                string role = await getUserRole();
+                OrderUpdateReward oOrder = new OrderUpdateReward();
+                oOrder.OrderID = data.OrderID;
+                oOrder.AgencyName = data.AgencyName;
+                oOrder.Review = Convert.ToInt32(data.Review);
+                oOrder.Role = role;
+                // Make a GET request to the API endpoint for agencies
+                HttpResponseMessage response = await _httpClient.PostAsJsonAsync(apiUrl, oOrder);
+
+                // Check if the request was successful
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the response content as string
+                    //var responseData = await response.Content.ReadAsStringAsync();
+                    _httpClient.Dispose();
+                    return Ok();
+
+                    // Do something with the response data, for example, return it to a view
+                }
+                else
+                {
+                    // Handle the error
+                    return StatusCode((int)response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error inserting review.", error = ex.Message });
+            }
+        }
 
         public IActionResult OrderConfirmation()
         {

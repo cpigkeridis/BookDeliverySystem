@@ -8,7 +8,12 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
 
 <!-- DataTables JavaScript -->
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<head>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+
 
 <div class="row" style="max-width: 100%; padding: 15px;">
     <div class="col-md-12 col-sm-12">
@@ -165,22 +170,22 @@
                         <label for="deldt" class="form-label">Order Items</label>
                         <div id="ItemResult"></div>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="review" class="form-label">Review</label>
                         <div class="input-group">
-                          <select id="review" tabindex="2" class="form-control form-select" aria-hidden="true" style="width:100%" disabled>
-                            <option value="0"></option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
+                            <select id="review" tabindex="2" class="form-control form-select" aria-hidden="true" style="width:100%" disabled>
+                                <option value="0"></option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
                             </select>
                             @*<input type="text" class="form-control" id="review" disabled>*@
                             <span class="input-group-text">
@@ -359,7 +364,7 @@
             type: "POST",
             url: "@Url.Action("SearchOrderItems", "Menu")",
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({ 'OrderID': orderData.orderid}),
+            data: JSON.stringify({ 'OrderID': orderData.orderid }),
             async: false,
             success: function (response) {
                 $('#ItemResult').html(response);
@@ -431,10 +436,20 @@
                 eddt = null;
             }
             if (status == 'RESCHEDULE' && eddt == null) {
-                alert('PLEASE SELECT A DATE TO RESCHEDULEYOUR ORDER');
+                //TODO FIX THIS POPUP IT REFRESHES QUIKLY
+                // Swal.fire({
+                //     icon: 'warning',
+                //     title: 'Please select a date to reschedule your order'
+                // });
+                alert("Please select a date to reschedule your order");
             }
-            if (status == 'CANCELED'){
-                alert('SUCCESFULLY CANCELED THE ORDER');
+            if (status == 'CANCELED') {
+                //TODO FIX THIS POPUP IT REFRESHES QUIKLY
+                // Swal.fire({
+                //     icon: 'success',
+                //     title: 'Successfully canceled the order'
+                // });
+                alert("Succesfully canceled your order")
             }
             $.ajax({
                 type: "POST",
@@ -451,7 +466,7 @@
                 }
             });
 
-        } 
+        }
         if (role == "COUR" && statusCour == "DELIVERED" && review == null && reviewComments == "") {
             if (eddt == '') {
                 eddt = null;
@@ -474,268 +489,42 @@
         }
 
         if (role == 'CLIE' && review != null && review != 0) {
+    $.ajax({
+        type: "POST",
+        url: "@Url.Action("UpdateOrderReview", "Menu")",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ 'OrderID': $('#orderid').val(), 'Review': $('#review').val(), 'ReviewComments': $('#reviewCom').val() }),
+        async: false,
+        success: function (response) {
+            console.log(response);
+            // Additional call to UpdateOrderReward
             $.ajax({
                 type: "POST",
-                url: "@Url.Action("UpdateOrderReview", "Menu")",
+                url: "@Url.Action("UpdateOrderReward", "Menu")",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({ 'OrderID': $('#orderid').val(), 'Review': $('#review').val(), 'ReviewComments': $('#reviewCom').val() }),
+                        data: JSON.stringify({ 'AgencyName': $('#agency').val(), 'OrderID': $('#orderid').val(), 'Review': $('#review').val() }),
                 async: false,
-                success: function (response) {
-                    console.log(response);
-                    location.reload();
+                success: function (rewardResponse) {
+                    console.log(rewardResponse);
+                    location.reload(); // Reloading after both calls are successful
                 },
                 error: function (xhr, status, error) {
                     alert(error);
                 }
             });
+        },
+        error: function (xhr, status, error) {
+            alert(error);
         }
-        //alert(deldt);
-        //console.log(deldt);
-        if (role == 'CLIE' && (review == null || review == 0) && deldt != ''){
-            alert('PLEASE SELECT A REVIEW SCORE');
+    });
+}
+
+        if (role == 'CLIE' && (review == null || review == 0) && deldt != '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Please select a review score'
+            });
         }
         $('#viewOrderModal').modal('hide');
     }
 </script>
-
-
-@* <script>
-    $(document).ready(function () {
-        $('#OrdersTable').DataTable({
-            paging: true,
-            pagingType: 'simple_numbers',
-            searching: true,
-            pageLength: 15,
-            dom: 'frtip',
-            language: {
-                thousands: ",",
-                decimal: "."
-            },
-            responsive: true,
-            scrollX: false,
-            columnDefs: [
-                { className: 'dt-body-left', targets: '_all' }
-            ]
-        });
-    });
-
-    function ViewOrder(button) {
-        $('#eddt').prop('disabled', true);
-        var row = button.parentNode.parentNode; // Get the row
-        var cells = row.getElementsByTagName("td");
-        var orderData = {
-            orderid: cells[0].innerText,
-            clname: cells[1].innerText,
-            clphone: cells[2].innerText,
-            agname: cells[3].innerText,
-            courname: cells[4].innerText,
-            courphone: cells[5].innerText,
-            status: cells[6].innerText,
-            orderdt: cells[7].innerText,
-            dispdt: cells[8].innerText,
-            eddt: cells[9].innerText,
-            deldt: cells[10].innerText,
-            review: cells[11].innerText,
-            reviewcom: cells[12].innerText
-        };
-
-
-
-        var role = $('#role').val();
-        // var divContent = '<div id="eddtdiv" class="mb-3"><label for="eddt" class="form-label">Estimated Delivery Date</label><input type="date" class="form-control" id="eddt" disabled></div>';
-        // var divstsContent = '<div id="stsdiv" class="mb-3"><label for="status" class="form-label">Status</label><select id="status" tabindex="2" class="form-control form-select" aria-hidden="true" style="width:100%"><option value="NOCHOICE">&ensp;</option><option value="RESCHEDULE">RESCHEDULE</option><option value="CANCELED">CANCELED</option></select></div>';
-
-        if (role == "CLIE") {
-            if (orderData.status != "PENDING" && $('#eddtdiv').length != 0) {
-                $('#eddtdiv').remove();
-            }
-            else {
-                if ($('#eddtdiv').length == 0) {
-                    $('#ddtdiv').append(divContent);
-                }
-
-            }
-        }
-
-        if (role == "CLIE") {
-            if (orderData.status == "DISPATCHED" && $('#stsdiv').length != 0) {
-                $('#stsdiv').remove();
-            }
-            else {
-                if ($('#stsdiv').length == 0) {
-                    $('#stsprev').append(divstsContent);
-                }
-
-            }
-        }
-
-        $('#status').change(function () {
-            // Get the selected value
-            var selectedValue = $(this).val();
-            if (selectedValue == "RESCHEDULE") {
-                $('#eddt').prop('disabled', false);
-            }
-            else {
-                $('#eddt').prop('disabled', true);
-                $('#eddt').val('');
-
-            }
-        });
-
-        var savediv = '<div id="savebtn">' +
-            '<button type="button" class="btn btn-primary" onclick="saveChanges()">Save changes</button>' +
-            '</div>';
-
-        if (orderData.status == "CANCELED" || (orderData.status == "DISPATCHED" && role == "CLIE")) {
-            $('#savebtn').remove();
-            $('#status').prop('disabled', true);
-        }
-        else {
-            $('#status').prop('disabled', false);
-            if ($('#savebtn').length == 0) {
-                $('#savebtnprev').append(savediv);
-            }
-        }
-
-        if (orderData.status == "DELIVERED" && role == "COUR") {
-            $('#savebtn').remove();
-            $('#status').prop('disabled', true);
-        }
-        else {
-            $('#status').prop('disabled', false);
-            if ($('#savebtn').length == 0) {
-                $('#savebtnprev').append(savediv);
-            }
-        }
-        if (orderData.status == "DELIVERED" && role == "CLIE") {
-            $('#status').prop('disabled', true);
-            $('#reviewCom').prop('disabled', false);
-            $('#review').prop('disabled', false);
-
-        }
-        else {
-            $('#status').prop('disabled', false);
-            $('#reviewCom').prop('disabled', true);
-            $('#review').prop('disabled', true);
-        }
-
-        // Get today's date
-        var today = new Date();
-
-        // Calculate one month from today
-        var maxDate = new Date(today);
-        maxDate.setMonth(maxDate.getMonth() + 1);
-
-        // Format the maximum date as yyyy-mm-dd
-        var maxDateString = maxDate.toISOString().split('T')[0];
-
-        // Set the max attribute of the input field to restrict selection
-        $('#eddt').attr('max', maxDateString);
-
-        // Format the minimum date as yyyy-mm-dd
-        var minDateString = today.toISOString().split('T')[0];
-
-        // Set the min attribute of the input field to restrict selection
-        $('#eddt').attr('min', minDateString);
-
-
-        //if (orderData.eddt != "") {
-        //    $('#eddt').prop('disabled', true);
-        //}
-        //else {
-        //    $('#eddt').prop('disabled', false);
-        //}
-
-        console.log(orderData);
-        editOrderModal(orderData)
-    }
-
-    function editOrderModal(orderData) {
-        $('#viewOrderModalLabel').text("Order -" + orderData.orderid);
-        $('#orderid').val(orderData.orderid);
-        $('#clientName').val(orderData.clname);
-        $('#clientPhone').val(orderData.clphone);
-        $('#agency').val(orderData.agname);
-        $('#courierName').val(orderData.courname);
-        $('#courierPhone').val(orderData.courphone);
-        $('#status').val(orderData.status);
-        $('#orderdt').val(orderData.orderdt);
-        $('#dispdt').val(orderData.dispdt);
-        $('#deldt').val(orderData.deldt);
-        $('#eddt').val(orderData.eddt);
-        $('#review').val(orderData.review + "/10");
-        $('#reviewCom').val(orderData.reviewcom);
-
-        if (orderData.review >= 5) {
-            $('#review').next('.input-group-text').find('i').addClass('text-warning');
-
-        }
-        else {
-            $('#review').next('.input-group-text').find('i').addClass('"fa fa-star-half-o"');
-        }
-
-
-        $('#viewOrderModal').modal('show');
-    }
-
-    function saveChanges() {
-        var status = $('#status').val();
-        var eddt = $('#eddt').val();
-        var role = $('#role').val();
-        // Perform actions to save changes here
-        console.log("STATUS: " + status);
-        console.log("ESTIMATED DATE: " + eddt);
-        //TODO ADD && review !=''
-        if (role == "CLIE" && (status == "CANCELED" || eddt != '')) {
-            if (eddt == '') {
-                eddt = null;
-            }
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("UpdateOrder", "Menu")",
-                contentType: "application/json; charset=utf-8",
-
-                // Pass only the 'username' parameter
-                data: JSON.stringify({ 'OrderID': $('#orderid').val(), 'Status': status, 'EDD': eddt }),
-                async: false,
-                success: function (response) {
-                    console.log(response); // Add this line for logging
-                    //$('#UserResult').html(response);
-                    // Initialize DataTable here if needed
-                    location.reload();
-                },
-                error: function (xhr, status, error) {
-                    alert(error);
-                }
-            });
-        }
-        else if (role == "COUR" && status == "DELIVERED") {
-            if (eddt == '') {
-                eddt = null;
-            }
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("UpdateOrder", "Menu")",
-                contentType: "application/json; charset=utf-8",
-
-                // Pass only the 'username' parameter
-                data: JSON.stringify({ 'Status': status, 'OrderID': $('#orderid').val(), 'EDD': eddt }),
-                async: false,
-                success: function (response) {
-                    location.reload();
-                },
-                error: function (xhr, status, error) {
-                    alert(error);
-                }
-            });
-        }
-        else {
-
-        }
-        $('#viewOrderModal').modal('hide');
-
-
-    }
-
-
-</script> *@

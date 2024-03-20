@@ -96,11 +96,11 @@ namespace BookDeliverySystemAPI.Controllers
 
         [HttpPost]
         [Route("api/[controller]/[action]")]
-        public IActionResult updateReward(string agencyName, int review, int orderID)
+        public IActionResult updateReward(OrderUpdateReward data)
         {
             try
             {
-                _oClient.updateReward(agencyName, review, orderID);
+                _oClient.updateReward(data);
                 return Ok(new { message = "successfully updating reward." });
             }
             catch (Exception ex)

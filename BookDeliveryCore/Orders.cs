@@ -12,7 +12,6 @@ namespace BookDeliveryCore
         public string? CLIENT_USERNAME { get; set; }
         public string? CLIENT_FIRSTNAME { get; set; }
         public string? CLIENT_LASTNAME { get; set; }
-        //added these two 
         public string? CLIENT_ADDRESS { get; set; }
         public string? CLIENT_POSTALCODE { get; set; }
         public string? CLIENT_PHONE { get; set; }
@@ -46,6 +45,14 @@ namespace BookDeliveryCore
         public string OrderID { get; set; }
         public int Review { get; set; }
         public string ReviewComments { get; set; }
+        public string Role { get; set; }
+    }
+
+    public class OrderUpdateReward
+    {
+        public string AgencyName { get; set; }
+        public string OrderID { get; set; }
+        public int Review { get; set; }
         public string Role { get; set; }
     }
 }
