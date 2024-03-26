@@ -568,6 +568,19 @@ namespace BookDeliveryAPI.Controllers
             }
         }
 
-
+        [HttpGet]
+        [Route("api/[controller]/[action]")]
+        public IActionResult GetRewardsByAgencyName(string agencyName)
+        {
+            try
+            {
+                List<OrderRewards> rewards = _oAdministrator.GetRewardsByAgencyName(agencyName);
+                return Ok(rewards);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error showing order rewards.", error = ex.Message });
+            }
+        }
     }
 }

@@ -17,6 +17,7 @@
 
     public class UpdateOrderRewardModel
     {
+        public float? totalPrice { get; set; }
         public string? OrderID { get; set; }
 
         public string? AgencyName { get; set; }

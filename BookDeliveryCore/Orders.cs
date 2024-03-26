@@ -50,9 +50,16 @@ namespace BookDeliveryCore
 
     public class OrderUpdateReward
     {
+        public float? TotalPrice { get; set; }
         public string AgencyName { get; set; }
         public string OrderID { get; set; }
         public int Review { get; set; }
         public string Role { get; set; }
+    }
+    public class OrderRewards
+    {
+        public int REVIEW_SCORE { get; set; }
+        public string REWARD { get; set; }
+        public int ORDER_ID { get; set; }
     }
 }

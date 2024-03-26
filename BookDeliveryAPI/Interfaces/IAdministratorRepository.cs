@@ -39,7 +39,7 @@ namespace BookDeliverySystemAPI.Interfaces
 
         public List<OrderItems> GetOrderItems(string OrderID);
 
-
+        public List<OrderRewards> GetRewardsByAgencyName(string agencyName);
 
 
     }

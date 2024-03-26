@@ -23,6 +23,13 @@
         }
         else
         {
+            @if (Model.myID == "AGEN")
+            {
+                <p>
+                    <a href="MyRewards" class="btn btn-primary shadow mr-2">MY REWARDS</a>
+                </p>
+                
+            }
             <div>
                 <table id="OrdersTable" class="table table-condensed table-hover" style="width: 100%">
                     <thead>

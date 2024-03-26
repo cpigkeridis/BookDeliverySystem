@@ -183,6 +183,7 @@ namespace BookDeliverySystemAPI.Repositories
                     AGENCY_NAME = data.AgencyName,
                     REVIEW = data.Review,
                     ORDER_ID = data.OrderID,
+                    total_price = data.TotalPrice,
                 };
 
                 oCnn.ExecuteScalar("[dbo].[SP_UPDATE_REWARD_AND_ORDER]", values, commandType: System.Data.CommandType.StoredProcedure);

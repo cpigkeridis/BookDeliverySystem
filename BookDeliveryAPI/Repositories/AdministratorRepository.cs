@@ -695,5 +695,31 @@ namespace BookDeliverySystemAPI.Repositories
                 oCnn.Dispose();
             }
         }
+
+        public List<OrderRewards> GetRewardsByAgencyName(string agencyName)
+        {
+            using (SqlConnection connection = new SqlConnection(_Configuration.APICONSTRING))
+            {
+                connection.Open();
+
+                try
+                {
+                    var parameters = new
+                    {
+                        AGENCY_NAME = agencyName
+                    };
+
+                    string query = "[dbo].[SP_GET_REWARDS]";
+                    List<OrderRewards> rewards = connection.Query<OrderRewards>(query, parameters, commandType: System.Data.CommandType.StoredProcedure).AsList();
+
+                    return rewards;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+        }
+
     }
 }

@@ -61,6 +61,10 @@ namespace BookDeliverySystem.Controllers
         {
             return View();
         }
+        public IActionResult MyRewards()
+        {
+            return View();
+        }
         public async Task<IActionResult> AdminModule(string select = "")
         {
             try
