@@ -19,6 +19,7 @@ namespace BookDeliveryCore
 
         public string? AGENCY_ID { get; set; }
         public string? AGENCY_NAME { get; set; }
+        public string? AGENCY_USERNAME { get; set; }
         public string? COURIER_USERNAME { get; set; }
         public string? COURIER_FIRSTNAME { get; set; }
         public string? COURIER_LASTNAME { get; set; }
@@ -61,5 +62,11 @@ namespace BookDeliveryCore
         public int REVIEW_SCORE { get; set; }
         public string REWARD { get; set; }
         public int ORDER_ID { get; set; }
+
+    }
+    public class Rewards
+    {
+        public List<OrderRewards>? REWARDST { get; set; }
+        public double? TOTAL { get; set; }
     }
 }

@@ -28,7 +28,7 @@
                 <p>
                     <a href="MyRewards" class="btn btn-primary shadow mr-2">MY REWARDS</a>
                 </p>
-                
+
             }
             <div>
                 <table id="OrdersTable" class="table table-condensed table-hover" style="width: 100%">
@@ -47,6 +47,7 @@
                             <th scope="col">Delivered Date</th>
                             <th scope="col">Order Review</th>
                             <th scope="col">Review Comments</th>
+                            <th scope="col" hidden>Agency ID</th>
                             @if (Model.myID == "AGEN")
                             {
                                 <th scope="col">View</th>
@@ -75,6 +76,7 @@
                                 <td>@order.DELIVEREDDATE</td>
                                 <td>@order.REVIEW</td>
                                 <td>@order.REVIEW_COMMENTS</td>
+                                <td hidden>@order.AGENCY_USERNAME</td>
                                 <td>
                                     <button onclick="ViewOrder(this)">
                                         <i class="fa fa-magic" aria-hidden="true"></i>
@@ -224,6 +226,7 @@
 </div>
 
 <input hidden id="role" value="@Model.myID" />
+<input hidden id="agid" value="@Model.myID" />
 
 <script>
     $(document).ready(function () {
@@ -231,12 +234,13 @@
             paging: true,
             pagingType: 'simple_numbers',
             searching: true,
-            pageLength: 15,
+            pageLength: 10,
             dom: 'frtip',
             language: {
                 thousands: ",",
                 decimal: "."
             },
+            order: [[7, "desc"]],
             responsive: true,
             scrollX: false,
             columnDefs: [
@@ -262,7 +266,8 @@
             eddt: cells[9].innerText,
             deldt: cells[10].innerText,
             review: cells[11].innerText,
-            reviewcom: cells[12].innerText
+            reviewcom: cells[12].innerText,
+            agencyid: cells[13].innerText
         };
 
         var role = $('#role').val();
@@ -391,6 +396,7 @@
         $('#orderdt').val(orderData.orderdt);
         $('#dispdt').val(orderData.dispdt);
         $('#deldt').val(orderData.deldt);
+        $('#agid').val(orderData.agencyid);
         if (orderData.eddt != "") {
             var datetimeString = orderData.eddt;
             var parts = datetimeString.split(" "); // Split the string into date and time parts
@@ -433,7 +439,7 @@
         var role = $('#role').val();
         var review = $('#review').val();
         var reviewComments = $('#reviewCom').val();
-        var deldt =  $('#deldt').val();
+        var deldt = $('#deldt').val();
 
         console.log("STATUS: " + status);
         console.log("ESTIMATED DATE: " + eddt);
@@ -443,37 +449,83 @@
                 eddt = null;
             }
             if (status == 'RESCHEDULE' && eddt == null) {
-                //TODO FIX THIS POPUP IT REFRESHES QUIKLY
-                // Swal.fire({
-                //     icon: 'warning',
-                //     title: 'Please select a date to reschedule your order'
-                // });
-                alert("Please select a date to reschedule your order");
+                Swal.fire({
+                    title: 'Please Enter An Estimated Delivery Date!',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                    }
+
+                });
+            }
+            if (status == 'RESCHEDULE' && eddt != null) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UpdateOrder", "Menu")",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ 'OrderID': $('#orderid').val(), 'Status': status, 'EDD': eddt }),
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Successfully Rescheduled Your Order!',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.log(response);
+                                location.reload();
+                            }
+                        });
+
+                        
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
             }
             if (status == 'CANCELED') {
-                //TODO FIX THIS POPUP IT REFRESHES QUIKLY
-                // Swal.fire({
-                //     icon: 'success',
-                //     title: 'Successfully canceled the order'
-                // });
-                alert("Succesfully canceled your order")
+                Swal.fire({
+                    title: 'Are you sure you want to cancel the order?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Revert'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("UpdateOrder", "Menu")",
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({ 'OrderID': $('#orderid').val(), 'Status': status, 'EDD': eddt }),
+                            success: function (response) {
+                                Swal.fire({
+                                    title: 'Successfully Cancelled Your Order!',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        console.log(response);
+                                        location.reload();
+                                    }
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                alert(error);
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        // Action when user clicks "Revert" button or outside the dialog
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Order cancellation reverted'
+                        });
+                    }
+                });
             }
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("UpdateOrder", "Menu")",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({ 'OrderID': $('#orderid').val(), 'Status': status, 'EDD': eddt }),
-                async: false,
-                success: function (response) {
-                    console.log(response);
-                    location.reload();
-                },
-                error: function (xhr, status, error) {
-                    alert(error);
-                }
-            });
-
         }
+
         if (role == "COUR" && statusCour == "DELIVERED" && review == null && reviewComments == "") {
             if (eddt == '') {
                 eddt = null;
@@ -496,35 +548,35 @@
         }
 
         if (role == 'CLIE' && review != null && review != 0) {
-    $.ajax({
-        type: "POST",
-        url: "@Url.Action("UpdateOrderReview", "Menu")",
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({ 'OrderID': $('#orderid').val(), 'Review': $('#review').val(), 'ReviewComments': $('#reviewCom').val() }),
-        async: false,
-        success: function (response) {
-            console.log(response);
-            // Additional call to UpdateOrderReward
             $.ajax({
                 type: "POST",
-                url: "@Url.Action("UpdateOrderReward", "Menu")",
+                url: "@Url.Action("UpdateOrderReview", "Menu")",
                 contentType: "application/json; charset=utf-8",
-                        data: JSON.stringify({ 'AgencyName': $('#agency').val(), 'OrderID': $('#orderid').val(), 'Review': $('#review').val() }),
+                data: JSON.stringify({ 'OrderID': $('#orderid').val(), 'Review': $('#review').val(), 'ReviewComments': $('#reviewCom').val() }),
                 async: false,
-                success: function (rewardResponse) {
-                    console.log(rewardResponse);
-                    location.reload(); // Reloading after both calls are successful
+                success: function (response) {
+                    console.log(response);
+                    // Additional call to UpdateOrderReward
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("UpdateOrderReward", "Menu")",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ 'AgencyName': $('#agid').val(), 'OrderID': $('#orderid').val(), 'Review': $('#review').val() }),
+                        async: false,
+                        success: function (rewardResponse) {
+                            console.log(rewardResponse);
+                            location.reload(); // Reloading after both calls are successful
+                        },
+                        error: function (xhr, status, error) {
+                            alert(error);
+                        }
+                    });
                 },
                 error: function (xhr, status, error) {
                     alert(error);
                 }
             });
-        },
-        error: function (xhr, status, error) {
-            alert(error);
         }
-    });
-}
 
         if (role == 'CLIE' && (review == null || review == 0) && deldt != '') {
             Swal.fire({

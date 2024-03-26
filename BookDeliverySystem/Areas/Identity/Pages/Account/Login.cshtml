@@ -41,8 +41,11 @@
                                 @Html.DisplayNameFor(m => m.Input.RememberMe)
                             </label>
                         </div>
+                        @Html.ValidationMessage("CustomError", new { @class = "text-warnings" })
                     </div>
+
                     <button id="login-submit" type="submit" class="btn btn-lg btn-primary">Login</button>
+                    
                 </div>
                 <div class="Options">
                     <p class="option">
@@ -62,3 +65,9 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+<style>
+    .text-warnings {
+        color: red; /* Adjust color as needed */
+        font-weight: bold;
+    }
+</style>

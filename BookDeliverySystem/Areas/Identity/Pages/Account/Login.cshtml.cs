@@ -115,26 +115,42 @@ namespace BookDeliverySystem.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                //TODO FIX LOGIN FAILS
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                ApplicationUser user = await _signInManager.UserManager.FindByNameAsync(Input.Email);
-                BookDeliveryCore.Users oUser = GetUser(user.UserName, user.Role);
-                if (oUser != null && oUser.ENABLE == true)
+                if (!result.Succeeded)
                 {
-                    if (result.Succeeded)
+                    ModelState.AddModelError("CustomError", "Invalid username or password.");
+                    await _signInManager.SignOutAsync(); // Sign out the user
+                    return Page();
+                }
+                else
+                {
+                    ApplicationUser user = await _signInManager.UserManager.FindByNameAsync(Input.Email);
+                    BookDeliveryCore.Users oUser = GetUser(user.UserName, user.Role);
+                    if (oUser != null && oUser.ENABLE == true)
                     {
-                        _logger.LogInformation("User logged in.");
-                        return LocalRedirect(returnUrl);
-                    }
-                    if (result.RequiresTwoFactor)
-                    {
-                        return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                    }
-                    if (result.IsLockedOut)
-                    {
-                        _logger.LogWarning("User account locked out.");
-                        return RedirectToPage("./Lockout");
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        if (result.RequiresTwoFactor)
+                        {
+                            return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                        }
+                        if (result.IsLockedOut)
+                        {
+                            _logger.LogWarning("User account locked out.");
+                            return RedirectToPage("./Lockout");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            await _signInManager.SignOutAsync(); // Sign out the user
+                            return Page();
+                        }
                     }
                     else
                     {
@@ -142,12 +158,6 @@ namespace BookDeliverySystem.Areas.Identity.Pages.Account
                         await _signInManager.SignOutAsync(); // Sign out the user
                         return Page();
                     }
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    await _signInManager.SignOutAsync(); // Sign out the user
-                    return Page();
                 }
             }
 

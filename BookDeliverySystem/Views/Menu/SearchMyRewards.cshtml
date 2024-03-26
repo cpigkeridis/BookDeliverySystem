@@ -1,0 +1,74 @@
+﻿@{
+    Layout = null;
+    @model BookDeliveryCore.Rewards
+
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+
+<!-- DataTables JavaScript -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="row" style="max-width: 100%; padding: 15px;">
+    <div class="col-md-12 col-sm-12">
+        @if (Model == null || Model.REWARDST.Count == 0)
+        {
+            <p>No Rewards available.</p>
+        }
+        else
+        {
+            <div>
+                <table id="RewardsTable" class="table table-condensed table-hover" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">OrderID</th>
+                            <th scope="col">Review Score</th>
+                            <th scope="col">Reward</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var orderReward in Model.REWARDST)
+                        {
+                            <tr>
+                                <td>@orderReward.ORDER_ID</td>
+                                <td>@(orderReward.REVIEW_SCORE < 10 ? "0" + orderReward.REVIEW_SCORE.ToString() : orderReward.REVIEW_SCORE.ToString()) / 10</td>
+                                <td>€ @orderReward.REWARD</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2"><strong>Total</strong></td>
+                            <td><strong>€ @Model.TOTAL</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#RewardsTable').DataTable({
+            paging: true,
+            pagingType: 'simple_numbers',
+            searching: false,
+            pageLength: 10,
+            dom: 'frtip',
+            order: [[0, 'desc']],
+            language: {
+                thousands: ",",
+                decimal: "."
+            },
+            responsive: false,
+            scrollX: true,
+            columnDefs: [
+                { className: 'dt-body-left', targets: '_all' }
+            ]
+        });
+    });
+
+
+</script>

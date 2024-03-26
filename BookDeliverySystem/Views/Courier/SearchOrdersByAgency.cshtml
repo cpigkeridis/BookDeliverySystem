@@ -11,6 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 
+
 <div class="row" style="max-width: 100%; padding: 15px;">
     <div class="col-md-12 col-sm-12">
         @if (Model == null || Model.Count == 0)
@@ -269,8 +270,16 @@
                 data: JSON.stringify({ 'OrderID': orderID, 'EDD': eddt }),
                 async: false,
                 success: function (response) {
-                    console.log(response); // Add this line for logging
-                    location.reload();
+                    Swal.fire({
+                        title: 'Order Accepted!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.log(response);
+                            location.reload();
+                        }
+                    });
                 },
                 error: function (xhr, status, error) {
                     alert(error);

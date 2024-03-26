@@ -21,18 +21,26 @@
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Agency" asp-action="OrdersByCity">Select Orders</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Menu" asp-action="MyOrders">My Orders</a>
+            </li>
         }
         if(user.Role == "COUR")
         {
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Courier" asp-action="OrdersByAgency">Accept Orders</a>
-            </li>          
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Menu" asp-action="MyOrders">My Orders</a>
+            </li>
         }
         @*TODO MAKE ADMIN MODULE ACCESSIBLE ONLY TO ADMIN ROLE USERS*@
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Menu" asp-action="MyOrders">My Orders</a>
-                </li>
-
+        if (user.Role == "CLIE")
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Menu" asp-action="MyOrders">My Orders</a>
+            </li>
+        }
                 <li class="nav-item">
                     <a class="nav-link text-dark" asp-area="" asp-controller="Menu" asp-action="ContactUs">Contact Us</a>
                 </li>

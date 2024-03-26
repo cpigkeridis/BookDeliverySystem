@@ -157,9 +157,6 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     success: function (data) {
-                        // Handle success response
-                        //TODO ADD SWAL POP UP AND FIX THE REFRESH
-                        alert('Order successfully submitted!');
                         window.location.href = data.redirectUrl;
                         // Optionally, you can redirect the user or perform any other actions
                     },
