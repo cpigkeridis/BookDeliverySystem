@@ -16,7 +16,16 @@
     <div class="col-md-12 col-sm-12">
         @if (Model == null || Model.Count == 0)
         {
-            <p>No orders available.</p>
+            <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+                <div class="text-center">
+
+                    <h2>No orders available</h2>
+                    <div class="form-like">
+                        <p style="font-size: 1.5rem;">It seems that your Agency has not taken any new orders.</p>
+                        <p style="font-size: 1.5rem;">Please check again soon.</p>
+                    </div>
+                </div>
+            </div>
         }
         else
         {

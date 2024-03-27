@@ -17,7 +17,6 @@
             </div>
         </div>
     </div>
-    </div>
     <div class="aboutus-secktion paddingTB60">
         <div class="container">
             <div class="row">
@@ -34,4 +33,14 @@
         </div>
     </div>
 </main>
+<script>
+    $(document).ready(function () {
+        var myModal = new bootstrap.Modal(document.getElementById('loaderModal'));
+        myModal.show();
+
+        setTimeout(function () {
+            myModal.hide();
+        }, 1000);
+    });
+</script>
                      

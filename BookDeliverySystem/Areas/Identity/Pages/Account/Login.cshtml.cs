@@ -125,10 +125,17 @@ namespace BookDeliverySystem.Areas.Identity.Pages.Account
                     await _signInManager.SignOutAsync(); // Sign out the user
                     return Page();
                 }
+                ApplicationUser user = await _signInManager.UserManager.FindByNameAsync(Input.Email);
+                BookDeliveryCore.Users oUser = GetUser(user.UserName, user.Role);
+                if(result.Succeeded && oUser.ENABLE == false)
+                {
+                    ModelState.AddModelError("CustomError", "Your Account has not been enabled by an Administrator yet. Please try again later.");
+                    await _signInManager.SignOutAsync(); // Sign out the user
+                    return Page();
+                }
                 else
                 {
-                    ApplicationUser user = await _signInManager.UserManager.FindByNameAsync(Input.Email);
-                    BookDeliveryCore.Users oUser = GetUser(user.UserName, user.Role);
+
                     if (oUser != null && oUser.ENABLE == true)
                     {
                         if (result.Succeeded)

@@ -2,8 +2,35 @@
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
-<ul class="nav nav-pills flex-column">
-    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal data</a></li>
-</ul>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <ul class="nav flex-column justify-content-center">
+                <li class="nav-item"><a class="nav-link-1 @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Edit Profile</a></li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <ul class="nav flex-column justify-content-center">
+                <li class="nav-item"><a class="nav-link-1 @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Change Password</a></li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <ul class="nav flex-column justify-content-center">
+                <li class="nav-item"><a class="nav-link-1 @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal Data</a></li>
+            </ul>
+        </div>
+    </div>
+    <br />
+</div>
+<style>
+    .nav-link-1 {
+        color: #333; /* Change the text color to dark gray */
+        font-size: 18px; /* Increase the font size */
+        font-weight: bold; /* Make the font bold */
+        text-decoration: none; /* Remove underline */
+    }
+
+        .nav-link:hover {
+            color: #555; /* Change the text color on hover */
+        }
+</style>

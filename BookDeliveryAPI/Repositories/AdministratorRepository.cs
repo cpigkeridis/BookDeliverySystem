@@ -320,7 +320,7 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
-        public void EditClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber, bool enable, string NewRole)
+        public void EditClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber, bool? enable, string NewRole)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -350,7 +350,7 @@ namespace BookDeliverySystemAPI.Repositories
             }
         }
 
-        public void EditAdministrator(string username, string firstname, string lastname, string address, string postalcode, string phonenumber, bool enable, string NewRole)
+        public void EditAdministrator(string username, string firstname, string lastname, string address, string postalcode, string phonenumber, bool? enable, string NewRole)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -379,7 +379,7 @@ namespace BookDeliverySystemAPI.Repositories
                 oCnn.Dispose();
             }
         }
-        public void EditCourier(string username, string? agencyId, string? vehicleNo, string firstname, string lastname, string address, string postalcode, string phonenumber, bool enable, string NewRole)
+        public void EditCourier(string username, string? agencyId, string? vehicleNo, string firstname, string lastname, string address, string postalcode, string phonenumber, bool? enable, string NewRole)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();
@@ -412,7 +412,7 @@ namespace BookDeliverySystemAPI.Repositories
         }
 
 
-        public void EditAgency(string username, string? name, string? country, string city, string address, string postalcode, string phonenumber, bool enable, string newrole)
+        public void EditAgency(string username, string? name, string? country, string city, string address, string postalcode, string phonenumber, bool? enable, string newrole)
         {
             SqlConnection oCnn = new SqlConnection(_Configuration.APICONSTRING);
             oCnn.Open();

@@ -5,14 +5,66 @@
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
-<h3>@ViewData["Title"]</h3>
-
 <div class="row">
-    <div class="col-md-6">
-        <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
+    <div class="col-md-12">
         <p>
-            <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
-            <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">Delete</a>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Personal Data</h2>
+                        <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
+                        <p><strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong></p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Manage Your Data</h3>
+                        <p><strong>Download Data:</strong> You have the right to access and download the personal data associated with your account. This feature enables you to review the information we have on record for you. By downloading your data, you can keep a copy for your records or use it as needed.</p>
+                        <p><strong>Delete Data:</strong> Deleting your personal data from our system is a crucial aspect of data privacy and control. When you choose to delete your data, it removes all information linked to your account permanently. This action is irreversible and means that your account will be deactivated, and you'll no longer have access to our services.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Consequences of Deletion:</h4>
+                        <ul>
+                            <li>Deleting your data removes you from our system entirely.</li>
+                            <li>This action includes forfeiting any benefits, preferences, or history associated with your account.</li>
+                            <li>Once deleted, we won't be able to recover your information, and you'll need to create a new account if you wish to use our services in the future.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Data Security:</h4>
+                        <p>We prioritize the security and protection of your personal data. Our systems employ robust security measures to safeguard your information from unauthorized access, loss, or misuse. When you delete your data, we ensure that it's removed securely and irreversibly, in compliance with data protection regulations.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Privacy Policy:</h4>
+                        <p>For detailed information on how we collect, use, and protect your data, please refer to our Privacy Policy. This document outlines our practices regarding data handling, including consent, security measures, and your rights as a user.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Contact Us:</h4>
+                        <p>If you have any questions or concerns about managing your personal data, please don't hesitate to contact our support team. We're <a href="/Menu/ContactUs" class="">here</a> to assist you and ensure that your privacy preferences are respected.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
+                        <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+
+
         </p>
     </div>
 </div>

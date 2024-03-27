@@ -14,7 +14,17 @@
     <div class="col-md-12 col-sm-12">
         @if (Model == null || Model.REWARDST.Count == 0)
         {
-            <p>No Rewards available.</p>
+            <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+                <div class="text-center">
+
+                    <h2>No Rewards available</h2>
+                    <div class="form-like">
+                        <p style="font-size: 1.5rem;">It seems that you have no rewards at the moment.</p>
+                        <p style="font-size: 1.5rem;">Go on then, grab some orders and make some deliveries.</p>
+                        <p style="font-size: 1.5rem;">Good things await!</p>
+                    </div>
+                </div>
+            </div>
         }
         else
         {

@@ -17,10 +17,10 @@ namespace BookDeliverySystemAPI.Interfaces
         public Administrator GetAdministratorByUsername(string username);
         public List<Agency> GetAgencies();
         public Users GetUser(string username, string role);
-        public void EditClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber, bool enable, string NewRole);
-        public void EditAdministrator(string username, string firstname, string lastname, string address, string postalcode, string phonenumber, bool enable, string NewRole);
-        public void EditCourier(string username, string? agencyId, string? vehicleNo, string firstname, string lastname, string address, string postalcode, string phonenumber, bool enable, string NewRole);
-        public void EditAgency(string username, string? name, string? country, string city, string address, string postalcode, string phonenumber, bool enable, string newrole);
+        public void EditClient(string username, string firstname, string lastname, string address, string postalcode, string phonenumber, bool? enable, string NewRole);
+        public void EditAdministrator(string username, string firstname, string lastname, string address, string postalcode, string phonenumber, bool? enable, string NewRole);
+        public void EditCourier(string username, string? agencyId, string? vehicleNo, string firstname, string lastname, string address, string postalcode, string phonenumber, bool? enable, string NewRole);
+        public void EditAgency(string username, string? name, string? country, string city, string address, string postalcode, string phonenumber, bool? enable, string newrole);
         public List<Orders> GetOrderByUserName(string ClientUsername);
 
         public List<Orders> GetOrderByCourierUserName(string CourierUsername);

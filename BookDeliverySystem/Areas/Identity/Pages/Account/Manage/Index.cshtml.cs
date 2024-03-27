@@ -4,6 +4,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using BookDeliverySystem.Areas.Identity.Data;
@@ -17,13 +18,16 @@ namespace BookDeliverySystem.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly BookDeliverySystemAPI.Interfaces.IAdministratorRepository _oAdmin;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            BookDeliverySystemAPI.Interfaces.IAdministratorRepository oAdmin)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _oAdmin = oAdmin;
         }
 
         /// <summary>
@@ -56,21 +60,56 @@ namespace BookDeliverySystem.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Phone]
-            [Display(Name = "Phone number")]
+     
+            [Display(Name = "First Name")]
+            [StringLength(255, ErrorMessage = "The MaxLength of FirstName must be at max 255 characters")]
+            public string FirstName { get; set; }
+
+     
+            [Display(Name = "Last Name")]
+            [StringLength(255, ErrorMessage = "The MaxLength of LastName must be at max 255 characters")]
+            public string LastName { get; set; }
+
+            [Required]
+            [Display(Name = "Address")]
+            [StringLength(255, ErrorMessage = "The MaxLength of Address must be at max 255 characters")]
+            public string Address { get; set; }
+
+            [Required]
+            [Display(Name = "Postal Code")]
+            [StringLength(4, ErrorMessage = "The MaxLength of PostalCode must be at max 4 characters")]
+            public string PostalCode { get; set; }
+
+            [Required]
+            [Display(Name = "Phone Number")]
+            [StringLength(12, ErrorMessage = "The MaxLength of PostalCode must be at max 12 characters")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Agency Name")]
+            [StringLength(255, ErrorMessage = "The MaxLength of Agency Name must be at max 255 characters")]
+            public string AgencyName { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var phoneNumber = user.PhoneNumber;
+            var firstname = user.FirstName;
+            var lastname = user.LastName;
+            var address = user.Address;
+            var postalCode = user.PostalCode;
+            var agencyname = user.FirstName;
 
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FirstName = firstname,
+                LastName = lastname,
+                Address = address,
+                PostalCode = postalCode,
+                AgencyName = agencyname
             };
         }
 
@@ -99,21 +138,69 @@ namespace BookDeliverySystem.Areas.Identity.Pages.Account.Manage
                 await LoadAsync(user);
                 return Page();
             }
-
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            var res = await UpdateUser();
+            if (res.StatusCode==200)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                //Update Asp.net user
+                if(user.Role != "AGEN")
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
+                    user.FirstName = Input.FirstName;
+                    user.LastName = Input.LastName;
+                    user.PhoneNumber = Input.PhoneNumber;
+                    user.Address = Input.Address;
+                    user.PostalCode = Input.PostalCode;
                 }
+                else
+                {
+                    user.FirstName = Input.AgencyName;
+                    user.PhoneNumber = Input.PhoneNumber;
+                    user.Address = Input.Address;
+                    user.PostalCode = Input.PostalCode;
+                }
+                await _signInManager.UserManager.UpdateAsync(user);
+
+                await _signInManager.RefreshSignInAsync(user);
+                StatusMessage = "Your profile has been updated succesfully";
+                return RedirectToPage();
+            }
+            else 
+            {
+                StatusMessage = "Unexpected error while updating profile please try again";
+                return RedirectToPage();
+
             }
 
-            await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
-            return RedirectToPage();
+        }
+
+        public async Task<StatusCodeResult> UpdateUser()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            //Default Bad Request
+            var res = new StatusCodeResult(400);
+            switch (user.Role)
+            {
+                case "CLIE":
+                    _oAdmin.EditClient(user.UserName, Input.FirstName, Input.LastName, Input.Address, Input.PostalCode, Input.PhoneNumber, null, "CLIE");
+                    res = new StatusCodeResult(200);
+                    break;
+                case "COUR":
+                    _oAdmin.EditCourier(user.UserName, null, null, Input.FirstName, Input.LastName, Input.Address, Input.PostalCode, Input.PhoneNumber, null, "COUR"); 
+                    res = new StatusCodeResult(200);
+                    break;
+                case "AGEN":
+                    _oAdmin.EditAgency(user.UserName, Input.AgencyName, "", "", Input.Address, Input.PostalCode, Input.PhoneNumber, null, "AGEN");
+                    res = new StatusCodeResult(200);
+                    break;
+                case "ADMI":
+                    _oAdmin.EditAdministrator(user.UserName, Input.FirstName, Input.LastName, Input.Address, Input.PostalCode, Input.PhoneNumber, null, "ADMI");
+                    res = new StatusCodeResult(200);
+                    break;
+                default:
+                    break;
+
+            }
+            return res;
+
         }
     }
 }
